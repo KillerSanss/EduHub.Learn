@@ -5,22 +5,56 @@ using Domain.Validations.GuardClasses;
 
 namespace Domain.Entities;
 
+/// <summary>
+/// Сущность, описывающая преподавателя
+/// </summary>
 public class Educator
 {
-    public FullName Name;
-    public Genders Gender;
-    public int WorkExp;
-    public DateTime WorkStartDate;
-    public string PhoneNumber;
+    /// <summary>
+    /// Получение уникального Id для преподавателя
+    /// </summary>
+    public Guid EducatorId { get; private set; }
 
-    public List<Course> Courses;
+    /// <summary>
+    /// Получение полного имени преподавателя через value object FullName
+    /// </summary>
+    public FullName Name { get; private set; }
 
-    public Educator(FullName name, Genders gender, int workExp, DateTime workStartDate, string phoneNumber)
+    /// <summary>
+    /// Получение пола преподавателя
+    /// </summary>
+    public Gender Gender { get; private set; }
+
+    /// <summary>
+    /// Получение стажа работы преподавателя в годах
+    /// </summary>
+    public int WorkExperience { get; private set; }
+
+    /// <summary>
+    /// Получение даты начала работы преподавателя
+    /// </summary>
+    public DateTime StartDate { get; private set; }
+
+    /// <summary>
+    /// Получение номера телефона преподавателя
+    /// </summary>
+    public string PhoneNumber { get; private set; }
+
+    /// <summary>
+    /// Список всех курсов, которые ведет преподаватель
+    /// </summary>
+    private List<Course> Courses;
+
+    /// <summary>
+    /// Коструктор для установки значений полей для проподавателя
+    /// </summary>
+    public Educator(FullName name, Gender gender, int workExperience, DateTime startDate, string phoneNumber)
     {
-        Name = name;
+        EducatorId = Guid.NewGuid();
+        Name = Guard.Against.Null(name);
         Gender = Guard.Against.GenderValidation(gender);
-        WorkExp = Guard.Against.Negative(workExp);
-        WorkStartDate = Guard.Against.Null(workStartDate);
+        WorkExperience = Guard.Against.Negative(workExperience);
+        StartDate = Guard.Against.Null(startDate);
         PhoneNumber = Guard.Against.PhoneValidation(phoneNumber);
     }
 }

@@ -1,18 +1,21 @@
-﻿using System.Text.RegularExpressions;
+﻿using Domain.Validations.RegularExpressions;
 using Ardalis.GuardClauses;
-using Domain.Validations.Exceptions;
 
 namespace Domain.Validations.GuardClasses;
 
+/// <summary>
+/// Гуард для валидации номера телефона
+/// </summary>
 public static class PhoneGuard
 {
-    private const string PhonePattern = @"\+373[0-9]{8}";
-
+    /// <summary>
+    /// Метод для провекри phone на null и на соответствие регулярному выражению PhonePattern
+    /// </summary>
     public static string PhoneValidation(this IGuardClause guardClause, string phone)
     {
-        if (string.IsNullOrWhiteSpace(phone) || !Regex.IsMatch(phone, PhonePattern))
+        if (string.IsNullOrWhiteSpace(phone) || !RegexPatterns.PhonePattern.IsMatch(phone))
         {
-            throw new CustomExceptions.InvalidPhoneFormatException(ErrorMessages.ErrorMessages.InvalidPhoneFormat, nameof(phone));
+            throw new Exceptions.InvalidDataException(ErrorMessages.ErrorMessages.InvalidPhoneFormat, nameof(phone));
         }
 
         return phone;

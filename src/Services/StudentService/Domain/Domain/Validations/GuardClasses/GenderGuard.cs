@@ -1,15 +1,21 @@
 ﻿using Ardalis.GuardClauses;
 using Domain.Entities.Enums;
-using Domain.Validations.Exceptions;
 
 namespace Domain.Validations.GuardClasses;
+
+/// <summary>
+/// Гуард для валидации пола
+/// </summary>
 public static class GenderGuard
 {
-    public static Genders GenderValidation(this IGuardClause guardClause, Genders gender)
+    /// <summary>
+    /// Метод для провеки gender на соответсвие перечислению Gender
+    /// </summary>
+    public static Gender GenderValidation(this IGuardClause guardClause, Gender gender)
     {
-        if (gender != Genders.Male && gender != Genders.Female)
+        if (!Enum.IsDefined(typeof(Gender), gender))
         {
-            throw new CustomExceptions.InvalidGenderException(ErrorMessages.ErrorMessages.InvalidGender, nameof(gender));
+            throw new Exceptions.InvalidDataException(ErrorMessages.ErrorMessages.InvalidGender, nameof(gender));
         }
 
         return gender;

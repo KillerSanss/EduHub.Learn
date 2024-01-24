@@ -5,18 +5,16 @@ namespace Domain.Entities.Value_Objects;
 
 public class FullName
 {
-    public string FirstName { get; set; }
-    public string SecondName { get; set; }
-    public string LastName { get; set; }
+    public readonly string FirstName;
+
+    public readonly string SecondName;
+
+    public readonly string LastName;
 
     public FullName(string firstName, string secondName, string lastName)
     {
-        Guard.Against.StringValidation(firstName);
-        Guard.Against.StringValidation(secondName);
-        Guard.Against.StringValidation(lastName);
-
-        FirstName = firstName;
-        SecondName = secondName;
-        LastName = lastName;
+        FirstName = Guard.Against.NameValueValidation(firstName);
+        SecondName = Guard.Against.SecondNameValueValidation(secondName);
+        LastName = Guard.Against.LastNameValueValidation(lastName);
     }
 }
