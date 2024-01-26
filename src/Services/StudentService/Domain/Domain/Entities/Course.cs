@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using Domain.Validations.GuardClasses;
+using Domain.Validations.RegularExpressions;
 
 namespace Domain.Entities;
 
@@ -11,7 +12,7 @@ public class Course
     /// <summary>
     /// Получение уникального Id курса
     /// </summary>
-    public Guid CourseId { get; private set; }
+    public Guid Id { get; private set; }
 
     /// <summary>
     /// Получение названия курса
@@ -31,11 +32,21 @@ public class Course
     /// <summary>
     /// Коструктор для установки значений полей для курса
     /// </summary>
-    public Course(string courseName, string description, Guid educatorId)
+    public Course(Guid id, string courseName, string description, Guid educatorId)
     {
-        CourseId = Guid.NewGuid();
-        CourseName = Guard.Against.NameValueValidation(courseName);
-        Description = Guard.Against.DescriptionValidation(description);
+        Id = Guard.Against.Default(id);
+        CourseName = Guard.Against.Regex(courseName, RegexPatterns.LettersPattern);
+        Description = Guard.Against.String(description);
+        EducatorId = Guard.Against.Default(educatorId);
+    }
+
+    /// <summary>
+    /// Метод для обновления курса
+    /// </summary>
+    public void UpdateCourse(string courseName, string description, Guid educatorId)
+    {
+        CourseName = Guard.Against.Regex(courseName, RegexPatterns.LettersPattern);
+        Description = Guard.Against.String(description);
         EducatorId = Guard.Against.Default(educatorId);
     }
 }

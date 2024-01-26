@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using Domain.Entities.Value_Objects;
 using Domain.Entities.Enums;
+using Domain.Validations.ErrorMessages;
 using Domain.Validations.GuardClasses;
 
 namespace Domain.Entities;
@@ -8,22 +9,12 @@ namespace Domain.Entities;
 /// <summary>
 /// Сущность, описывающая преподавателя
 /// </summary>
-public class Educator
+public class Educator : CummonFeilds
 {
     /// <summary>
     /// Получение уникального Id для преподавателя
     /// </summary>
-    public Guid EducatorId { get; private set; }
-
-    /// <summary>
-    /// Получение полного имени преподавателя через value object FullName
-    /// </summary>
-    public FullName Name { get; private set; }
-
-    /// <summary>
-    /// Получение пола преподавателя
-    /// </summary>
-    public Gender Gender { get; private set; }
+    public Guid Id { get; private set; }
 
     /// <summary>
     /// Получение стажа работы преподавателя в годах
@@ -36,25 +27,38 @@ public class Educator
     public DateTime StartDate { get; private set; }
 
     /// <summary>
-    /// Получение номера телефона преподавателя
-    /// </summary>
-    public string PhoneNumber { get; private set; }
-
-    /// <summary>
     /// Список всех курсов, которые ведет преподаватель
     /// </summary>
-    private List<Course> Courses;
+    private List<Course> _courses = new();
 
     /// <summary>
     /// Коструктор для установки значений полей для проподавателя
     /// </summary>
-    public Educator(FullName name, Gender gender, int workExperience, DateTime startDate, string phoneNumber)
+    public Educator(Guid id, FullName fullName, Gender gender, int workExperience, DateTime startDate, FullPhone phoneNumber) : base(fullName, gender,
+        phoneNumber)
     {
-        EducatorId = Guid.NewGuid();
-        Name = Guard.Against.Null(name);
-        Gender = Guard.Against.GenderValidation(gender);
-        WorkExperience = Guard.Against.Negative(workExperience);
-        StartDate = Guard.Against.Null(startDate);
-        PhoneNumber = Guard.Against.PhoneValidation(phoneNumber);
+        Id = Guard.Against.Default(id);
+        WorkExperience = Guard.Against.Negative(workExperience, string.Format(ErrorMessage.NegativeError, nameof(workExperience)));
+        StartDate = Guard.Against.Null(startDate, string.Format(ErrorMessage.NullError, nameof(startDate)));
+    }
+
+    /// <summary>
+    /// Метод для получения списка всех курсов учителя
+    /// </summary>
+    public List<Course> GetCourse()
+    {
+        return _courses;
+    }
+
+    /// <summary>
+    /// Метод для обновления преподавателя
+    /// </summary>
+    public void UpdateEducator(FullName fullName, Gender gender, int workExperience, DateTime startDate, FullPhone phoneNumber)
+    {
+        FullName = Guard.Against.Null(fullName, string.Format(ErrorMessage.NullError, nameof(fullName))); // Я не уверен насчет проверки общих полей. Типо они в классе CummonFeilds уже валидируются.
+        Gender = Guard.Against.Gender(gender);
+        PhoneNumber = Guard.Against.Null(phoneNumber, string.Format(ErrorMessage.NullError, nameof(phoneNumber)));
+        WorkExperience = Guard.Against.Negative(workExperience, string.Format(ErrorMessage.NegativeError, nameof(workExperience)));
+        StartDate = Guard.Against.Null(startDate, string.Format(ErrorMessage.NullError, nameof(startDate)));
     }
 }

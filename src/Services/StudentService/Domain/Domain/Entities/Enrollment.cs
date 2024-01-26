@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using Domain.Validations.ErrorMessages;
 
 namespace Domain.Entities;
 
@@ -10,8 +11,8 @@ public class Enrollment
     /// <summary>
     /// Получение уникального Id для зачисления
     /// </summary>
-    public Guid EnrollmentId { get; private set; }
-    
+    public Guid Id { get; private set; }
+
     /// <summary>
     /// Получение Id студента, зачислевшегося на курс
     /// </summary>
@@ -25,16 +26,16 @@ public class Enrollment
     /// <summary>
     /// Получение даты зачисления
     /// </summary>
-    public DateTime EnrollmentDate { get; private set; }
+    public DateTime StartCourseDate { get; private set; } ////
 
     /// <summary>
     /// Коструктор для установки значений полей для зачисления
     /// </summary>
-    public Enrollment(Guid studentId, Guid courseId, DateTime enrollmentDate)
+    public Enrollment(Guid id, Guid studentId, Guid courseId, DateTime startCourseDate)
     {
-        EnrollmentId = Guid.NewGuid();
+        Id = Guard.Against.Default(id);
         StudentId = Guard.Against.Default(studentId);
         CourseId = Guard.Against.Default(courseId);
-        EnrollmentDate = Guard.Against.Null(enrollmentDate);
+        StartCourseDate = Guard.Against.Null(startCourseDate, string.Format(ErrorMessage.NullError, nameof(startCourseDate)));
     }
 }

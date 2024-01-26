@@ -1,5 +1,8 @@
-﻿using Ardalis.GuardClauses;
+﻿using Domain.Validations.ErrorMessages;
+using Ardalis.GuardClauses;
 using Domain.Entities.Enums;
+using Domain.Validations.Exceptions;
+using System.Runtime.CompilerServices;
 
 namespace Domain.Validations.GuardClasses;
 
@@ -11,11 +14,11 @@ public static class GenderGuard
     /// <summary>
     /// Метод для провеки gender на соответсвие перечислению Gender
     /// </summary>
-    public static Gender GenderValidation(this IGuardClause guardClause, Gender gender)
+    public static Gender Gender(this IGuardClause guardClause, Gender gender, [CallerArgumentExpression("gender")] string paramName = null)
     {
-        if (!Enum.IsDefined(typeof(Gender), gender))
+        if (gender == Entities.Enums.Gender.None)
         {
-            throw new Exceptions.InvalidDataException(ErrorMessages.ErrorMessages.InvalidGender, nameof(gender));
+            throw new EntityValidationException(string.Format(ErrorMessage.InvalidData, paramName));
         }
 
         return gender;
