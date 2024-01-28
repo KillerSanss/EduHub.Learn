@@ -5,12 +5,8 @@
 /// </summary>
 public static class ErrorMessage
 {
-    public const string InvalidData = "{0} введен не правельно";
-    public const string NegativeError = "{0} не может быть отрацательным";
-
-    public const string InvalidPattern = "{0} имеет неверный формат написания";
-
+    public const string InvalidData = "{0} is incorrect";
+    public const string InvalidPattern = "{0} has a wrong format";
     public const string NotNullError = "{0} is not Null";
     public const string NullError = "{0} is Null";
-
 }

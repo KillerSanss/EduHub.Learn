@@ -13,13 +13,13 @@ public static class StringGuard
     /// <summary>
     /// Метод для провеки value на соответствие регулярному выражению
     /// </summary>
-    public static string String(this IGuardClause guardClause, string value, [CallerArgumentExpression("value")] string paramName = null)
+    public static string String(this IGuardClause guardClause, string value, int min, int max, [CallerArgumentExpression("value")] string paramName = null)
     {
         Guard.Against.NullOrEmpty(value);
 
-        if (value.Length <= 2 || value.Length >= 100)
+        if (value.Length <= min || value.Length >= max)
         {
-            throw new EntityValidationException(string.Format(ErrorMessage.InvalidPattern, paramName));
+            throw new GuardValidationException(string.Format(ErrorMessage.InvalidPattern, paramName));
         }
 
         return value;

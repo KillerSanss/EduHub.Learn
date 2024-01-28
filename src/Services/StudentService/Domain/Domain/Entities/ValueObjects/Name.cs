@@ -2,32 +2,35 @@
 using Domain.Validations.GuardClasses;
 using Domain.Validations.RegularExpressions;
 
-namespace Domain.Entities.Value_Objects;
+namespace Domain.Entities.ValueObjects;
 
 /// <summary>
 /// Value Object для получения полного имени
 /// </summary>
-public class FullName
+public class Name
 {
     /// <summary>
-    /// Поле описывающее surname
+    /// Фамилия
     /// </summary>
     public string Surname { get; private set; }
 
     /// <summary>
-    /// Поле описывающее firstname
+    /// Имя
     /// </summary>
     public string FirstName { get; private set; }
 
     /// <summary>
-    /// Поле описывающее patronymic
+    /// Отчество
     /// </summary>
     public string Patronymic { get; private set; }
 
     /// <summary>
-    /// Конструктор для устновки значений полей для FullName
+    /// Конструктор для установки значений полей для объекта Name.
     /// </summary>
-    public FullName(string surname, string firstName, string patronymic)
+    /// <param name="surname">Фамилия.</param>
+    /// <param name="firstName">Имя.</param>
+    /// <param name="patronymic">Отчество.</param>
+    public Name(string surname, string firstName, string patronymic)
     {
         Surname = Guard.Against.Regex(surname, RegexPatterns.LettersPattern);
         FirstName = Guard.Against.Regex(firstName, RegexPatterns.LettersPattern);

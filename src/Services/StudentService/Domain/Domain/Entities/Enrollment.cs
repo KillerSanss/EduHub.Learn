@@ -1,41 +1,38 @@
 ﻿using Ardalis.GuardClauses;
-using Domain.Validations.ErrorMessages;
 
 namespace Domain.Entities;
 
 /// <summary>
 /// Сущность, описывающая зачисления на курсы
 /// </summary>
-public class Enrollment
+public class Enrollment : Person
 {
     /// <summary>
-    /// Получение уникального Id для зачисления
-    /// </summary>
-    public Guid Id { get; private set; }
-
-    /// <summary>
-    /// Получение Id студента, зачислевшегося на курс
+    /// Id студента
     /// </summary>
     public Guid StudentId { get; private set; }
 
     /// <summary>
-    /// Получение Id курса, на который идет зачисление
+    /// Id курса
     /// </summary>
     public Guid CourseId { get; private set; }
 
     /// <summary>
-    /// Получение даты зачисления
+    /// Дата зачисления
     /// </summary>
-    public DateTime StartCourseDate { get; private set; } ////
+    public DateTime StartDate { get; private set; }
 
     /// <summary>
-    /// Коструктор для установки значений полей для зачисления
+    /// Конструктор для установки значений полей для объекта Enrollment.
     /// </summary>
-    public Enrollment(Guid id, Guid studentId, Guid courseId, DateTime startCourseDate)
+    /// <param name="id">Id.</param>
+    /// <param name="studentId">Id студента.</param>
+    /// <param name="courseId">Id курса.</param>
+    /// <param name="startDate">Дата зачисления.</param>
+    public Enrollment(Guid id, Guid studentId, Guid courseId, DateTime startDate): base(id)
     {
-        Id = Guard.Against.Default(id);
         StudentId = Guard.Against.Default(studentId);
         CourseId = Guard.Against.Default(courseId);
-        StartCourseDate = Guard.Against.Null(startCourseDate, string.Format(ErrorMessage.NullError, nameof(startCourseDate)));
+        StartDate = Guard.Against.Null(startDate);
     }
 }

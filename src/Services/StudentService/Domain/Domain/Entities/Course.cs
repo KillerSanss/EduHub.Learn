@@ -7,46 +7,51 @@ namespace Domain.Entities;
 /// <summary>
 /// Сущность, описывающая курс
 /// </summary>
-public class Course
+public class Course : Person
 {
     /// <summary>
-    /// Получение уникального Id курса
-    /// </summary>
-    public Guid Id { get; private set; }
-
-    /// <summary>
-    /// Получение названия курса
+    /// Название курса
     /// </summary>
     public string CourseName { get; private set; }
 
     /// <summary>
-    /// Получение описания курса
+    /// Описание курса
     /// </summary>
     public string Description { get; private set; }
 
     /// <summary>
-    /// Получение Id проподавателя, который этот курс преподает
+    /// Id преподавателя
     /// </summary>
     public Guid EducatorId { get; private set; }
 
     /// <summary>
-    /// Коструктор для установки значений полей для курса
+    /// Конструктор для установки значений полей для объекта Course.
     /// </summary>
-    public Course(Guid id, string courseName, string description, Guid educatorId)
+    /// <param name="id">Id.</param>
+    /// <param name="courseName">Название курса.</param>
+    /// <param name="description">Описание курса.</param>
+    /// <param name="educatorId">Id преподавателя.</param>
+    public Course(Guid id, string courseName, string description, Guid educatorId) : base(id)
     {
-        Id = Guard.Against.Default(id);
-        CourseName = Guard.Against.Regex(courseName, RegexPatterns.LettersPattern);
-        Description = Guard.Against.String(description);
-        EducatorId = Guard.Against.Default(educatorId);
+        Common(id, courseName, description, educatorId);
     }
 
     /// <summary>
     /// Метод для обновления курса
     /// </summary>
-    public void UpdateCourse(string courseName, string description, Guid educatorId)
+    public void Update(Guid id, string courseName, string description, Guid educatorId)
     {
+        Common(id, courseName, description, educatorId);
+    }
+
+    /// <summary>
+    /// Метод для избежания повторений в коде при валидации полей Course
+    /// </summary>
+    private void Common(Guid id, string courseName, string description, Guid educatorId)
+    {
+        Id = Guard.Against.Default(id);
         CourseName = Guard.Against.Regex(courseName, RegexPatterns.LettersPattern);
-        Description = Guard.Against.String(description);
+        Description = Guard.Against.String(description, 2, 100);
         EducatorId = Guard.Against.Default(educatorId);
     }
 }

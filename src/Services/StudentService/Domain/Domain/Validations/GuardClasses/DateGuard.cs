@@ -8,20 +8,20 @@ namespace Domain.Validations.GuardClasses;
 /// <summary>
 /// Гуард для валидации дня рождения
 /// </summary>
-public static class BirthGuard
+public static class DateGuard
 {
     /// <summary>
     /// Метод для провеки birthDate на значение по умолчанию и на ошибку ввода, когда birthDate больше текущего времени.
     /// </summary>
-    public static DateTime BirthValidation(this IGuardClause guardClause, DateTime birthDate, [CallerArgumentExpression("birthDate")] string paramName = null)
+    public static DateTime Date(this IGuardClause guardClause, DateTime date, [CallerArgumentExpression("date")] string paramName = null)
     {
-        Guard.Against.Default(birthDate);
+        Guard.Against.Default(date);
 
-        if (birthDate >= DateTime.Now)
+        if (date >= DateTime.Now)
         {
-            throw new EntityValidationException(string.Format(ErrorMessage.InvalidData, paramName));
+            throw new GuardValidationException(string.Format(ErrorMessage.InvalidData, paramName));
         }
 
-        return birthDate;
+        return date;
     }
 }

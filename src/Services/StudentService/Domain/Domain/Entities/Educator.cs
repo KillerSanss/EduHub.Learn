@@ -1,7 +1,6 @@
 ﻿using Ardalis.GuardClauses;
-using Domain.Entities.Value_Objects;
+using Domain.Entities.ValueObjects;
 using Domain.Entities.Enums;
-using Domain.Validations.ErrorMessages;
 using Domain.Validations.GuardClasses;
 
 namespace Domain.Entities;
@@ -9,56 +8,69 @@ namespace Domain.Entities;
 /// <summary>
 /// Сущность, описывающая преподавателя
 /// </summary>
-public class Educator : CummonFeilds
+public class Educator : Person
 {
     /// <summary>
-    /// Получение уникального Id для преподавателя
+    /// Список курсов
     /// </summary>
-    public Guid Id { get; private set; }
+    private readonly List<Course> _courses = new();
 
     /// <summary>
-    /// Получение стажа работы преподавателя в годах
+    /// Опыт работы
     /// </summary>
     public int WorkExperience { get; private set; }
 
     /// <summary>
-    /// Получение даты начала работы преподавателя
+    /// Начало работы
     /// </summary>
     public DateTime StartDate { get; private set; }
 
     /// <summary>
-    /// Список всех курсов, которые ведет преподаватель
+    /// Конструктор для установки значений полей для объекта Educator.
     /// </summary>
-    private List<Course> _courses = new();
-
-    /// <summary>
-    /// Коструктор для установки значений полей для проподавателя
-    /// </summary>
-    public Educator(Guid id, FullName fullName, Gender gender, int workExperience, DateTime startDate, FullPhone phoneNumber) : base(fullName, gender,
-        phoneNumber)
+    /// <param name="id">Id.</param>
+    /// <param name="name">Имя.</param>
+    /// <param name="gender">Пол.</param>
+    /// <param name="workExperience">Опыт работы.</param>
+    /// <param name="startDate">Начало работы.</param>
+    /// <param name="phoneNumber">.</param>
+    public Educator(
+        Guid id
+        , Name name
+        , Gender gender
+        , int workExperience
+        , DateTime startDate
+        , Phone phoneNumber) : base(id, name, gender, phoneNumber)
     {
-        Id = Guard.Against.Default(id);
-        WorkExperience = Guard.Against.Negative(workExperience, string.Format(ErrorMessage.NegativeError, nameof(workExperience)));
-        StartDate = Guard.Against.Null(startDate, string.Format(ErrorMessage.NullError, nameof(startDate)));
+        Common(id, name, gender, workExperience, startDate, phoneNumber);
     }
 
     /// <summary>
     /// Метод для получения списка всех курсов учителя
     /// </summary>
-    public List<Course> GetCourse()
+    public IEnumerable<Course> GetCourse()
     {
         return _courses;
     }
 
     /// <summary>
-    /// Метод для обновления преподавателя
+    /// Метод для обновления полей сущности Educator
     /// </summary>
-    public void UpdateEducator(FullName fullName, Gender gender, int workExperience, DateTime startDate, FullPhone phoneNumber)
+    public void Update(Guid id, Name name, Gender gender, int workExperience, DateTime startDate, Phone phoneNumber)
     {
-        FullName = Guard.Against.Null(fullName, string.Format(ErrorMessage.NullError, nameof(fullName))); // Я не уверен насчет проверки общих полей. Типо они в классе CummonFeilds уже валидируются.
-        Gender = Guard.Against.Gender(gender);
-        PhoneNumber = Guard.Against.Null(phoneNumber, string.Format(ErrorMessage.NullError, nameof(phoneNumber)));
-        WorkExperience = Guard.Against.Negative(workExperience, string.Format(ErrorMessage.NegativeError, nameof(workExperience)));
-        StartDate = Guard.Against.Null(startDate, string.Format(ErrorMessage.NullError, nameof(startDate)));
+        Common(id, name, gender, workExperience, startDate, phoneNumber);
+    }
+
+    /// <summary>
+    /// Метод для избежания повторений в коде при валидации полей Educator
+    /// </summary>
+    private void Common(Guid id, Name name, Gender gender, int workExperience, DateTime startDate, Phone phoneNumber)
+    {
+        Id = Guard.Against.Default(id);
+        Name = Guard.Against.Null(name);
+        Gender = Guard.Against.Enum(gender);
+        PhoneNumber = Guard.Against.Null(phoneNumber);
+        WorkExperience = Guard.Against.Negative(workExperience);
+        StartDate = Guard.Against.Null(startDate);
     }
 }

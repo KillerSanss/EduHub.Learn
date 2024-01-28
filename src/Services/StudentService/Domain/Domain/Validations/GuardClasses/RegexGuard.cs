@@ -20,7 +20,7 @@ public static class RegexGuard
 
         if (!regex.IsMatch(value))
         {
-            throw new EntityValidationException(string.Format(ErrorMessage.InvalidPattern, paramName));
+            throw new GuardValidationException(string.Format(ErrorMessage.InvalidPattern, paramName));
         }
 
         return value;

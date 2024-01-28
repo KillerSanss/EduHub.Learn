@@ -1,65 +1,71 @@
 ﻿using Ardalis.GuardClauses;
-using Domain.Entities.Value_Objects;
+using Domain.Entities.ValueObjects;
 using Domain.Entities.Enums;
 using Domain.Validations.GuardClasses;
 using Domain.Validations.RegularExpressions;
 using Domain.Validations.ErrorMessages;
-using Domain.Validations.Exceptions;
+using Domain.Validations.Exceptions.StudentExceptions;
 
 namespace Domain.Entities;
 
 /// <summary>
 /// Сущность описывающая студента
 /// </summary>
-public class Student : CummonFeilds
+public class Student : Person
 {
     /// <summary>
-    /// Получение уникального Id для студента
+    /// Список зачислений
     /// </summary>
-    public Guid Id { get; private set; }
+    private readonly List<Enrollment> _enrollments = new();
 
     /// <summary>
-    /// Получение даты рождения студента
+    /// Дата рождения
     /// </summary>
     public DateTime BirthDate { get; private set; }
 
     /// <summary>
-    /// Получение электронной почты студента
+    /// Электронная почта
     /// </summary>
-    public FullEmail Email { get; private set; }
+    public Email Email { get; private set; }
 
     /// <summary>
-    /// Получение полного адреса студента через value object FullAddress
+    /// Адрес
     /// </summary>
-    public FullAddress FullAddress { get; private set; }
+    public Address Address { get; private set; }
 
     /// <summary>
-    /// Получение ссылки на аватар студента
+    /// Аватар
     /// </summary>
     public string Avatar { get; private set; }
 
     /// <summary>
-    /// Получение списка всех зачислений студента
+    /// Конструктор для установки значений полей для объекта Student.
     /// </summary>
-    private List<Enrollment> _enrollments = new();
-
-    /// <summary>
-    /// Коструктор для установки значений полей для студента
-    /// </summary>
-    public Student(Guid id, FullName fullName, Gender gender, DateTime birthDate, FullEmail email, FullPhone phoneNumber, FullAddress fullAddress, string avatar)
-                : base(fullName, gender, phoneNumber)
+    /// <param name="id">Id.</param>
+    /// <param name="name">Имя.</param>
+    /// <param name="gender">Пол.</param>
+    /// <param name="birthDate">Дата рождения.</param>
+    /// <param name="email">Электронная почта.</param>
+    /// <param name="phoneNumber">Номер телефона.</param>
+    /// <param name="address">Адрес.</param>
+    /// <param name="avatar">Аватар.</param>
+    public Student(
+        Guid id
+        , Name name
+        , Gender gender
+        , DateTime birthDate
+        , Email email
+        , Phone phoneNumber
+        , Address address
+        , string avatar) : base(id, name, gender, phoneNumber)
     {
-        Id = Guard.Against.Default(id);
-        BirthDate = Guard.Against.BirthValidation(birthDate);
-        Email = Guard.Against.Null(email, string.Format(ErrorMessage.NullError, nameof(email)));
-        FullAddress = Guard.Against.Null(fullAddress, string.Format(ErrorMessage.NullError, nameof(fullAddress)));
-        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern);
+        Common(id, name, gender, birthDate, email, phoneNumber, address, avatar);
     }
 
     /// <summary>
     /// Метод для получения списка всех зачислений студента
     /// </summary>
-    public List<Enrollment> GetEnrollments()
+    public IEnumerable<Enrollment> GetEnrollments()
     {
         return _enrollments;
     }
@@ -67,44 +73,60 @@ public class Student : CummonFeilds
     /// <summary>
     /// Метод для добавления нового зачисления в список
     /// </summary>
-    public void AddEnrollment(Guid enrollmentId, Guid courseId, DateTime startCourseDate)
+    public void Add(Guid enrollmentId, Guid courseId, DateTime startCourseDate)
     {
-        var exist = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
-        if (exist != null)
+        var enrollment = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
+        if (enrollment != null)
         {
-            throw new EntityNotNullException(string.Format(ErrorMessage.NotNullError, nameof(enrollmentId)));
+            throw new StudentNotNullException(string.Format(ErrorMessage.NotNullError, nameof(enrollmentId)));
         }
 
-        var enrollment = new Enrollment(enrollmentId, Id, courseId, startCourseDate);
-        _enrollments.Add(enrollment);
+        var newEnrollment = new Enrollment(enrollmentId, Id, courseId, startCourseDate);
+        _enrollments.Add(newEnrollment);
     }
 
     /// <summary>
-    /// Метод для обновления информации о студенте
+    /// Метод для обновления значений полей сущности Student
     /// </summary>
-    public void UpdateStudent(FullName fullName, Gender gender, DateTime birthDate, FullEmail email, FullPhone phoneNumber, FullAddress fullAddress,
+    public void Update(
+        Guid id
+        , Name name
+        , Gender gender
+        , DateTime birthDate
+        , Email email
+        , Phone phoneNumber
+        , Address address,
         string avatar)
     {
-        FullName = Guard.Against.Null(fullName, string.Format(ErrorMessage.NullError, nameof(fullName))); // Я не уверен насчет проверки общих полей. Типо они в классе CummonFeilds уже валидируются.
-        Gender = Guard.Against.Gender(gender);
-        BirthDate = Guard.Against.BirthValidation(birthDate);
-        Email = Guard.Against.Null(email, string.Format(ErrorMessage.NullError, nameof(email)));
-        PhoneNumber = Guard.Against.Null(phoneNumber, string.Format(ErrorMessage.NullError, nameof(phoneNumber)));
-        FullAddress = Guard.Against.Null(fullAddress, string.Format(ErrorMessage.NullError, nameof(fullAddress)));
-        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern);
+        Common(id, name, gender, birthDate, email, phoneNumber, address, avatar);
     }
 
     /// <summary>
-    /// Метод для удаления студента
+    /// Метод для удаления зачисления
     /// </summary>
-    public void DeleteEnrollement(Guid enrollmentId)
+    public void Delete(Guid enrollmentId)
     {
-        var exist = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
-        if (exist == null)
+        var enrollment = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
+        if (enrollment == null)
         {
-            throw new EntityNullException(string.Format(ErrorMessage.NullError, nameof(enrollmentId)));
+            throw new StudentNotFoundException(string.Format(ErrorMessage.NullError, nameof(enrollmentId)));
         }
 
-        _enrollments.RemoveAll(e => e.Id == enrollmentId);
+        _enrollments.Remove(enrollment);
+    }
+
+    /// <summary>
+    /// Метод для избежания повторений в коде при валидации полей Student
+    /// </summary>
+    private void Common(Guid id, Name name, Gender gender, DateTime birthDate, Email email, Phone phoneNumber, Address address, string avatar)
+    {
+        Id = Guard.Against.Default(id);
+        Name = Guard.Against.Null(name);
+        Gender = Guard.Against.Enum(gender);
+        BirthDate = Guard.Against.Date(birthDate);
+        Email = Guard.Against.Null(email);
+        PhoneNumber = Guard.Against.Null(phoneNumber);
+        Address = Guard.Against.Null(address);
+        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern);
     }
 }
