@@ -1,11 +1,12 @@
 ﻿using Ardalis.GuardClauses;
+using Domain.Entities.Base;
 
 namespace Domain.Entities;
 
 /// <summary>
 /// Сущность, описывающая зачисления на курсы
 /// </summary>
-public class Enrollment : Person
+public class Enrollment : BaseEntity
 {
     /// <summary>
     /// Id студента
@@ -29,8 +30,9 @@ public class Enrollment : Person
     /// <param name="studentId">Id студента.</param>
     /// <param name="courseId">Id курса.</param>
     /// <param name="startDate">Дата зачисления.</param>
-    public Enrollment(Guid id, Guid studentId, Guid courseId, DateTime startDate): base(id)
+    public Enrollment(Guid id, Guid studentId, Guid courseId, DateTime startDate)
     {
+        SetId(id);
         StudentId = Guard.Against.Default(studentId);
         CourseId = Guard.Against.Default(courseId);
         StartDate = Guard.Against.Null(startDate);

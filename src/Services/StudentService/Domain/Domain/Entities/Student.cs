@@ -5,13 +5,14 @@ using Domain.Validations.GuardClasses;
 using Domain.Validations.RegularExpressions;
 using Domain.Validations.ErrorMessages;
 using Domain.Validations.Exceptions.StudentExceptions;
+using Domain.Entities.Base;
 
 namespace Domain.Entities;
 
 /// <summary>
 /// Сущность описывающая студента
 /// </summary>
-public class Student : Person
+public class Student : BasePerson
 {
     /// <summary>
     /// Список зачислений
@@ -42,24 +43,24 @@ public class Student : Person
     /// Конструктор для установки значений полей для объекта Student.
     /// </summary>
     /// <param name="id">Id.</param>
-    /// <param name="name">Имя.</param>
+    /// <param name="fullName">Имя.</param>
     /// <param name="gender">Пол.</param>
     /// <param name="birthDate">Дата рождения.</param>
     /// <param name="email">Электронная почта.</param>
-    /// <param name="phoneNumber">Номер телефона.</param>
+    /// <param name="phone">Номер телефона.</param>
     /// <param name="address">Адрес.</param>
     /// <param name="avatar">Аватар.</param>
     public Student(
         Guid id
-        , Name name
+        , Name fullName
         , Gender gender
         , DateTime birthDate
         , Email email
-        , Phone phoneNumber
+        , Phone phone
         , Address address
-        , string avatar) : base(id, name, gender, phoneNumber)
+        , string avatar)
     {
-        Common(id, name, gender, birthDate, email, phoneNumber, address, avatar);
+        Common(id, fullName, gender, birthDate, email, phone, address, avatar);
     }
 
     /// <summary>
@@ -90,15 +91,15 @@ public class Student : Person
     /// </summary>
     public void Update(
         Guid id
-        , Name name
+        , Name fullName
         , Gender gender
         , DateTime birthDate
         , Email email
-        , Phone phoneNumber
+        , Phone phone
         , Address address,
         string avatar)
     {
-        Common(id, name, gender, birthDate, email, phoneNumber, address, avatar);
+        Common(id, fullName, gender, birthDate, email, phone, address, avatar);
     }
 
     /// <summary>
@@ -116,16 +117,16 @@ public class Student : Person
     }
 
     /// <summary>
-    /// Метод для избежания повторений в коде при валидации полей Student
+    /// Метод для установки значений для Student
     /// </summary>
-    private void Common(Guid id, Name name, Gender gender, DateTime birthDate, Email email, Phone phoneNumber, Address address, string avatar)
+    private void Common(Guid id, Name fullName, Gender gender, DateTime birthDate, Email email, Phone phone, Address address, string avatar)
     {
-        Id = Guard.Against.Default(id);
-        Name = Guard.Against.Null(name);
-        Gender = Guard.Against.Enum(gender);
+        SetId(id);
+        SetFullName(fullName);
+        SetGender(gender);
+        SetPhone(phone);
         BirthDate = Guard.Against.Date(birthDate);
         Email = Guard.Against.Null(email);
-        PhoneNumber = Guard.Against.Null(phoneNumber);
         Address = Guard.Against.Null(address);
         Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern);
     }

@@ -1,14 +1,14 @@
 ﻿using Ardalis.GuardClauses;
 using Domain.Entities.ValueObjects;
 using Domain.Entities.Enums;
-using Domain.Validations.GuardClasses;
+using Domain.Entities.Base;
 
 namespace Domain.Entities;
 
 /// <summary>
 /// Сущность, описывающая преподавателя
 /// </summary>
-public class Educator : Person
+public class Educator : BasePerson
 {
     /// <summary>
     /// Список курсов
@@ -29,20 +29,20 @@ public class Educator : Person
     /// Конструктор для установки значений полей для объекта Educator.
     /// </summary>
     /// <param name="id">Id.</param>
-    /// <param name="name">Имя.</param>
+    /// <param name="fullName">Имя.</param>
     /// <param name="gender">Пол.</param>
     /// <param name="workExperience">Опыт работы.</param>
     /// <param name="startDate">Начало работы.</param>
-    /// <param name="phoneNumber">.</param>
+    /// <param name="phone">.</param>
     public Educator(
         Guid id
-        , Name name
+        , Name fullName
         , Gender gender
         , int workExperience
         , DateTime startDate
-        , Phone phoneNumber) : base(id, name, gender, phoneNumber)
+        , Phone phone)
     {
-        Common(id, name, gender, workExperience, startDate, phoneNumber);
+        Common(id, fullName, gender, workExperience, startDate, phone);
     }
 
     /// <summary>
@@ -56,20 +56,20 @@ public class Educator : Person
     /// <summary>
     /// Метод для обновления полей сущности Educator
     /// </summary>
-    public void Update(Guid id, Name name, Gender gender, int workExperience, DateTime startDate, Phone phoneNumber)
+    public void Update(Guid id, Name fullName, Gender gender, int workExperience, DateTime startDate, Phone phone)
     {
-        Common(id, name, gender, workExperience, startDate, phoneNumber);
+        Common(id, fullName, gender, workExperience, startDate, phone);
     }
 
     /// <summary>
-    /// Метод для избежания повторений в коде при валидации полей Educator
+    /// Метод для установки значений Educator
     /// </summary>
-    private void Common(Guid id, Name name, Gender gender, int workExperience, DateTime startDate, Phone phoneNumber)
+    private void Common(Guid id, Name fullName, Gender gender, int workExperience, DateTime startDate, Phone phone)
     {
-        Id = Guard.Against.Default(id);
-        Name = Guard.Against.Null(name);
-        Gender = Guard.Against.Enum(gender);
-        PhoneNumber = Guard.Against.Null(phoneNumber);
+        SetId(id);
+        SetFullName(fullName);
+        SetGender(gender);
+        SetPhone(phone);
         WorkExperience = Guard.Against.Negative(workExperience);
         StartDate = Guard.Against.Null(startDate);
     }

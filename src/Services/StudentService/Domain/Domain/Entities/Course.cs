@@ -1,13 +1,14 @@
 ﻿using Ardalis.GuardClauses;
 using Domain.Validations.GuardClasses;
 using Domain.Validations.RegularExpressions;
+using Domain.Entities.Base;
 
 namespace Domain.Entities;
 
 /// <summary>
 /// Сущность, описывающая курс
 /// </summary>
-public class Course : Person
+public class Course : BaseEntity
 {
     /// <summary>
     /// Название курса
@@ -31,7 +32,7 @@ public class Course : Person
     /// <param name="courseName">Название курса.</param>
     /// <param name="description">Описание курса.</param>
     /// <param name="educatorId">Id преподавателя.</param>
-    public Course(Guid id, string courseName, string description, Guid educatorId) : base(id)
+    public Course(Guid id, string courseName, string description, Guid educatorId)
     {
         Common(id, courseName, description, educatorId);
     }
@@ -45,11 +46,11 @@ public class Course : Person
     }
 
     /// <summary>
-    /// Метод для избежания повторений в коде при валидации полей Course
+    /// Метод для установки значений Course
     /// </summary>
     private void Common(Guid id, string courseName, string description, Guid educatorId)
     {
-        Id = Guard.Against.Default(id);
+        SetId(id);
         CourseName = Guard.Against.Regex(courseName, RegexPatterns.LettersPattern);
         Description = Guard.Against.String(description, 2, 100);
         EducatorId = Guard.Against.Default(educatorId);
