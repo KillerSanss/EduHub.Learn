@@ -16,6 +16,7 @@ public static class RegexGuard
     /// </summary>
     public static string Regex(this IGuardClause guardClause, string value, Regex regex, [CallerArgumentExpression("value")] string paramName = null)
     {
+        Guard.Against.Null(regex);
         Guard.Against.NullOrEmpty(value);
 
         if (!regex.IsMatch(value))

@@ -13,11 +13,11 @@ public static class DateGuard
     /// <summary>
     /// Метод для провеки birthDate на значение по умолчанию и на ошибку ввода, когда birthDate больше текущего времени.
     /// </summary>
-    public static DateTime Date(this IGuardClause guardClause, DateTime date, [CallerArgumentExpression("date")] string paramName = null)
+    public static DateTime FutureDate(this IGuardClause guardClause, DateTime date, [CallerArgumentExpression("date")] string paramName = null)
     {
         Guard.Against.Default(date);
 
-        if (date >= DateTime.Now)
+        if (date > DateTime.Now)
         {
             throw new GuardValidationException(string.Format(ErrorMessage.InvalidData, paramName));
         }

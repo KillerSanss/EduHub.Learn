@@ -1,7 +1,8 @@
 ﻿using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Entities.Base;
+using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
-using Eduhub.StudentService.Domain.Validations.RegularExpressions;
+using Eduhub.StudentService.Domain.Validations;
 
 namespace Eduhub.StudentService.Domain.Entities;
 
@@ -13,7 +14,7 @@ public class Course : BaseEntity
     /// <summary>
     /// Название курса
     /// </summary>
-    public string CourseName { get; private set; }
+    public string Name { get; private set; }
 
     /// <summary>
     /// Описание курса
@@ -35,7 +36,7 @@ public class Course : BaseEntity
     public Course(Guid id, string courseName, string description, Guid educatorId)
     {
         SetId(id);
-        SetCourseName(courseName);
+        SetName(courseName);
         SetDescription(description);
         SetEducatorId(educatorId);
     }
@@ -43,10 +44,9 @@ public class Course : BaseEntity
     /// <summary>
     /// Метод для обновления курса
     /// </summary>
-    public void Update(Guid id, string courseName, string description, Guid educatorId)
+    public void Update(string courseName, string description, Guid educatorId)
     {
-        SetId(id);
-        SetCourseName(courseName);
+        SetName(courseName);
         SetDescription(description);
         SetEducatorId(educatorId);
     }
@@ -54,9 +54,9 @@ public class Course : BaseEntity
     /// <summary>
     /// Установка названия курса
     /// </summary>
-    private void SetCourseName(string courseName)
+    private void SetName(string courseName)
     {
-        CourseName = Guard.Against.Regex(courseName, RegexPatterns.LettersPattern);
+        Name = Guard.Against.Regex(courseName, RegexPatterns.LettersPattern);
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ public class Course : BaseEntity
     /// </summary>
     private void SetDescription(string description)
     {
-        Description = Guard.Against.String(description, 2, 100);
+        Description = Guard.Against.String(description, 100, Operation.GreaterThan);
     }
 
     /// <summary>

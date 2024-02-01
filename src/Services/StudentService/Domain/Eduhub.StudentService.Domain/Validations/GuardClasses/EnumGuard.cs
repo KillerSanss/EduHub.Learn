@@ -13,9 +13,9 @@ public static class EnumGuard
     /// <summary>
     /// Метод для провеки Enum на дефолтное значение
     /// </summary>
-    public static T Enum<T>(this IGuardClause guardClause, T value, [CallerArgumentExpression("value")] string paramName = null) where T : Enum
+    public static T Enum<T>(this IGuardClause guardClause, T value, [CallerArgumentExpression("value")] string paramName = null, params T[] defaultValues) where T : Enum
     {
-        if (EqualityComparer<T>.Default.Equals(value, default))
+        if (defaultValues.Contains(value))
         {
             throw new GuardValidationException(string.Format(ErrorMessage.InvalidData, paramName));
         }

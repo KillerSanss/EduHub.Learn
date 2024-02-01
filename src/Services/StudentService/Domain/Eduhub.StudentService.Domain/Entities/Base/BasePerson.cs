@@ -13,7 +13,7 @@ public abstract class BasePerson : BaseEntity
     /// <summary>
     /// Фио
     /// </summary>
-    public Name FullName { get; protected set; }
+    public FullName FullName { get; protected set; }
 
     /// <summary>
     /// Гендер
@@ -28,7 +28,7 @@ public abstract class BasePerson : BaseEntity
     /// <summary>
     /// Установка фио
     /// </summary>
-    protected void SetFullName(Name fullName)
+    protected void SetFullName(FullName fullName)
     {
         FullName = Guard.Against.Null(fullName);
     }
@@ -38,7 +38,7 @@ public abstract class BasePerson : BaseEntity
     /// </summary>
     protected void SetGender(Gender gender)
     {
-        Gender = Guard.Against.Enum(gender);
+        Gender = Guard.Against.Enum(gender, defaultValues: Gender.None);
     }
 
     /// <summary>

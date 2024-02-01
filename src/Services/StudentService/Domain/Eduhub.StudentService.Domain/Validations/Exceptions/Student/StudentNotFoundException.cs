@@ -1,6 +1,6 @@
 ﻿using Eduhub.StudentService.Domain.Validations.Exceptions.Core;
 
-namespace Eduhub.StudentService.Domain.Validations.Exceptions.StudentExceptions
+namespace Eduhub.StudentService.Domain.Validations.Exceptions.Student
 {
     /// <summary>
     /// Класс для описания кастомного исключения StudentNotFoundException для ошибок сущности Student

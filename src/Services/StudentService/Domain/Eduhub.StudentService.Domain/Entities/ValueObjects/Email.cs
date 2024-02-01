@@ -1,6 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
-using Eduhub.StudentService.Domain.Validations.RegularExpressions;
+using Eduhub.StudentService.Domain.Validations;
 
 namespace Eduhub.StudentService.Domain.Entities.ValueObjects;
 

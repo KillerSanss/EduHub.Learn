@@ -36,7 +36,7 @@ public class Educator : BasePerson
     /// <param name="phone">.</param>
     public Educator(
         Guid id
-        , Name fullName
+        , FullName fullName
         , Gender gender
         , int workExperience
         , DateTime startDate
@@ -61,9 +61,8 @@ public class Educator : BasePerson
     /// <summary>
     /// Метод для обновления полей сущности Educator
     /// </summary>
-    public void Update(Guid id, Name fullName, Gender gender, int workExperience, DateTime startDate, Phone phone)
+    public void Update(FullName fullName, Gender gender, int workExperience, DateTime startDate, Phone phone)
     {
-        SetId(id);
         SetFullName(fullName);
         SetGender(gender);
         SetPhone(phone);

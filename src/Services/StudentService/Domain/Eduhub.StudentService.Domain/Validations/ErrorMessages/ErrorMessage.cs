@@ -7,6 +7,6 @@ public static class ErrorMessage
 {
     public const string InvalidData = "{0} is incorrect";
     public const string InvalidPattern = "{0} has a wrong format";
-    public const string NotNullError = "{0} is not Null";
-    public const string NullError = "{0} is Null";
+    public const string ConflictError = "{0} is already exist";
+    public const string NotFoundError = "{0} not found.";
 }

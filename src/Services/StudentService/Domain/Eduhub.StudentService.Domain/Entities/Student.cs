@@ -3,9 +3,9 @@ using Eduhub.StudentService.Domain.Entities.Base;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Domain.Validations.ErrorMessages;
-using Eduhub.StudentService.Domain.Validations.Exceptions.StudentExceptions;
+using Eduhub.StudentService.Domain.Validations.Exceptions.Enrollment;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
-using Eduhub.StudentService.Domain.Validations.RegularExpressions;
+using Eduhub.StudentService.Domain.Validations;
 
 namespace Eduhub.StudentService.Domain.Entities;
 
@@ -52,7 +52,7 @@ public class Student : BasePerson
     /// <param name="avatar">Аватар.</param>
     public Student(
         Guid id
-        , Name fullName
+        , FullName fullName
         , Gender gender
         , DateTime birthDate
         , Email email
@@ -86,7 +86,7 @@ public class Student : BasePerson
         var enrollment = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
         if (enrollment != null)
         {
-            throw new StudentNotNullException(string.Format(ErrorMessage.NotNullError, nameof(enrollmentId)));
+            throw new EnrollmentConflictException(string.Format(ErrorMessage.ConflictError, nameof(enrollmentId)));
         }
 
         var newEnrollment = new Enrollment(enrollmentId, Id, courseId, startCourseDate);
@@ -97,8 +97,7 @@ public class Student : BasePerson
     /// Метод для обновления значений полей сущности Student
     /// </summary>
     public void Update(
-        Guid id
-        , Name fullName
+        FullName fullName
         , Gender gender
         , DateTime birthDate
         , Email email
@@ -106,7 +105,6 @@ public class Student : BasePerson
         , Address address,
         string avatar)
     {
-        SetId(id);
         SetFullName(fullName);
         SetGender(gender);
         SetPhone(phone);
@@ -124,7 +122,7 @@ public class Student : BasePerson
         var enrollment = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
         if (enrollment == null)
         {
-            throw new StudentNotFoundException(string.Format(ErrorMessage.NullError, nameof(enrollmentId)));
+            throw new EnrollmentNotFoundException(string.Format(ErrorMessage.NotFoundError, nameof(enrollmentId)));
         }
 
         _enrollments.Remove(enrollment);
@@ -135,7 +133,7 @@ public class Student : BasePerson
     /// </summary>
     private void SetBirthDate(DateTime birthDate)
     {
-        BirthDate = Guard.Against.Date(birthDate);
+        BirthDate = Guard.Against.FutureDate(birthDate);
     }
 
     /// <summary>
