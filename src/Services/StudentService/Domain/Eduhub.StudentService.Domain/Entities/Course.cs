@@ -1,8 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Entities.Base;
-using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
-using Eduhub.StudentService.Domain.Validations;
+using Eduhub.StudentService.Domain.Validations.Enums;
 
 namespace Eduhub.StudentService.Domain.Entities;
 
@@ -56,7 +55,7 @@ public class Course : BaseEntity
     /// </summary>
     private void SetName(string courseName)
     {
-        Name = Guard.Against.Regex(courseName, RegexPatterns.LettersPattern);
+        Name = Guard.Against.String(courseName, 50, Operation.LessThanOrEqual);
     }
 
     /// <summary>
@@ -64,7 +63,7 @@ public class Course : BaseEntity
     /// </summary>
     private void SetDescription(string description)
     {
-        Description = Guard.Against.String(description, 100, Operation.GreaterThan);
+        Description = description;
     }
 
     /// <summary>
@@ -72,6 +71,6 @@ public class Course : BaseEntity
     /// </summary>
     private void SetEducatorId(Guid educatorId)
     {
-        EducatorId = Guard.Against.Default(educatorId);
+        EducatorId = Guard.Against.NullOrEmpty(educatorId);
     }
 }

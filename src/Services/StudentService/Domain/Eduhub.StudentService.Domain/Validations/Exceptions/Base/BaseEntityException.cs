@@ -1,8 +1,9 @@
 ﻿namespace Eduhub.StudentService.Domain.Validations.Exceptions.Core;
 
 /// <summary>
-/// Класс для описания кастомных исключений, которые будут наследовать этот класс
+/// Базовове исключение для сущностей
 /// </summary>
+/// <param name="message">Сообщение об ошибке.</param>
 public class BaseEntityException : Exception
 {
     protected BaseEntityException(string message) : base(message)

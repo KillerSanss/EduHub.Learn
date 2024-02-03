@@ -2,7 +2,7 @@
 using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.ErrorMessages;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
-using Eduhub.StudentService.Domain.Entities.Enums;
+using Eduhub.StudentService.Domain.Validations.Enums;
 
 namespace Eduhub.StudentService.Domain.Validations.GuardClasses;
 
@@ -14,31 +14,19 @@ public static class StringGuard
     /// <summary>
     /// Метод для провеки value на соответствие регулярному выражению
     /// </summary>
-    public static string String(this IGuardClause guardClause, string value, int lenght, Operation operation, [CallerArgumentExpression("value")] string paramName = null)
+    public static string String(this IGuardClause guardClause, string value, int length, Operation operation, [CallerArgumentExpression("value")] string paramName = null)
     {
         Guard.Against.NullOrEmpty(value);
-        Guard.Against.Enum(operation, defaultValues: Operation.None);
 
-        bool isValid = false;
-
-        switch (operation)
+        var isValid = operation switch
         {
-            case Operation.LessThan:
-                isValid = value.Length < lenght;
-                break;
-            case Operation.LessThanOrEqual:
-                isValid = value.Length <= lenght;
-                break;
-            case Operation.GreaterThan:
-                isValid = value.Length > lenght;
-                break;
-            case Operation.GreaterThanOrEqual:
-                isValid = value.Length >= lenght;
-                break;
-            case Operation.Equal:
-                isValid = value.Length == lenght;
-                break;
-        }
+            Operation.LessThan => value.Length < length,
+            Operation.LessThanOrEqual => value.Length <= length,
+            Operation.GreaterThan => value.Length > length,
+            Operation.GreaterThanOrEqual => value.Length >= length,
+            Operation.Equal => value.Length == length,
+            _ => false
+        };
 
         if (!isValid)
         {

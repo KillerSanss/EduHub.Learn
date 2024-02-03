@@ -6,12 +6,12 @@ using Eduhub.StudentService.Domain.Validations.Exceptions;
 namespace Eduhub.StudentService.Domain.Validations.GuardClasses;
 
 /// <summary>
-/// Гуард для валидации дня рождения
+/// Гуард для валидации даты
 /// </summary>
 public static class DateGuard
 {
     /// <summary>
-    /// Метод для провеки birthDate на значение по умолчанию и на ошибку ввода, когда birthDate больше текущего времени.
+    /// Метод для проверки даты, не превышающая текущую дату
     /// </summary>
     public static DateTime FutureDate(this IGuardClause guardClause, DateTime date, [CallerArgumentExpression("date")] string paramName = null)
     {

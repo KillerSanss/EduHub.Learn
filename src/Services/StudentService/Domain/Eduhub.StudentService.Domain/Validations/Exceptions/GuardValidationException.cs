@@ -3,8 +3,9 @@
 namespace Eduhub.StudentService.Domain.Validations.Exceptions;
 
 /// <summary>
-/// Класс для описания кастомного исключения GuardValidationException для ошибок валидации в Guard классах
+/// Исключение при ошибки валидации
 /// </summary>
+/// <param name="message">Сообщение об ошибке.</param>
 public class GuardValidationException : BaseEntityException
 {
     public GuardValidationException(string message) : base(message)

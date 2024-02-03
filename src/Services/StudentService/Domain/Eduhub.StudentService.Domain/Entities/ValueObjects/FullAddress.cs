@@ -1,13 +1,13 @@
 ﻿using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
-using Eduhub.StudentService.Domain.Validations;
+using Eduhub.StudentService.Domain.Validations.Enums;
 
 namespace Eduhub.StudentService.Domain.Entities.ValueObjects;
 
 /// <summary>
 /// Value Object для получения полного адреса
 /// </summary>
-public class Address
+public class FullAddress
 {
     /// <summary>
     /// Город
@@ -30,10 +30,10 @@ public class Address
     /// <param name="city">Город.</param>
     /// <param name="street">Улица.</param>
     /// <param name="houseNumber">Номер дома.</param>
-    public Address(string city, string street, int houseNumber)
+    public FullAddress(string city, string street, int houseNumber)
     {
-        City = Guard.Against.Regex(city, RegexPatterns.LettersPattern);
-        Street = Guard.Against.Regex(street, RegexPatterns.LettersPattern);
+        City = Guard.Against.String(city, 60, Operation.LessThanOrEqual);
+        Street = Guard.Against.String(street, 60, Operation.LessThanOrEqual);
         HouseNumber = Guard.Against.Negative(houseNumber);
     }
 }

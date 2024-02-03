@@ -3,19 +3,19 @@
 namespace Eduhub.StudentService.Domain.Validations;
 
 /// <summary>
-/// Класс для описание регулярных выражений
+/// Класс для описания регулярных выражений
 /// </summary>
 public static class RegexPatterns
 {
     /// <summary>
     /// Электронная почта
     /// </summary>
-    public static readonly Regex EmailPattern = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+    public static readonly Regex EmailPattern = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,255}");
 
     /// <summary>
     /// Номер телефона
     /// </summary>
-    public static readonly Regex PhonePattern = new Regex(@"\+373 [0-9]{8}$");
+    public static readonly Regex PhonePattern = new Regex(@"\373[0-9]{8}$");
 
     /// <summary>
     /// Ссылка на аватар

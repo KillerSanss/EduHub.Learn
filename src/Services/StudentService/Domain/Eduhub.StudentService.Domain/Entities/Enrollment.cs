@@ -43,7 +43,7 @@ public class Enrollment : BaseEntity
     /// </summary>
     private void SetStudentId(Guid studentId)
     {
-        StudentId = Guard.Against.Default(studentId);
+        StudentId = Guard.Against.NullOrEmpty(studentId);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class Enrollment : BaseEntity
     /// </summary>
     private void SetCourseId(Guid courseId)
     {
-        CourseId = Guard.Against.Default(courseId);
+        CourseId = Guard.Against.NullOrEmpty(courseId);
     }
 
     /// <summary>

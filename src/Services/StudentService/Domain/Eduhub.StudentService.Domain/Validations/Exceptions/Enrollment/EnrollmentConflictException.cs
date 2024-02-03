@@ -1,13 +1,16 @@
-﻿using Eduhub.StudentService.Domain.Validations.Exceptions.Core;
+﻿using Eduhub.StudentService.Domain.Validations.Exceptions.Base;
 
 namespace Eduhub.StudentService.Domain.Validations.Exceptions.Enrollment
 {
     /// <summary>
-    /// Класс для описания кастомного исключения EnrollmentNotFoundException для ошибок сущности Student
+    /// Исключение при возникновении конфликта
     /// </summary>
-    public class EnrollmentConflictException : BaseEntityException
+    /// <param name="paramName">Название параметра.</param>
+    /// <param name="value">Значение параметра.</param>
+    public class EnrollmentConflictException : BaseConflictException
     {
-        public EnrollmentConflictException(string message) : base(message)
+        public EnrollmentConflictException(string paramName, string value)
+            : base(nameof(Enrollment), paramName, value)
         {
         }
     }

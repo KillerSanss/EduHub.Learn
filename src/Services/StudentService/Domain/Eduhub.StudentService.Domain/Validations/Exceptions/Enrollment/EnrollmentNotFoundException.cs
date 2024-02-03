@@ -1,13 +1,16 @@
-﻿using Eduhub.StudentService.Domain.Validations.Exceptions.Core;
+﻿using Eduhub.StudentService.Domain.Validations.Exceptions.Base;
 
 namespace Eduhub.StudentService.Domain.Validations.Exceptions.Enrollment
 {
     /// <summary>
-    /// Класс для описания кастомного исключения EnrollmentNotFoundException для ошибок сущности Student
+    /// Исключение при не найденой сущности Enrollment
     /// </summary>
-    public class EnrollmentNotFoundException : BaseEntityException
+    /// <param name="paramName">Название параметра.</param>
+    /// <param name="value">Значение параметра.</param>
+    public class EnrollmentNotFoundException : BaseNotFoundException
     {
-        public EnrollmentNotFoundException(string message) : base(message)
+        public EnrollmentNotFoundException(string paramName, string value)
+            : base(nameof (Enrollment), paramName, value)
         {
         }
     }

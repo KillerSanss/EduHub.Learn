@@ -2,7 +2,6 @@
 using Eduhub.StudentService.Domain.Entities.Base;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Eduhub.StudentService.Domain.Validations.ErrorMessages;
 using Eduhub.StudentService.Domain.Validations.Exceptions.Enrollment;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
 using Eduhub.StudentService.Domain.Validations;
@@ -32,7 +31,7 @@ public class Student : BasePerson
     /// <summary>
     /// Адрес
     /// </summary>
-    public Address Address { get; private set; }
+    public FullAddress Address { get; private set; }
 
     /// <summary>
     /// Аватар
@@ -51,14 +50,14 @@ public class Student : BasePerson
     /// <param name="address">Адрес.</param>
     /// <param name="avatar">Аватар.</param>
     public Student(
-        Guid id
-        , FullName fullName
-        , Gender gender
-        , DateTime birthDate
-        , Email email
-        , Phone phone
-        , Address address
-        , string avatar)
+        Guid id,
+        FullName fullName,
+        Gender gender,
+        DateTime birthDate,
+        Email email,
+        Phone phone,
+        FullAddress address,
+        string avatar)
     {
         SetId(id);
         SetFullName(fullName);
@@ -81,12 +80,14 @@ public class Student : BasePerson
     /// <summary>
     /// Метод для добавления нового зачисления в список
     /// </summary>
-    public void Add(Guid enrollmentId, Guid courseId, DateTime startCourseDate)
+    public void AddStudent(Guid enrollmentId, Guid courseId, DateTime startCourseDate)
     {
+        Guard.Against.Null(enrollmentId);
+
         var enrollment = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
         if (enrollment != null)
         {
-            throw new EnrollmentConflictException(string.Format(ErrorMessage.ConflictError, nameof(enrollmentId)));
+            throw new EnrollmentConflictException(nameof(enrollmentId), enrollmentId.ToString());
         }
 
         var newEnrollment = new Enrollment(enrollmentId, Id, courseId, startCourseDate);
@@ -97,12 +98,12 @@ public class Student : BasePerson
     /// Метод для обновления значений полей сущности Student
     /// </summary>
     public void Update(
-        FullName fullName
-        , Gender gender
-        , DateTime birthDate
-        , Email email
-        , Phone phone
-        , Address address,
+        FullName fullName,
+        Gender gender,
+        DateTime birthDate,
+        Email email,
+        Phone phone,
+        FullAddress address,
         string avatar)
     {
         SetFullName(fullName);
@@ -117,12 +118,14 @@ public class Student : BasePerson
     /// <summary>
     /// Метод для удаления зачисления
     /// </summary>
-    public void Delete(Guid enrollmentId)
+    public void DeleteStudent(Guid enrollmentId)
     {
+        Guard.Against.Null(enrollmentId);
+
         var enrollment = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
         if (enrollment == null)
         {
-            throw new EnrollmentNotFoundException(string.Format(ErrorMessage.NotFoundError, nameof(enrollmentId)));
+            throw new EnrollmentNotFoundException(nameof(enrollmentId), enrollmentId.ToString());
         }
 
         _enrollments.Remove(enrollment);
@@ -147,7 +150,7 @@ public class Student : BasePerson
     /// <summary>
     /// Установка адреса
     /// </summary>
-    private void SetAddress(Address address)
+    private void SetAddress(FullAddress address)
     {
         Address = Guard.Against.Null(address);
     }

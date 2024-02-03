@@ -33,14 +33,14 @@ public class Educator : BasePerson
     /// <param name="gender">Пол.</param>
     /// <param name="workExperience">Опыт работы.</param>
     /// <param name="startDate">Начало работы.</param>
-    /// <param name="phone">.</param>
+    /// <param name="phone">Номер телефона.</param>
     public Educator(
-        Guid id
-        , FullName fullName
-        , Gender gender
-        , int workExperience
-        , DateTime startDate
-        , Phone phone)
+        Guid id,
+        FullName fullName,
+        Gender gender,
+        int workExperience,
+        DateTime startDate,
+        Phone phone)
     {
         SetId(id);
         SetFullName(fullName);
