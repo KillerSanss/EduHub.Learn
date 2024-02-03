@@ -33,11 +33,14 @@ public class FullName
     /// <param name="patronymic">Отчество.</param>
     public FullName(string surname, string firstName, string patronymic)
     {
-        Surname = Guard.Against.String(surname, 60, Operation.LessThanOrEqual);
-        Surname = Guard.Against.Regex(surname, RegexPatterns.LettersPattern);
-        FirstName = Guard.Against.String(firstName, 60, Operation.LessThanOrEqual);
-        FirstName = Guard.Against.Regex(firstName, RegexPatterns.LettersPattern);
-        Patronymic = Guard.Against.String(patronymic, 60, Operation.LessThanOrEqual);
-        Patronymic = Guard.Against.Regex(patronymic, RegexPatterns.LettersPattern);
+        Guard.Against.String(surname, 2, Operation.GreaterThanOrEqual);
+        Guard.Against.String(surname, 60, Operation.LessThanOrEqual);
+        Surname = Guard.Against.Regex(surname, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
+        Guard.Against.String(firstName, 2, Operation.GreaterThanOrEqual);
+        Guard.Against.String(firstName, 60, Operation.LessThanOrEqual);
+        FirstName = Guard.Against.Regex(firstName, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
+        Guard.Against.String(patronymic, 2, Operation.GreaterThanOrEqual);
+        Guard.Against.String(patronymic, 60, Operation.LessThanOrEqual);
+        Patronymic = Guard.Against.Regex(patronymic, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
     }
 }

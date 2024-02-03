@@ -10,7 +10,7 @@ public static class RegexPatterns
     /// <summary>
     /// Электронная почта
     /// </summary>
-    public static readonly Regex EmailPattern = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,255}");
+    public static readonly Regex EmailPattern = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}");
 
     /// <summary>
     /// Номер телефона

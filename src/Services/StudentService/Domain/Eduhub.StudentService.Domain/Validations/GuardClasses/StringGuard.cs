@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using Ardalis.GuardClauses;
-using Eduhub.StudentService.Domain.Validations.ErrorMessages;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 using Eduhub.StudentService.Domain.Validations.Enums;
 
@@ -14,7 +13,12 @@ public static class StringGuard
     /// <summary>
     /// Метод для провеки value на соответствие регулярному выражению
     /// </summary>
-    public static string String(this IGuardClause guardClause, string value, int length, Operation operation, [CallerArgumentExpression("value")] string paramName = null)
+    public static string String(
+        this IGuardClause guardClause,
+        string value,
+        int length,
+        Operation operation,
+        [CallerArgumentExpression("value")] string paramName = null)
     {
         Guard.Against.NullOrEmpty(value);
 
@@ -30,7 +34,7 @@ public static class StringGuard
 
         if (!isValid)
         {
-            throw new GuardValidationException(string.Format(ErrorMessage.InvalidPattern, paramName));
+            throw new GuardValidationException(string.Format(ErrorMessage.InvalidLength, paramName));
         }
 
         return value;

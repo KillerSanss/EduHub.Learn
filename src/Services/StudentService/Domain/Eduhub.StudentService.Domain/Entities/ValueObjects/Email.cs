@@ -20,6 +20,6 @@ public class Email
     /// <param name="email">Электронная почта.</param>
     public Email(string email)
     {
-        Value = Guard.Against.Regex(email, RegexPatterns.EmailPattern);
+        Value = Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessage.EmailFormat);
     }
 }

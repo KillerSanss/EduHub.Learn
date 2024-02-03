@@ -5,6 +5,7 @@ using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Domain.Validations.Exceptions.Enrollment;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
 using Eduhub.StudentService.Domain.Validations;
+using Eduhub.StudentService.Domain.Validations.Enums;
 
 namespace Eduhub.StudentService.Domain.Entities;
 
@@ -80,7 +81,7 @@ public class Student : BasePerson
     /// <summary>
     /// Метод для добавления нового зачисления в список
     /// </summary>
-    public void AddStudent(Guid enrollmentId, Guid courseId, DateTime startCourseDate)
+    public void AddEnrollment(Guid enrollmentId, Guid courseId, DateTime startCourseDate)
     {
         Guard.Against.Null(enrollmentId);
 
@@ -118,7 +119,7 @@ public class Student : BasePerson
     /// <summary>
     /// Метод для удаления зачисления
     /// </summary>
-    public void DeleteStudent(Guid enrollmentId)
+    public void DeleteEntollment(Guid enrollmentId)
     {
         Guard.Against.Null(enrollmentId);
 
@@ -144,6 +145,7 @@ public class Student : BasePerson
     /// </summary>
     private void SetEmail(Email email)
     {
+        Guard.Against.String(email.ToString(), 255, Operation.LessThanOrEqual);
         Email = Guard.Against.Null(email);
     }
 
@@ -160,6 +162,6 @@ public class Student : BasePerson
     /// </summary>
     private void SetAvatar(string avatar)
     {
-        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern);
+        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern, ErrorMessage.AvatarPattern);
     }
 }

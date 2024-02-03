@@ -32,8 +32,8 @@ public class FullAddress
     /// <param name="houseNumber">Номер дома.</param>
     public FullAddress(string city, string street, int houseNumber)
     {
-        City = Guard.Against.String(city, 60, Operation.LessThanOrEqual);
-        Street = Guard.Against.String(street, 60, Operation.LessThanOrEqual);
+        City = Guard.Against.String(city, 100, Operation.LessThanOrEqual);
+        Street = Guard.Against.String(street, 100, Operation.LessThanOrEqual);
         HouseNumber = Guard.Against.Negative(houseNumber);
     }
 }
