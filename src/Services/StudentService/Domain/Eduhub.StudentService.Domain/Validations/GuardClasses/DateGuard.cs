@@ -21,7 +21,7 @@ public static class DateGuard
 
         if (date > DateTime.Now)
         {
-            throw new GuardValidationException(string.Format(ErrorMessage.InvalidData, paramName));
+            throw new GuardValidationException(string.Format(ErrorMessage.FutureDate, paramName));
         }
 
         return date;

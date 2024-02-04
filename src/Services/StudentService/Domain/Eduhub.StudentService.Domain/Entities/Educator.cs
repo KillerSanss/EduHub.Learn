@@ -2,6 +2,7 @@
 using Eduhub.StudentService.Domain.Entities.Base;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
+using Eduhub.StudentService.Domain.Validations.GuardClasses;
 
 namespace Eduhub.StudentService.Domain.Entities;
 
@@ -83,6 +84,6 @@ public class Educator : BasePerson
     /// </summary>
     private void SetStartDate(DateTime startDate)
     {
-        StartDate = Guard.Against.Null(startDate);
+        StartDate = Guard.Against.FutureDate(startDate);
     }
 }

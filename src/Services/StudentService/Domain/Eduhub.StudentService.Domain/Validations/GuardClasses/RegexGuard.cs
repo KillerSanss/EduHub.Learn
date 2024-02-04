@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 
@@ -17,15 +16,14 @@ public static class RegexGuard
         this IGuardClause guardClause,
         string value,
         Regex regex,
-        string message,
-        [CallerArgumentExpression("value")] string paramName = null)
+        string message)
     {
         Guard.Against.Null(regex);
         Guard.Against.NullOrEmpty(value);
 
         if (!regex.IsMatch(value))
         {
-            throw new GuardValidationException(string.Format(message, paramName));
+            throw new GuardValidationException(message);
         }
 
         return value;

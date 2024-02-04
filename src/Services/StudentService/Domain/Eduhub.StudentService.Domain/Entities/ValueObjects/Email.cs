@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
 using Eduhub.StudentService.Domain.Validations;
+using Eduhub.StudentService.Domain.Validations.Enums;
 
 namespace Eduhub.StudentService.Domain.Entities.ValueObjects;
 
@@ -20,6 +21,7 @@ public class Email
     /// <param name="email">Электронная почта.</param>
     public Email(string email)
     {
+        Guard.Against.String(email, 255, Operation.LessThanOrEqual);
         Value = Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessage.EmailFormat);
     }
 }

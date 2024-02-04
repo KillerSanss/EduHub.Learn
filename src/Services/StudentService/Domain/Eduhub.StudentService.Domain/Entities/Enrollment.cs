@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Entities.Base;
+using Eduhub.StudentService.Domain.Validations.GuardClasses;
 
 namespace Eduhub.StudentService.Domain.Entities;
 
@@ -59,6 +60,6 @@ public class Enrollment : BaseEntity
     /// </summary>
     private void SetStartDate(DateTime startDate)
     {
-        StartDate = Guard.Against.Null(startDate);
+        StartDate = Guard.Against.FutureDate(startDate);
     }
 }

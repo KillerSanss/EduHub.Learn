@@ -33,14 +33,19 @@ public class FullName
     /// <param name="patronymic">Отчество.</param>
     public FullName(string surname, string firstName, string patronymic)
     {
+        Common(surname, firstName, patronymic);
+    }
+
+    private void Common(string surname, string firstName, string patronymic)
+    {
         Guard.Against.String(surname, 2, Operation.GreaterThanOrEqual);
         Guard.Against.String(surname, 60, Operation.LessThanOrEqual);
-        Surname = Guard.Against.Regex(surname, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
+        Surname = Guard.Against.Regex(surname, RegexPatterns.LettersPattern, string.Format(ErrorMessage.OnlyLetters, nameof(surname)));
         Guard.Against.String(firstName, 2, Operation.GreaterThanOrEqual);
         Guard.Against.String(firstName, 60, Operation.LessThanOrEqual);
-        FirstName = Guard.Against.Regex(firstName, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
+        FirstName = Guard.Against.Regex(firstName, RegexPatterns.LettersPattern, string.Format(ErrorMessage.OnlyLetters, nameof(firstName)));
         Guard.Against.String(patronymic, 2, Operation.GreaterThanOrEqual);
         Guard.Against.String(patronymic, 60, Operation.LessThanOrEqual);
-        Patronymic = Guard.Against.Regex(patronymic, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
+        Patronymic = Guard.Against.Regex(patronymic, RegexPatterns.LettersPattern, string.Format(ErrorMessage.OnlyLetters, nameof(patronymic)));
     }
 }

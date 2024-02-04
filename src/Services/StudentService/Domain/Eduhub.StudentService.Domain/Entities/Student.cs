@@ -119,7 +119,7 @@ public class Student : BasePerson
     /// <summary>
     /// Метод для удаления зачисления
     /// </summary>
-    public void DeleteEntollment(Guid enrollmentId)
+    public void DeleteEnrollment(Guid enrollmentId)
     {
         Guard.Against.Null(enrollmentId);
 

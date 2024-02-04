@@ -35,7 +35,16 @@ public static class ErrorMessage
     /// Использовать вместе со string.Format
     /// {0} - имя свойства
     /// </remarks>
-    public const string InvalidLength = "{0} must be correct lenght";
+    public const string InvalidLength = "{0} must be correct length";
+
+    /// <summary>
+    /// Сообщение об ошибке даты
+    /// </summary>
+    /// <remarks>
+    /// Использовать вместе со string.Format
+    /// {0} - имя свойства
+    /// </remarks>
+    public const string FutureDate = "{0} cannot be in future";
 
     /// <summary>
     /// Сообщение об ошибке некорректного формата электронной почты
