@@ -51,6 +51,10 @@ public class Educator : BasePerson
         SetStartDate(startDate);
     }
 
+    public Educator()
+    {
+    }
+
     /// <summary>
     /// Метод для получения списка всех курсов учителя
     /// </summary>

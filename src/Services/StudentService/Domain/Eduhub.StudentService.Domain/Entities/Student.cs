@@ -70,6 +70,10 @@ public class Student : BasePerson
         SetAvatar(avatar);
     }
 
+    public Student()
+    {
+    }
+
     /// <summary>
     /// Метод для получения списка всех зачислений студента
     /// </summary>

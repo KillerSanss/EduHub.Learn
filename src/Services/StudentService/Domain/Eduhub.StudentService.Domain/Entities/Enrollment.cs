@@ -39,6 +39,10 @@ public class Enrollment : BaseEntity
         SetStartDate(startDate);
     }
 
+    public Enrollment()
+    {
+    }
+
     /// <summary>
     /// Установка индентификатора студента
     /// </summary>
