@@ -10,13 +10,13 @@ namespace EduHub.StudentService.Tests.Unit.Tests.CourseTests;
 /// </summary>
 public class CoursePositiveTests
 {
-    private readonly Faker _faker = new Faker();
+    private readonly Faker _faker = new();
 
     /// <summary>
     /// Проверка, что у сущности Course корректно создается экземпляр.
     /// </summary>
     [Fact]
-    public void Add_CourseInstance_ReturnCourse()
+    public void Add_Course_ReturnNewCourse()
     {
         // Arrange
         var id = _faker.Random.Guid();
@@ -39,7 +39,7 @@ public class CoursePositiveTests
     /// Проверка, что метод Update обновляет экземпляр сущности Course.
     /// </summary>
     [Fact]
-    public void Update_CourseInstance_UpdatedCourse()
+    public void Update_Course_ReturnSameCourse()
     {
         // Arrange
         var course = CourseGenerator.GenerateCourse();
@@ -52,7 +52,6 @@ public class CoursePositiveTests
 
         // Assert
         course.Should().BeEquivalentTo(newCourse, options => options
-            .Excluding(o => o.Id)
-            .ExcludingNestedObjects());
+            .Excluding(o => o.Id));
     }
 }

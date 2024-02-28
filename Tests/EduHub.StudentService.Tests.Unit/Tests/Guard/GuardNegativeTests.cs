@@ -14,7 +14,7 @@ namespace EduHub.StudentService.Tests.Unit.Tests.GuardTests;
 /// </summary>
 public class GuardNegativeTests
 {
-    private readonly Faker _faker = new Faker();
+    private readonly Faker _faker = new();
 
     /// <summary>
     /// Проверка, что гуард DateGuard выбрасывает исключение GuardValidationException
@@ -54,8 +54,10 @@ public class GuardNegativeTests
     [Fact]
     public void StringGuard_ThrowGuardValidationException()
     {
+        // Arrange
         var text = _faker.Random.String(10);
 
+        // Act
         Action action1 = () => Guard.Against.String(text, 100, Operation.GreaterThanOrEqual);
         Action action2 = () => Guard.Against.String(text, 2, Operation.LessThanOrEqual);
         Action action3 = () => Guard.Against.String(text, 2, Operation.Equal);
@@ -63,6 +65,7 @@ public class GuardNegativeTests
         Action action5 = () => Guard.Against.String(text, 2, Operation.LessThan);
         Action action6 = () => Guard.Against.String(text, 20, (Operation)100);
 
+        // Assert
         action1.Should().Throw<GuardValidationException>();
         action2.Should().Throw<GuardValidationException>();
         action3.Should().Throw<GuardValidationException>();

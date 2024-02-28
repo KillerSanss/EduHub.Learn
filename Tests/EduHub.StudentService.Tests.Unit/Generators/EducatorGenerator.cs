@@ -8,18 +8,19 @@ namespace Eduhub.StudentService.Tests.Unit.Generators;
 /// <summary>
 /// Генерация преподавателя
 /// </summary>
-public class EducatorGenerator
+public static class EducatorGenerator
 {
-    private static readonly Faker<Educator> EducatorFaker = new Faker<Educator>()
-        .RuleFor(e => e.Id, f => f.Random.Guid())
-        .RuleFor(e => e.FullName, f => new FullName(f.Name.LastName(), f.Name.FirstName(), f.Name.LastName()))
-        .RuleFor(e => e.Gender, Gender.Male)
-        .RuleFor(e => e.Phone, f => new Phone(f.Phone.PhoneNumber("+373########")))
-        .RuleFor(e => e.WorkExperience, f => f.Random.Int(1))
-        .RuleFor(e => e.StartDate, f => f.Date.Past());
+    private static readonly Faker _faker = new();
 
     public static Educator GenerateEducator()
     {
-        return EducatorFaker.Generate();
+        var id = _faker.Random.Guid();
+        var fullName = new FullName(_faker.Name.LastName(), _faker.Name.FirstName(), _faker.Name.LastName());
+        var gender = Gender.Male;
+        var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
+        var workExperience = _faker.Random.Int(1);
+        var startDate = _faker.Date.Past();
+
+        return new Educator(id, fullName, gender, workExperience, startDate, phone);
     }
 }

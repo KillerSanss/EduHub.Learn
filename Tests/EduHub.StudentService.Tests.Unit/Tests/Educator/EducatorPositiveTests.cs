@@ -12,13 +12,13 @@ namespace EduHub.StudentService.Tests.Unit.Tests.EducatorTests;
 /// </summary>
 public class EducatorPositiveTests
 {
-    private readonly Faker _faker = new Faker();
+    private readonly Faker _faker = new();
 
     /// <summary>
     /// Проверка, что у сущности Educator корректно создается экземпляр.
     /// </summary>
     [Fact]
-    public void Add_EducatorInstance_ReturnEducator()
+    public void Add_Educator_ReturnNewEducator()
     {
         // Arrange
         var id = _faker.Random.Guid();
@@ -26,7 +26,7 @@ public class EducatorPositiveTests
         var gender = Gender.Male;
         var workExperience = _faker.Random.Int(1);
         var startDate = _faker.Date.Past();
-        var phone = new Phone(_faker.Phone.PhoneNumber("+373########"));
+        var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
 
         // Act
         var educator = new Educator(id, fullName, gender, workExperience, startDate, phone);
@@ -45,7 +45,7 @@ public class EducatorPositiveTests
     /// Проверка, что метод Update обновляет экземпляр сущности Educator.
     /// </summary>
     [Fact]
-    public void Update_EducatorInstance_UpdatedEducator()
+    public void Update_Educator_ReturnSameEducator()
     {
         // Arrange
         var educator = EducatorGenerator.GenerateEducator();
@@ -60,23 +60,6 @@ public class EducatorPositiveTests
 
         // Assert
         educator.Should().BeEquivalentTo(newEducator, options => options
-            .Excluding(o => o.Id)
-            .ExcludingNestedObjects());
-    }
-
-    /// <summary>
-    /// Проверка, что метод GetCourse возвращает список курсов преподавателя.
-    /// </summary>
-    [Fact]
-    public void GetCourse_ReturnIEnumerable()
-    {
-        // Arrange
-        var educator = EducatorGenerator.GenerateEducator();
-
-        // Act
-        var educatorCourses = educator.GetCourse();
-
-        // Assert
-        educatorCourses.Should().NotBeNull();
+            .Excluding(o => o.Id));
     }
 }

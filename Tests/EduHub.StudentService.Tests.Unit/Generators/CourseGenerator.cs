@@ -3,16 +3,17 @@ using Bogus;
 
 namespace Eduhub.StudentService.Tests.Unit.Generators;
 
-public class CourseGenerator
+public static class CourseGenerator
 {
-    private static readonly Faker<Course> CourseFaker = new Faker<Course>()
-        .RuleFor(c => c.Id, f => f.Random.Guid())
-        .RuleFor(c => c.Name, f => f.Random.String(1, 50))
-        .RuleFor(c => c.Description, f => f.Random.String())
-        .RuleFor(c => c.EducatorId, f => f.Random.Guid());
+    private static readonly Faker _faker = new();
 
     public static Course GenerateCourse()
     {
-        return CourseFaker.Generate();
+        var id = _faker.Random.Guid();
+        var name = _faker.Random.String(1, 50);
+        var description = _faker.Random.String();
+        var educatorId = _faker.Random.Guid();
+
+        return new Course(id, name, description, educatorId);
     }
 }

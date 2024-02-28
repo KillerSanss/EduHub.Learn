@@ -15,7 +15,7 @@ public static class RegexPatterns
     /// <summary>
     /// Номер телефона
     /// </summary>
-    public static readonly Regex PhonePattern = new Regex(@"\+373[0-9]{8}$");
+    public static readonly Regex PhonePattern = new Regex(@"^373\d{8}$");
 
     /// <summary>
     /// Ссылка на аватар

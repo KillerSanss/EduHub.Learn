@@ -9,7 +9,7 @@ namespace EduHub.StudentService.Tests.Unit.Tests.EnrollmentTests;
 /// </summary>
 public class EnrollmentPositiveTests
 {
-    private readonly Faker _faker = new Faker();
+    private readonly Faker _faker = new();
 
     /// <summary>
     /// Проверка, что метод Update обновляет экземпляр сущности Educator.

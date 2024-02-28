@@ -8,20 +8,21 @@ namespace Eduhub.StudentService.Tests.Unit.Generators;
 /// <summary>
 /// Генерация студента
 /// </summary>
-public class StudentGenerator
+public static class StudentGenerator
 {
-    private static readonly Faker<Student> StudentFaker = new Faker<Student>()
-        .RuleFor(s => s.Id, f => f.Random.Guid())
-        .RuleFor(s => s.FullName, f => new FullName(f.Name.LastName(), f.Name.FirstName(), f.Name.LastName()))
-        .RuleFor(s => s.Gender, Gender.Male)
-        .RuleFor(s => s.BirthDate, f => f.Date.Past(18))
-        .RuleFor(s => s.Email, f => new Email(f.Internet.Email()))
-        .RuleFor(s => s.Phone, f => new Phone(f.Phone.PhoneNumber("+373########")))
-        .RuleFor(s => s.Address, f => new FullAddress(f.Address.City(), f.Address.StreetName(), f.Random.Int(1, 1000)))
-        .RuleFor(s => s.Avatar, f => f.Image.PicsumUrl() + f.PickRandom(new[] {".jpeg", ".png"}));
+    private static readonly Faker _faker = new();
 
     public static Student GenerateStudent()
     {
-        return StudentFaker.Generate();
+        var id = _faker.Random.Guid();
+        var fullName = new FullName(_faker.Name.LastName(), _faker.Name.FirstName(), _faker.Name.LastName());
+        var gender = Gender.Male;
+        var birthDate = _faker.Date.Past();
+        var email = new Email(_faker.Internet.Email());
+        var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
+        var address = new FullAddress(_faker.Address.City(), _faker.Address.StreetName(), _faker.Random.Int(1, 1000));
+        var avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png");
+
+        return new Student(id, fullName, gender, birthDate, email, phone, address, avatar);
     }
 }

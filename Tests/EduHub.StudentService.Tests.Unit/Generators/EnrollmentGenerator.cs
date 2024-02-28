@@ -6,15 +6,17 @@ namespace Eduhub.StudentService.Tests.Unit.Generators;
 /// <summary>
 /// Генерация зачисления
 /// </summary>
-public class EnrollmentGenerator
+public static class EnrollmentGenerator
 {
-    private static readonly Faker<Enrollment> EnrollmentFaker = new Faker<Enrollment>()
-        .RuleFor(e => e.Id, f => f.Random.Guid())
-        .RuleFor(e => e.CourseId, f => f.Random.Guid())
-        .RuleFor(e => e.StartDate, f => f.Date.Past(18));
+    private static readonly Faker _faker = new();
 
     public static Enrollment GenerateEnrollment()
     {
-        return EnrollmentFaker.Generate();
+        var id = _faker.Random.Guid();
+        var studentId = _faker.Random.Guid();
+        var courseId = _faker.Random.Guid();
+        var startDate = _faker.Date.Past();
+
+        return new Enrollment(id, studentId, courseId, startDate);
     }
 }
