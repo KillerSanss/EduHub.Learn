@@ -5,15 +5,16 @@ namespace Eduhub.StudentService.Tests.Unit.Generators;
 
 public static class CourseGenerator
 {
-    private static readonly Faker Faker = new();
+    private static readonly Faker<Course> Faker = new Faker<Course>()
+        .CustomInstantiator(f => new Course(
+            f.Random.Guid(),
+            f.Random.String(1, 50),
+            f.Random.String(),
+            f.Random.Guid()
+        ));
 
     public static Course GenerateCourse()
     {
-        var id = Faker.Random.Guid();
-        var name = Faker.Random.String(1, 50);
-        var description = Faker.Random.String();
-        var educatorId = Faker.Random.Guid();
-
-        return new Course(id, name, description, educatorId);
+        return Faker.Generate();
     }
 }

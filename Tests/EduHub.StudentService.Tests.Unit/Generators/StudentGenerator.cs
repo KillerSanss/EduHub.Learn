@@ -10,19 +10,20 @@ namespace Eduhub.StudentService.Tests.Unit.Generators;
 /// </summary>
 public static class StudentGenerator
 {
-    private static readonly Faker Faker = new();
+    private static readonly Faker<Student> Faker = new Faker<Student>()
+        .CustomInstantiator(f => new Student(
+            f.Random.Guid(),
+            new FullName(f.Name.LastName(), f.Name.FirstName(), f.Name.LastName()),
+            Gender.Male,
+            f.Date.Past(),
+            new Email(f.Internet.Email()),
+            new Phone(f.Phone.PhoneNumber("373########")),
+            new FullAddress(f.Address.City(), f.Address.StreetName(), f.Random.Int(1, 1000)),
+            f.Image.PicsumUrl() + f.PickRandom(".jpeg", ".png")
+        ));
 
     public static Student GenerateStudent()
     {
-        var id = Faker.Random.Guid();
-        var fullName = new FullName(Faker.Name.LastName(), Faker.Name.FirstName(), Faker.Name.LastName());
-        var gender = Gender.Male;
-        var birthDate = Faker.Date.Past();
-        var email = new Email(Faker.Internet.Email());
-        var phone = new Phone(Faker.Phone.PhoneNumber("373########"));
-        var address = new FullAddress(Faker.Address.City(), Faker.Address.StreetName(), Faker.Random.Int(1, 1000));
-        var avatar = Faker.Image.PicsumUrl() + Faker.PickRandom(".jpeg", ".png");
-
-        return new Student(id, fullName, gender, birthDate, email, phone, address, avatar);
+        return Faker.Generate();
     }
 }
