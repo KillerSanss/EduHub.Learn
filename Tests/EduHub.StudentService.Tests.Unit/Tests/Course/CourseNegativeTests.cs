@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
-using Eduhub.StudentService.Domain.Entities;
 using Bogus;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 
-namespace EduHub.StudentService.Tests.Unit.Tests.CourseTests;
+namespace EduHub.StudentService.Tests.Unit.Tests.Course;
 
 /// <summary>
 /// Негативные unit тесты для сущности Course.
@@ -15,17 +14,17 @@ public class CourseNegativeTests
     /// <summary>
     /// Проверка, что у сущности Course выбрасывается ArgumentException при пустом названия курса.
     /// </summary>
-    [Fact]
-    public void Add_NullName_ThrowArgumentException()
+    [Theory]
+    [InlineData(null)]
+    public void Add_NullName_ThrowArgumentException(string name)
     {
         // Arrange
         var id = _faker.Random.Guid();
-        string? name = null;
         var description = _faker.Random.String();
-        var educatorId = Guid.NewGuid();
+        var educatorId = _faker.Random.Guid();
 
         // Act
-        var action = () => new Course(id, name, description, educatorId);
+        var action = () => new Eduhub.StudentService.Domain.Entities.Course(id, name, description, educatorId);
 
         // Assert
         action.Should().Throw<ArgumentException>();
@@ -34,17 +33,17 @@ public class CourseNegativeTests
     /// <summary>
     /// Проверка, что у сущности Course выбрасывается GuardValidationException при слишком длинном названии курса.
     /// </summary>
-    [Fact]
-    public void Add_TooLongName_ThrowGuardValidationException()
+    [Theory]
+    [InlineData("111111111111111111111111111111111111111111111111111")]
+    public void Add_TooLongName_ThrowGuardValidationException(string name)
     {
         // Arrange
         var id = _faker.Random.Guid();
-        var name = _faker.Random.String(51);
         var description = _faker.Random.String();
-        var educatorId = Guid.NewGuid();
+        var educatorId = _faker.Random.Guid();
 
         // Act
-        var action = () => new Course(id, name, description, educatorId);
+        var action = () => new Eduhub.StudentService.Domain.Entities.Course(id, name, description, educatorId);
 
         // Assert
         action.Should().Throw<GuardValidationException>();
@@ -53,17 +52,17 @@ public class CourseNegativeTests
     /// <summary>
     /// Проверка, что у сущности Course выбрасывается ArgumentException при пустом educatorId.
     /// </summary>
-    [Fact]
-    public void Add_EmptyEducatorId_ThrowGuardValidationException()
+    [Theory]
+    [InlineData("00000000-0000-0000-0000-000000000000")]
+    public void Add_EmptyEducatorId_ThrowGuardValidationException(string guid)
     {
         // Arrange
         var id = _faker.Random.Guid();
         var name = _faker.Random.String(10);
         var description = _faker.Random.String();
-        Guid educatorId = default;
 
         // Act
-        var action = () => new Course(id, name, description, educatorId);
+        var action = () => new Eduhub.StudentService.Domain.Entities.Course(id, name, description, Guid.Parse(guid));
 
         // Assert
         action.Should().Throw<ArgumentException>();

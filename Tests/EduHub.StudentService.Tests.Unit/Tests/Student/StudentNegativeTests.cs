@@ -18,12 +18,12 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Student
         /// <summary>
         /// Проверка, что у сущности Student выбрасывается ArgumentException при пустом имени.
         /// </summary>
-        [Fact]
-        public void Add_NullFullName_ThrowArgumentException()
+        [Theory]
+        [InlineData(null)]
+        public void Add_NullFullName_ThrowArgumentException(FullName fullName)
         {
             // Arrange
             var id = _faker.Random.Guid();
-            FullName? fullName = null;
             var gender = Gender.Male;
             var birthDate = _faker.Date.Past();
             var email = new Email(_faker.Internet.Email());
@@ -41,13 +41,13 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Student
         /// <summary>
         /// Проверка, что у сущности Student выбрасывается GuardValidationException при неверном gender.
         /// </summary>
-        [Fact]
-        public void Add_NoneGender_ThrowGuardValidationException()
+        [Theory]
+        [InlineData(Gender.None)]
+        public void Add_NoneGender_ThrowGuardValidationException(Gender gender)
         {
             // Arrange
             var id = _faker.Random.Guid();
             var fullName = new FullName(_faker.Name.LastName(), _faker.Name.FirstName(), _faker.Name.LastName());
-            var gender = Gender.None;
             var birthDate = _faker.Date.Past();
             var email = new Email(_faker.Internet.Email());
             var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
@@ -64,14 +64,14 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Student
         /// <summary>
         /// Проверка, что у сущности Student выбрасывается GuardValidationException при неверном birthDate.
         /// </summary>
-        [Fact]
-        public void Add_FutureBirthDate_ThrowGuardValidationException()
+        [Theory]
+        [InlineData("2069-01-01")]
+        public void Add_FutureBirthDate_ThrowGuardValidationException(DateTime birthDate)
         {
             // Arrange
             var id = _faker.Random.Guid();
             var fullName = new FullName(_faker.Name.LastName(), _faker.Name.FirstName(), _faker.Name.LastName());
             var gender = Gender.Male;
-            var birthDate = _faker.Date.Future();
             var email = new Email(_faker.Internet.Email());
             var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
             var fullAddress = new FullAddress(_faker.Address.City(), _faker.Address.StreetName(), _faker.Random.Int(1, 100));
@@ -87,8 +87,9 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Student
         /// <summary>
         /// Проверка, что у сущности Student выбрасывается ArgumentException при пустом адресе.
         /// </summary>
-        [Fact]
-        public void Add_NullFullAddress_ThrowArgumentException()
+        [Theory]
+        [InlineData(null)]
+        public void Add_NullFullAddress_ThrowArgumentException(FullAddress fullAddress)
             // Arrange
         {
             var id = _faker.Random.Guid();
@@ -97,7 +98,6 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Student
             var birthDate = _faker.Date.Past();
             var email = new Email(_faker.Internet.Email());
             var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
-            FullAddress? fullAddress = null;
             var avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png");
 
             // Act
@@ -110,8 +110,9 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Student
         /// <summary>
         /// Проверка, что у сущности Student выбрасывается GuardValidationException при неверном avatar.
         /// </summary>
-        [Fact]
-        public void Add_InvalidAvatar_ThrowGuardValidationException()
+        [Theory]
+        [InlineData("---")]
+        public void Add_InvalidAvatar_ThrowGuardValidationException(string avatar)
             // Arrange
         {
             var id = _faker.Random.Guid();
@@ -121,7 +122,6 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Student
             var email = new Email(_faker.Internet.Email());
             var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
             var fullAddress = new FullAddress(_faker.Address.City(), _faker.Address.StreetName(), _faker.Random.Int(1, 100));
-            var avatar = "---";
 
             // Act
             var action = () => new Eduhub.StudentService.Domain.Entities.Student(id, fullName, gender, birthDate, email, phone, fullAddress, avatar);

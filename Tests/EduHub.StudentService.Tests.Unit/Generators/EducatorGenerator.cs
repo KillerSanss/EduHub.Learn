@@ -10,16 +10,16 @@ namespace Eduhub.StudentService.Tests.Unit.Generators;
 /// </summary>
 public static class EducatorGenerator
 {
-    private static readonly Faker _faker = new();
+    private static readonly Faker Faker = new();
 
     public static Educator GenerateEducator()
     {
-        var id = _faker.Random.Guid();
-        var fullName = new FullName(_faker.Name.LastName(), _faker.Name.FirstName(), _faker.Name.LastName());
+        var id = Faker.Random.Guid();
+        var fullName = new FullName(Faker.Name.LastName(), Faker.Name.FirstName(), Faker.Name.LastName());
         var gender = Gender.Male;
-        var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
-        var workExperience = _faker.Random.Int(1);
-        var startDate = _faker.Date.Past();
+        var phone = new Phone(Faker.Phone.PhoneNumber("373########"));
+        var workExperience = Faker.Random.Int(1);
+        var startDate = Faker.Date.Past();
 
         return new Educator(id, fullName, gender, workExperience, startDate, phone);
     }
