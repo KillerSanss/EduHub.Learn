@@ -2,7 +2,7 @@
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 using FluentAssertions;
 using Eduhub.StudentService.Domain.Entities;
-using EduHub.StudentService.Tests.Unit.Infrastucture.Data;
+using EduHub.StudentService.Tests.Unit.Infrastructure.Data;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Courses;
 
@@ -14,7 +14,6 @@ public class CourseNegativeTests
     private readonly Faker _faker = new();
 
     public static IEnumerable<object[]> TestCourseArgumentExceptionData = TestData.GetCourseArgumentExceptionProperties();
-    public static IEnumerable<object[]> TestCourseGuardValidationExceptionData = TestData.GetCourseGuardValidationExceptionProperties();
 
     /// <summary>
     /// Проверка, что у сущности Course выбрасывается ArgumentException.
@@ -39,9 +38,8 @@ public class CourseNegativeTests
     /// <summary>
     /// Проверка, что у сущности Course выбрасывается GuardValidationException.
     /// </summary>
-    /// <param name="name">Название курса.</param>
     [Theory]
-    [MemberData(nameof(TestCourseGuardValidationExceptionData))]
+    [InlineData("111111111111111111111111111111111111111111111111111")]
     public void Add_TooLongName_ThrowGuardValidationException(string name)
     {
         // Arrange

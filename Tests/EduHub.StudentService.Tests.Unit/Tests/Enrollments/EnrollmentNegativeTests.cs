@@ -2,7 +2,7 @@
 using Bogus;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 using Eduhub.StudentService.Domain.Entities;
-using EduHub.StudentService.Tests.Unit.Infrastucture.Data;
+using EduHub.StudentService.Tests.Unit.Infrastructure.Data;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Enrollments;
 
@@ -14,7 +14,6 @@ public class EnrollmentNegativeTests
     private readonly Faker _faker = new();
 
     public static IEnumerable<object[]> TestEnrollmentArgumentExceptionData = TestData.GetEnrollmentArgumentExceptionProperties();
-    public static IEnumerable<object[]> TestEnrollmentGuardValidationExceptionData = TestData.GetEnrollmentGuardValidationExceptionProperties();
 
     /// <summary>
     /// Проверка, что у сущности Enrollment выбрасывается ArgumentException.
@@ -39,9 +38,8 @@ public class EnrollmentNegativeTests
     /// <summary>
     /// Проверка, что у сущности Enrollment выбрасывается GuardValidationException.
     /// </summary>
-    /// <param name="startDate">Дата зачисления.</param>
     [Theory]
-    [MemberData(nameof(TestEnrollmentGuardValidationExceptionData))]
+    [InlineData("2060-01-01")]
     public void Add_FutureDate_ThrowGuardValidationException(DateTime startDate)
     {
         // Arrange

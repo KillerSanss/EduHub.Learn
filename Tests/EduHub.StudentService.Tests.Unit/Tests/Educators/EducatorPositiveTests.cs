@@ -3,7 +3,7 @@ using Bogus;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
+using EduHub.StudentService.Tests.Unit.Infrastructure.Generators;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Educators;
 
@@ -32,7 +32,6 @@ public class EducatorPositiveTests
         var educator = new Educator(id, fullName, gender, workExperience, startDate, phone);
 
         // Assert
-        educator.Should().NotBeNull();
         educator.Id.Should().Be(id);
         educator.FullName.Should().Be(fullName);
         educator.Gender.Should().Be(gender);

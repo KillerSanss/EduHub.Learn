@@ -4,7 +4,7 @@ using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
-using EduHub.StudentService.Tests.Unit.Infrastucture.Data;
+using EduHub.StudentService.Tests.Unit.Infrastructure.Data;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Educators;
 
@@ -21,11 +21,13 @@ public class EducatorNegativeTests
     /// <summary>
     /// Проверка, что у сущности Educator выбрасывается ArgumentException.
     /// </summary>
-    /// <param name="fullName">Имя.</param>
+    /// <param name="surname">Фамилия.</param>
+    /// <param name="name">Имя.</param>
+    /// <param name="patronymic">Отчество.</param>
     /// <param name="workExperience">Опыт работы.</param>
     [Theory]
     [MemberData(nameof(TestEducatorArgumentExceptionData))]
-    public void Add_NullFullName_ThrowArgumentException(FullName fullName, int workExperience)
+    public void Add_NullFullName_ThrowArgumentException(string surname, string name, string patronymic, int workExperience)
     {
         // Arrange
         var id = _faker.Random.Guid();
@@ -34,7 +36,7 @@ public class EducatorNegativeTests
         var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
 
         // Act
-        var action = () => new Educator(id, fullName, gender, workExperience, startDate, phone);
+        var action = () => new Educator(id, new FullName(surname, name, patronymic), gender, workExperience, startDate, phone);
 
         // Assert
         action.Should().Throw<ArgumentException>();

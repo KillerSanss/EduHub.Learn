@@ -2,7 +2,7 @@ using Bogus;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Domain.Entities;
-using EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
+using EduHub.StudentService.Tests.Unit.Infrastructure.Generators;
 using FluentAssertions;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Students
@@ -34,7 +34,6 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
             var student = new Student(id, fullName, gender, birthDate, email, phone, fullAddress, avatar);
 
             // Assert
-            student.Should().NotBeNull();
             student.Id.Should().Be(id);
             student.FullName.Should().Be(fullName);
             student.Gender.Should().Be(gender);

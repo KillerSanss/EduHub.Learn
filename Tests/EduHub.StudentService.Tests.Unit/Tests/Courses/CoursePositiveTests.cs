@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Bogus;
 using Eduhub.StudentService.Domain.Entities;
-using EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
+using EduHub.StudentService.Tests.Unit.Infrastructure.Generators;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Courses;
 
@@ -28,7 +28,6 @@ public class CoursePositiveTests
         var course = new Course(id, name, description, educatorId);
 
         // Assert
-        course.Should().NotBeNull();
         course.Id.Should().Be(id);
         course.Name.Should().Be(name);
         course.Description.Should().Be(description);

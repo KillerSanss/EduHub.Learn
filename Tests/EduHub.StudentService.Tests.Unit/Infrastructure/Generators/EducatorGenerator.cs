@@ -3,7 +3,7 @@ using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 
-namespace EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
+namespace EduHub.StudentService.Tests.Unit.Infrastructure.Generators;
 
 /// <summary>
 /// Генерация преподавателя

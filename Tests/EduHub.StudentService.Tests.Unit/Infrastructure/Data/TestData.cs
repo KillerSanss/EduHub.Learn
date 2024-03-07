@@ -1,8 +1,7 @@
 ﻿using Bogus;
 using Eduhub.StudentService.Domain.Entities.Enums;
-using Eduhub.StudentService.Domain.Entities.ValueObjects;
 
-namespace EduHub.StudentService.Tests.Unit.Infrastucture.Data;
+namespace EduHub.StudentService.Tests.Unit.Infrastructure.Data;
 
 /// <summary>
 /// Класс генерации тестовых данных для вызова исключений
@@ -18,8 +17,12 @@ public static class TestData
     {
         return new List<object[]>
         {
-            new object[] {null, new FullAddress(Faker.Address.City(), Faker.Address.StreetName(), Faker.Random.Int(1, 100))},
-            new object[] {new FullName(Faker.Name.LastName(), Faker.Name.FirstName(), Faker.Name.LastName()), null}
+            new object[] {null, Faker.Name.FirstName(), Faker.Name.LastName(), Faker.Address.City(), Faker.Address.StreetName(), Faker.Random.Int(1, 100)},
+            new object[] {Faker.Name.LastName(), null, Faker.Name.LastName(), Faker.Address.City(), Faker.Address.StreetName(), Faker.Random.Int(1, 100)},
+            new object[] {Faker.Name.LastName(), Faker.Name.FirstName(), null, Faker.Address.City(), Faker.Address.StreetName(), Faker.Random.Int(1, 100)},
+            new object[] {Faker.Name.LastName(), Faker.Name.FirstName(), Faker.Name.LastName(), null, Faker.Address.StreetName(), Faker.Random.Int(1, 100)},
+            new object[] {Faker.Name.LastName(), Faker.Name.FirstName(), Faker.Name.LastName(), Faker.Address.City(), null, Faker.Random.Int(1, 100)},
+            new object[] {Faker.Name.LastName(), Faker.Name.FirstName(), Faker.Name.LastName(), Faker.Address.City(), Faker.Address.StreetName(), -1}
         };
     }
 
@@ -49,25 +52,16 @@ public static class TestData
     }
 
     /// <summary>
-    /// Генерация данных для исключения GuardValidationException у сущности Enrollment
-    /// </summary>
-    public static IEnumerable<object[]> GetEnrollmentGuardValidationExceptionProperties()
-    {
-        return new List<object[]>
-        {
-            new object[] {Faker.Date.Future()}
-        };
-    }
-
-    /// <summary>
     /// Генерация данных для исключения ArgumentException у сущности Educator
     /// </summary>
     public static IEnumerable<object[]> GetEducatorArgumentExceptionProperties()
     {
         return new List<object[]>
         {
-            new object[] {null, 1},
-            new object[] {new FullName(Faker.Name.LastName(), Faker.Name.FirstName(), Faker.Name.LastName()), -1}
+            new object[] {null, Faker.Name.FirstName(), Faker.Name.LastName(), 1},
+            new object[] {Faker.Name.LastName(), null, Faker.Name.LastName(), 1},
+            new object[] {Faker.Name.LastName(), Faker.Name.FirstName(), null, 1},
+            new object[] {Faker.Name.LastName(), Faker.Name.FirstName(), Faker.Name.LastName(), -1}
         };
     }
 
@@ -92,17 +86,6 @@ public static class TestData
         {
             new object[] {null, Guid.NewGuid()},
             new object[] {Faker.Random.String(10), Guid.Empty}
-        };
-    }
-
-    /// <summary>
-    /// Генерация данных для исключения GuardValidationException у сущности Course
-    /// </summary>
-    public static IEnumerable<object[]> GetCourseGuardValidationExceptionProperties()
-    {
-        return new List<object[]>
-        {
-            new object[] {Faker.Random.String(51)}
         };
     }
 }

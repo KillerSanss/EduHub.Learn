@@ -4,8 +4,8 @@ using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 using Eduhub.StudentService.Domain.Validations.Exceptions.Enrollment;
 using Eduhub.StudentService.Domain.Entities;
-using EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
-using EduHub.StudentService.Tests.Unit.Infrastucture.Data;
+using EduHub.StudentService.Tests.Unit.Infrastructure.Data;
+using EduHub.StudentService.Tests.Unit.Infrastructure.Generators;
 using FluentAssertions;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Students
@@ -23,11 +23,15 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
         /// <summary>
         /// Проверка, что у сущности Student выбрасывается ArgumentException.
         /// </summary>
-        /// <param name="fullName">Имя.</param>
-        /// <param name="fullAddress">Адресс.</param>
+        /// <param name="surname">Фамилия.</param>
+        /// <param name="name">Имя.</param>
+        /// <param name="patronymic">Отчество.</param>
+        /// <param name="city">Город.</param>
+        /// <param name="street">Улица.</param>
+        /// <param name="houseNumber">Номер дома.</param>
         [Theory]
         [MemberData(nameof(TestStudentArgumentExceptionData))]
-        public void Add_Properties_ThrowArgumentException(FullName fullName, FullAddress fullAddress)
+        public void Add_Properties_ThrowArgumentException(string surname, string name, string patronymic, string city, string street, int houseNumber)
         {
             // Arrange
             var id = _faker.Random.Guid();
@@ -38,7 +42,15 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
             var avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png");
 
             // Act
-            var action = () => new Student(id, fullName, gender, birthDate, email, phone, fullAddress, avatar);
+            var action = () => new Student(
+                id,
+                new FullName(surname, name, patronymic),
+                gender,
+                birthDate,
+                email,
+                phone,
+                new FullAddress(city, street, houseNumber),
+                avatar);
 
             // Assert
             action.Should().Throw<ArgumentException>();

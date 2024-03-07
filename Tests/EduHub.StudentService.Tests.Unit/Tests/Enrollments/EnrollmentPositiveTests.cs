@@ -12,10 +12,10 @@ public class EnrollmentPositiveTests
     private readonly Faker _faker = new();
 
     /// <summary>
-    /// Проверка, что метод Update обновляет экземпляр сущности Educator.
+    /// Проверка, что у сущности Enrollment корректно создается экземпляр
     /// </summary>
     [Fact]
-    public void Add_EnrollmentInstance_ReturnCorrectId()
+    public void Add_Enrollment_ReturnNewEnrollment()
     {
         // Arrange
         var id = _faker.Random.Guid();
@@ -27,6 +27,9 @@ public class EnrollmentPositiveTests
         var enrollment = new Enrollment(id, studentId, courseId, startDate);
 
         // Assert
+        enrollment.Id.Should().Be(id);
         enrollment.StudentId.Should().Be(studentId);
+        enrollment.CourseId.Should().Be(courseId);
+        enrollment.StartDate.Should().Be(startDate);
     }
 }
