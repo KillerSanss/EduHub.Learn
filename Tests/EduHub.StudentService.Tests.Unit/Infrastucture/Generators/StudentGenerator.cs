@@ -1,9 +1,9 @@
-﻿using Eduhub.StudentService.Domain.Entities;
+﻿using Bogus;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Bogus;
 
-namespace Eduhub.StudentService.Tests.Unit.Generators;
+namespace EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
 
 /// <summary>
 /// Генерация студента

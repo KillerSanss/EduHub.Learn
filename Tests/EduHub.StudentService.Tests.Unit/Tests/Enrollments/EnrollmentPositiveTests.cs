@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
 using Bogus;
+using Eduhub.StudentService.Domain.Entities;
 
-namespace EduHub.StudentService.Tests.Unit.Tests.Enrollment;
+namespace EduHub.StudentService.Tests.Unit.Tests.Enrollments;
 
 /// <summary>
 /// Позитивные unit тесты для сущности Enrollment.
@@ -23,7 +24,7 @@ public class EnrollmentPositiveTests
         var startDate = _faker.Date.Past();
 
         // Act
-        var enrollment = new Eduhub.StudentService.Domain.Entities.Enrollment(id, studentId, courseId, startDate);
+        var enrollment = new Enrollment(id, studentId, courseId, startDate);
 
         // Assert
         enrollment.StudentId.Should().Be(studentId);

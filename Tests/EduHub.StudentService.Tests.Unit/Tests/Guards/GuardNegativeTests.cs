@@ -4,9 +4,10 @@ using Eduhub.StudentService.Domain.Validations;
 using Eduhub.StudentService.Domain.Validations.Enums;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
+using Ardalis.GuardClauses;
 using FluentAssertions;
 
-namespace EduHub.StudentService.Tests.Unit.Tests.Guard;
+namespace EduHub.StudentService.Tests.Unit.Tests.Guards;
 
 /// <summary>
 /// Негативные unit тесты для кастомных гуардов
@@ -25,7 +26,7 @@ public class GuardNegativeTests
         var date = _faker.Date.Future();
 
         // Act
-        Action action = () => Ardalis.GuardClauses.Guard.Against.FutureDate(date);
+        Action action = () => Guard.Against.FutureDate(date);
 
         // Assert
         action.Should().Throw<GuardValidationException>();
@@ -41,7 +42,7 @@ public class GuardNegativeTests
         var gender = default(Gender);
 
         // Act
-        Action action = () => Ardalis.GuardClauses.Guard.Against.Enum(gender, defaultValues: Gender.None);
+        Action action = () => Guard.Against.Enum(gender, defaultValues: Gender.None);
 
         // Assert
         action.Should().Throw<GuardValidationException>();
@@ -57,12 +58,12 @@ public class GuardNegativeTests
         var text = _faker.Random.String(10);
 
         // Act
-        Action action1 = () => Ardalis.GuardClauses.Guard.Against.String(text, 100, Operation.GreaterThanOrEqual);
-        Action action2 = () => Ardalis.GuardClauses.Guard.Against.String(text, 2, Operation.LessThanOrEqual);
-        Action action3 = () => Ardalis.GuardClauses.Guard.Against.String(text, 2, Operation.Equal);
-        Action action4 = () => Ardalis.GuardClauses.Guard.Against.String(text, 100, Operation.GreaterThan);
-        Action action5 = () => Ardalis.GuardClauses.Guard.Against.String(text, 2, Operation.LessThan);
-        Action action6 = () => Ardalis.GuardClauses.Guard.Against.String(text, 20, (Operation)100);
+        Action action1 = () => Guard.Against.String(text, 100, Operation.GreaterThanOrEqual);
+        Action action2 = () => Guard.Against.String(text, 2, Operation.LessThanOrEqual);
+        Action action3 = () => Guard.Against.String(text, 2, Operation.Equal);
+        Action action4 = () => Guard.Against.String(text, 100, Operation.GreaterThan);
+        Action action5 = () => Guard.Against.String(text, 2, Operation.LessThan);
+        Action action6 = () => Guard.Against.String(text, 20, (Operation)100);
 
         // Assert
         action1.Should().Throw<GuardValidationException>();
@@ -83,7 +84,7 @@ public class GuardNegativeTests
         var email = _faker.Random.String();
 
         // Act
-        Action action = () => Ardalis.GuardClauses.Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessage.EmailFormat);
+        Action action = () => Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessage.EmailFormat);
 
         // Assert
         action.Should().Throw<GuardValidationException>();
@@ -99,7 +100,7 @@ public class GuardNegativeTests
         var phone = _faker.Random.String();
 
         // Act
-        Action action = () => Ardalis.GuardClauses.Guard.Against.Regex(phone, RegexPatterns.PhonePattern, ErrorMessage.PhoneFormat);
+        Action action = () => Guard.Against.Regex(phone, RegexPatterns.PhonePattern, ErrorMessage.PhoneFormat);
 
         // Arrange
         action.Should().Throw<GuardValidationException>();
@@ -115,7 +116,7 @@ public class GuardNegativeTests
         var avatarUrl = _faker.Random.String();
 
         // Act
-        Action action = () => Ardalis.GuardClauses.Guard.Against.Regex(avatarUrl, RegexPatterns.AvatarUrlPattern, ErrorMessage.AvatarPattern);
+        Action action = () => Guard.Against.Regex(avatarUrl, RegexPatterns.AvatarUrlPattern, ErrorMessage.AvatarPattern);
 
         // Arrange
         action.Should().Throw<GuardValidationException>();
@@ -131,7 +132,7 @@ public class GuardNegativeTests
         var text = _faker.Random.String() + "-";
 
         // Act
-        Action action = () => Ardalis.GuardClauses.Guard.Against.Regex(text, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
+        Action action = () => Guard.Against.Regex(text, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
 
         // Arrange
         action.Should().Throw<GuardValidationException>();

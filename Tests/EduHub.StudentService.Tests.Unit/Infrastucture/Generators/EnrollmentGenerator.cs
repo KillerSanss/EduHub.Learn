@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using Eduhub.StudentService.Domain.Entities;
 
-namespace Eduhub.StudentService.Tests.Unit.Generators;
+namespace EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
 
 /// <summary>
 /// Генерация зачисления

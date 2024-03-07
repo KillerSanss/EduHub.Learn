@@ -1,10 +1,11 @@
-﻿using Eduhub.StudentService.Tests.Unit.Generators;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Bogus;
 using Eduhub.StudentService.Domain.Entities.Enums;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
+using EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
 
-namespace EduHub.StudentService.Tests.Unit.Tests.Educator;
+namespace EduHub.StudentService.Tests.Unit.Tests.Educators;
 
 /// <summary>
 /// Позитивные unit тесты для сущности Educator.
@@ -28,7 +29,7 @@ public class EducatorPositiveTests
         var phone = new Phone(_faker.Phone.PhoneNumber("373########"));
 
         // Act
-        var educator = new Eduhub.StudentService.Domain.Entities.Educator(id, fullName, gender, workExperience, startDate, phone);
+        var educator = new Educator(id, fullName, gender, workExperience, startDate, phone);
 
         // Assert
         educator.Should().NotBeNull();

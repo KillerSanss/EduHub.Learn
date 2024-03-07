@@ -1,10 +1,11 @@
 using Bogus;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Eduhub.StudentService.Tests.Unit.Generators;
+using Eduhub.StudentService.Domain.Entities;
+using EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
 using FluentAssertions;
 
-namespace EduHub.StudentService.Tests.Unit.Tests.Student
+namespace EduHub.StudentService.Tests.Unit.Tests.Students
 {
     /// <summary>
     /// Позитивные unit тесты для сущности Student.
@@ -30,7 +31,7 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Student
             var avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png");
 
             // Act
-            var student = new Eduhub.StudentService.Domain.Entities.Student(id, fullName, gender, birthDate, email, phone, fullAddress, avatar);
+            var student = new Student(id, fullName, gender, birthDate, email, phone, fullAddress, avatar);
 
             // Assert
             student.Should().NotBeNull();

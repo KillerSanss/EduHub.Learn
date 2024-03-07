@@ -1,8 +1,11 @@
-﻿using Eduhub.StudentService.Domain.Entities;
-using Bogus;
+﻿using Bogus;
+using Eduhub.StudentService.Domain.Entities;
 
-namespace Eduhub.StudentService.Tests.Unit.Generators;
+namespace EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
 
+/// <summary>
+/// Генерация курса
+/// </summary>
 public static class CourseGenerator
 {
     private static readonly Faker<Course> Faker = new Faker<Course>()

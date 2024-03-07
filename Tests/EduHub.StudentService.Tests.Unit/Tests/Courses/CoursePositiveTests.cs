@@ -1,8 +1,9 @@
-﻿using Eduhub.StudentService.Tests.Unit.Generators;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Bogus;
+using Eduhub.StudentService.Domain.Entities;
+using EduHub.StudentService.Tests.Unit.Infrastucture.Generators;
 
-namespace EduHub.StudentService.Tests.Unit.Tests.Course;
+namespace EduHub.StudentService.Tests.Unit.Tests.Courses;
 
 /// <summary>
 /// Позитивные unit тесты для сущности Course.
@@ -24,7 +25,7 @@ public class CoursePositiveTests
         var educatorId = Guid.NewGuid();
 
         // Act
-        var course = new Eduhub.StudentService.Domain.Entities.Course(id, name, description, educatorId);
+        var course = new Course(id, name, description, educatorId);
 
         // Assert
         course.Should().NotBeNull();
