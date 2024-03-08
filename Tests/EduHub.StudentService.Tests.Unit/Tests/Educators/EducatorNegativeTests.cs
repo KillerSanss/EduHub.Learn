@@ -27,7 +27,7 @@ public class EducatorNegativeTests
     /// <param name="workExperience">Опыт работы.</param>
     [Theory]
     [MemberData(nameof(TestEducatorArgumentExceptionData))]
-    public void Add_NullFullName_ThrowArgumentException(string surname, string name, string patronymic, int workExperience)
+    public void Add_Properties_ThrowArgumentException(string surname, string name, string patronymic, int workExperience)
     {
         // Arrange
         var id = _faker.Random.Guid();
@@ -49,7 +49,7 @@ public class EducatorNegativeTests
     /// <param name="startDate">Начало работы.</param>
     [Theory]
     [MemberData(nameof(TestEducatorGuardValidationExceptionData))]
-    public void Add_NoneGender_ThrowGuardValidationException(Gender gender, DateTime startDate)
+    public void Add_Properties_ThrowGuardValidationException(Gender gender, DateTime startDate)
     {
         // Arrange
         var id = _faker.Random.Guid();

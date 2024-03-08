@@ -9,7 +9,7 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Enrollments;
 /// <summary>
 /// Негативные unit тесты для сущности Enrollment.
 /// </summary>
-public class EnrollmentNegativeTests
+ public class EnrollmentNegativeTests
 {
     private readonly Faker _faker = new();
 
@@ -38,14 +38,14 @@ public class EnrollmentNegativeTests
     /// <summary>
     /// Проверка, что у сущности Enrollment выбрасывается GuardValidationException.
     /// </summary>
-    [Theory]
-    [InlineData("2060-01-01")]
-    public void Add_FutureDate_ThrowGuardValidationException(DateTime startDate)
+    [Fact]
+    public void Add_FutureDate_ThrowGuardValidationException()
     {
         // Arrange
         var id = _faker.Random.Guid();
         var studentId = _faker.Random.Guid();
         var courseId = _faker.Random.Guid();
+        var startDate = _faker.Date.Future();
 
         // Act
         var action = () => new Enrollment(id, studentId, courseId, startDate);

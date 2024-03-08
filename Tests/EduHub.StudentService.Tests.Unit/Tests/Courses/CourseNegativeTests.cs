@@ -22,7 +22,7 @@ public class CourseNegativeTests
     /// <param name="educatorId">Id преподавателя.</param>
     [Theory]
     [MemberData(nameof(TestCourseArgumentExceptionData))]
-    public void Add_NullName_ThrowArgumentException(string name, Guid educatorId)
+    public void Add_Properties_ThrowArgumentException(string name, Guid educatorId)
     {
         // Arrange
         var id = _faker.Random.Guid();
@@ -38,12 +38,12 @@ public class CourseNegativeTests
     /// <summary>
     /// Проверка, что у сущности Course выбрасывается GuardValidationException.
     /// </summary>
-    [Theory]
-    [InlineData("111111111111111111111111111111111111111111111111111")]
-    public void Add_TooLongName_ThrowGuardValidationException(string name)
+    [Fact]
+    public void Add_TooLongName_ThrowGuardValidationException()
     {
         // Arrange
         var id = _faker.Random.Guid();
+        var name = _faker.Random.String(51);
         var description = _faker.Random.String();
         var educatorId = _faker.Random.Guid();
 
