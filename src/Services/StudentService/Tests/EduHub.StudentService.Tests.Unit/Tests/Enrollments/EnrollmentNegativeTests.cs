@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Bogus;
-using Eduhub.StudentService.Domain.Validations.Exceptions;
 using Eduhub.StudentService.Domain.Entities;
+using Eduhub.StudentService.Domain.Validations.Exceptions;
 using EduHub.StudentService.Tests.Unit.Infrastructure.Data;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Enrollments;

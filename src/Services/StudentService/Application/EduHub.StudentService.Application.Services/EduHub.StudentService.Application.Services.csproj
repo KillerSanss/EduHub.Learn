@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\..\Tests\EduHub.StudentService.Tests.Unit\EduHub.StudentService.Tests.Unit.csproj" />
         <ProjectReference Include="..\..\Domain\Eduhub.StudentService.Domain\Eduhub.StudentService.Domain.csproj" />
     </ItemGroup>
 </Project>

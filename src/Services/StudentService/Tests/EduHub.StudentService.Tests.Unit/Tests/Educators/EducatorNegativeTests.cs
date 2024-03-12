@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Bogus;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 using EduHub.StudentService.Tests.Unit.Infrastructure.Data;
 

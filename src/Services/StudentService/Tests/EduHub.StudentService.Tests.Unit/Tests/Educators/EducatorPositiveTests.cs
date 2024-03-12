@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
-using Bogus;
-using Eduhub.StudentService.Domain.Entities.Enums;
+﻿using Bogus;
 using Eduhub.StudentService.Domain.Entities;
+using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using EduHub.StudentService.Tests.Unit.Infrastructure.Generators;
+using FluentAssertions;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Educators;
 

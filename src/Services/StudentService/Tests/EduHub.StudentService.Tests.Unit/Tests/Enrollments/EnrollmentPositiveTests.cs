@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
-using Bogus;
+﻿using Bogus;
 using Eduhub.StudentService.Domain.Entities;
+using FluentAssertions;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Enrollments;
 

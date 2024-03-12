@@ -1,10 +1,10 @@
-﻿using Bogus;
+﻿using Ardalis.GuardClauses;
+using Bogus;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Validations;
 using Eduhub.StudentService.Domain.Validations.Enums;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
-using Ardalis.GuardClauses;
 using FluentAssertions;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Guards;
