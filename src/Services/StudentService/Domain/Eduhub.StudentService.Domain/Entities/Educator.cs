@@ -14,17 +14,17 @@ public class Educator : BasePerson
     /// <summary>
     /// Список курсов
     /// </summary>
-    private readonly List<Course> _courses = new();
+    public readonly List<Course> Courses = new();
 
     /// <summary>
     /// Опыт работы
     /// </summary>
-    public int WorkExperience { get; private set; }
+    public int WorkExperience { get; set; }
 
     /// <summary>
     /// Начало работы
     /// </summary>
-    public DateTime StartDate { get; private set; }
+    public DateTime StartDate { get; set; }
 
     /// <summary>
     /// Конструктор для установки значений полей для объекта Educator.
@@ -49,14 +49,6 @@ public class Educator : BasePerson
         SetPhone(phone);
         SetWorkExperience(workExperience);
         SetStartDate(startDate);
-    }
-
-    /// <summary>
-    /// Метод для получения списка всех курсов учителя
-    /// </summary>
-    public IEnumerable<Course> GetCourse()
-    {
-        return _courses;
     }
 
     /// <summary>

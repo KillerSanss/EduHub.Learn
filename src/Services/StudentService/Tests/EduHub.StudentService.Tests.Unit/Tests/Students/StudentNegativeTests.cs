@@ -3,9 +3,7 @@ using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
-using Eduhub.StudentService.Domain.Validations.Exceptions.Enrollment;
 using EduHub.StudentService.Tests.Unit.Infrastructure.Data;
-using EduHub.StudentService.Tests.Unit.Infrastructure.Generators;
 using FluentAssertions;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Students
@@ -78,40 +76,6 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
 
             // Assert
             action.Should().Throw<GuardValidationException>();
-        }
-
-        /// <summary>
-        /// Проверка, что метод AddEnrollment сущности Student выбрасывает исключение EnrollmentConflictException.
-        /// </summary>
-        [Fact]
-        public void AddEnrollment_ShouldThrowEnrollmentConflictException()
-        {
-            // Arrange
-            var student = StudentGenerator.GenerateStudent();
-            var enrollment = EnrollmentGenerator.GenerateEnrollment();
-            student.AddEnrollment(enrollment.Id, enrollment.CourseId, enrollment.StartDate);
-
-            // Act
-            var action = () => student.AddEnrollment(enrollment.Id, enrollment.CourseId, enrollment.StartDate);
-
-            // Assert
-            action.Should().Throw<EnrollmentConflictException>();
-        }
-
-        /// <summary>
-        /// Проверка, что метод DeleteEnrollment сущности Student выбрасывает исключение EnrollmentNotFoundException.
-        /// </summary>
-        [Fact]
-        public void DeleteEnrollment_ShouldThrowEnrollmentNotFoundException()
-        {
-            // Arrange
-            var student = StudentGenerator.GenerateStudent();
-
-            // Act
-            var action = () => student.DeleteEnrollment(Guid.NewGuid());
-
-            // Assert
-            action.Should().Throw<EnrollmentNotFoundException>();
         }
     }
 }

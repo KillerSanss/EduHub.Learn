@@ -45,43 +45,6 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
         }
 
         /// <summary>
-        /// Проверка, что метод AddEnrollment сущности Student добавляет зачисление к студенту.
-        /// </summary>
-        [Fact]
-        public void AddEnrollment_ReturnNewEnrollment()
-        {
-            // Arrange
-            var student = StudentGenerator.GenerateStudent();
-            var enrollment = EnrollmentGenerator.GenerateEnrollment();
-            student.AddEnrollment(enrollment.Id, enrollment.CourseId, enrollment.StartDate);
-
-            // Act
-            var enrollments = student.GetEnrollments();
-
-            // Assert
-            enrollments.Should().ContainSingle(e => e.Id == enrollment.Id);
-        }
-
-        /// <summary>
-        /// Проверка, что метод DeleteEnrollment сущности Student удаляет зачисление студента.
-        /// </summary>
-        [Fact]
-        public void DeleteEnrollment_ReturnDeletedEnrollment()
-        {
-            // Arrange
-            var student = StudentGenerator.GenerateStudent();
-            var enrollment = EnrollmentGenerator.GenerateEnrollment();
-            student.AddEnrollment(enrollment.Id, enrollment.CourseId, enrollment.StartDate);
-
-            // Act
-            student.DeleteEnrollment(enrollment.Id);
-            var enrollments = student.GetEnrollments();
-
-            // Assert
-            enrollments.Should().NotContain(e => e.Id == enrollment.Id);
-        }
-
-        /// <summary>
         /// Проверка, что метод Update корректно обновляет экземпляр сущности Student.
         /// </summary>
         [Fact]

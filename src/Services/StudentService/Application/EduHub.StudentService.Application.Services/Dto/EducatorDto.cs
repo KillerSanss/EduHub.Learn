@@ -1,15 +1,15 @@
 ﻿using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 
-namespace EduHub.StudentService.Application.Services.DTOClasses;
+namespace EduHub.StudentService.Application.Services.Dto;
 
 /// <summary>
-/// DTO класс для студента
+/// Dto класс для преподавателя
 /// </summary>
-public class StudentDto
+public class EducatorDto
 {
     /// <summary>
-    /// Индентификатор
+    /// Идентификатор
     /// </summary>
     public Guid Id { get; init; }
 
@@ -29,22 +29,12 @@ public class StudentDto
     public Phone Phone { get; init; }
 
     /// <summary>
-    /// Дата рождения
+    /// Опыт работы
     /// </summary>
-    public DateTime BirthDate { get; init; }
+    public int WorkExperience { get; init; }
 
     /// <summary>
-    /// Электронная почта
+    /// Дата начала работы
     /// </summary>
-    public Email Email { get; init; }
-
-    /// <summary>
-    /// Адресс
-    /// </summary>
-    public FullAddress Address { get; init; }
-
-    /// <summary>
-    /// Аватар
-    /// </summary>
-    public string Avatar { get; init; }
+    public DateTime StartDate { get; init; }
 }

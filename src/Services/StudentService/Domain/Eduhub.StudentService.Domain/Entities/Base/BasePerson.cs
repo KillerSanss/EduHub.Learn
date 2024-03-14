@@ -13,17 +13,17 @@ public abstract class BasePerson : BaseEntity
     /// <summary>
     /// Фио
     /// </summary>
-    public FullName FullName { get; set; }
+    public FullName FullName { get; private set; }
 
     /// <summary>
     /// Гендер
     /// </summary>
-    public Gender Gender { get; set; }
+    public Gender Gender { get; private set; }
 
     /// <summary>
     /// Номер телефона
     /// </summary>
-    public Phone Phone { get; set; }
+    public Phone Phone { get; private set; }
 
     /// <summary>
     /// Установка фио
