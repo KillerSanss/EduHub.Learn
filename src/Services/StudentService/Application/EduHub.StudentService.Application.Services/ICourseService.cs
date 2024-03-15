@@ -1,5 +1,4 @@
 ﻿using EduHub.StudentService.Application.Services.Dto;
-using Eduhub.StudentService.Domain.Entities;
 
 namespace EduHub.StudentService.Application.Services;
 
@@ -8,9 +7,9 @@ namespace EduHub.StudentService.Application.Services;
 /// </summary>
 public interface ICourseService
 {
-    Task<Course> AsyncAddCourse(CourseDto courseDto);
-    Task<Course> AsyncUpdateCourse(CourseDto courseDto);
-    Task<Course> AsyncGetCourse(Guid courseId);
-    Task<List<Course>> AsyncGetAllCourses();
-    Task<Course> AsyncDeleteCourse(Guid courseId);
+    Task<CourseDto> AsyncAddCourse(CourseDto courseDto);
+    Task<CourseDto> AsyncUpdateCourse(CourseDto courseDto);
+    Task<CourseDto> AsyncGetCourse(Guid courseId);
+    Task<List<CourseDto>> AsyncGetAllCourses();
+    Task AsyncDeleteCourse(Guid courseId);
 }

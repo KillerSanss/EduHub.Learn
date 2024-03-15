@@ -1,5 +1,4 @@
 ﻿using EduHub.StudentService.Application.Services.Dto;
-using Eduhub.StudentService.Domain.Entities;
 
 namespace EduHub.StudentService.Application.Services;
 
@@ -8,9 +7,9 @@ namespace EduHub.StudentService.Application.Services;
 /// </summary>
 public interface IStudentService
 {
-    Task<Student> AsyncAddStudent(StudentDto studentDto);
-    Task<Student> AsyncUpdateStudent(StudentDto studentDto);
-    Task<Student> AsyncGetStudent(Guid studentId);
-    Task<List<Student>> AsyncGetAllStudents();
-    Task<Student> AsyncDeleteStudent(Guid studentId);
+    Task<StudentDto> AsyncAddStudent(StudentDto studentDto);
+    Task<StudentDto> AsyncUpdateStudent(StudentDto studentDto);
+    Task<StudentDto> AsyncGetStudent(Guid studentId);
+    Task<List<StudentDto>> AsyncGetAllStudents();
+    Task AsyncDeleteStudent(Guid studentId);
 }

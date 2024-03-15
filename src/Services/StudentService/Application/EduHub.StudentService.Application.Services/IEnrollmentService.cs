@@ -1,4 +1,4 @@
-﻿using Eduhub.StudentService.Domain.Entities;
+﻿using EduHub.StudentService.Application.Services.Dto;
 
 namespace EduHub.StudentService.Application.Services;
 
@@ -7,8 +7,8 @@ namespace EduHub.StudentService.Application.Services;
 /// </summary>
 public interface IEnrollmentService
 {
-    Task<Enrollment> AsyncEnrollStudent(Guid studentId, Guid courseId, DateTime startDate);
-    Task<List<Enrollment>> AsyncGetStudentEnrollments(Guid studentId);
-    Task<List<Enrollment>> AsyncGetAllEnrollments();
-    Task<Enrollment> AsyncDeleteEnrollment(Guid enrollmentId);
+    Task<EnrollmentDto> AsyncEnrollStudent(Guid studentId, Guid courseId, DateTime startDate);
+    Task<List<EnrollmentDto>> AsyncGetStudentEnrollments(Guid studentId);
+    Task<List<EnrollmentDto>> AsyncGetAllEnrollments();
+    Task AsyncDeleteEnrollment(Guid enrollmentId);
 }

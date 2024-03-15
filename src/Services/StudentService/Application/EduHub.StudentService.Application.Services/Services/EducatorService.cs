@@ -25,7 +25,7 @@ public class EducatorService : IEducatorService
     /// </summary>
     /// <param name="educatorDto">Преподаватель для добавления.</param>
     /// <returns>Добавленный преподаватель.</returns>
-    public async Task<Educator> AsyncAddEducator(EducatorDto educatorDto)
+    public async Task<EducatorDto> AsyncAddEducator(EducatorDto educatorDto)
     {
         var existingEducator = await _educatorRepository.GetEducatorById(educatorDto.Id);
         if (existingEducator != null)
@@ -36,7 +36,7 @@ public class EducatorService : IEducatorService
         var newEducator = _mapper.Map<Educator>(educatorDto);
         await _educatorRepository.AddEducator(newEducator);
 
-        return newEducator;
+        return _mapper.Map<EducatorDto>(newEducator);
     }
 
     /// <summary>
@@ -44,12 +44,12 @@ public class EducatorService : IEducatorService
     /// </summary>
     /// <param name="educatorDto">Преподаватель для обновления.</param>
     /// <returns>Обновленный преподаватель.</returns>
-    public async Task<Educator> AsyncUpdateEducator(EducatorDto educatorDto)
+    public async Task<EducatorDto> AsyncUpdateEducator(EducatorDto educatorDto)
     {
         var updatedEducator = _mapper.Map<Educator>(educatorDto);
         await _educatorRepository.UpdateEducator(updatedEducator);
 
-        return updatedEducator;
+        return _mapper.Map<EducatorDto>(updatedEducator);
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public class EducatorService : IEducatorService
     /// </summary>
     /// <param name="educatorId">Индентификатор преподавателя.</param>
     /// <returns>Выбранный преподаватель.</returns>
-    public async Task<Educator> AsyncGetEducator(Guid educatorId)
+    public async Task<EducatorDto> AsyncGetEducator(Guid educatorId)
     {
         var existingEducator = await _educatorRepository.GetEducatorById(educatorId);
         if (existingEducator == null)
@@ -65,26 +65,25 @@ public class EducatorService : IEducatorService
             throw new EntityNotFoundException<Guid>(educatorId, "Educator does not exist");
         }
 
-        return existingEducator;
+        return _mapper.Map<EducatorDto>(existingEducator);
     }
 
     /// <summary>
     /// Выбор всех существующих преподавателей
     /// </summary>
     /// <returns>Список всех преподавателей.</returns>
-    public async Task<List<Educator>> AsyncGetAllEducators()
+    public async Task<List<EducatorDto>> AsyncGetAllEducators()
     {
         var allEducators = await _educatorRepository.GetAllEducators();
 
-        return _mapper.Map<List<Educator>>(allEducators);
+        return _mapper.Map<List<EducatorDto>>(allEducators);
     }
 
     /// <summary>
     /// Удаление преподавателя
     /// </summary>
     /// <param name="educatorId">Идентификатор преподавателя.</param>
-    /// <returns>Удаленный преподаватель.</returns>
-    public async Task<Educator> AsyncDeleteEducator(Guid educatorId)
+    public async Task AsyncDeleteEducator(Guid educatorId)
     {
         var deletedEducator = await _educatorRepository.GetEducatorById(educatorId);
         if (deletedEducator == null)
@@ -93,7 +92,5 @@ public class EducatorService : IEducatorService
         }
 
         await _educatorRepository.DeleteEducator(educatorId);
-
-        return deletedEducator;
     }
 }

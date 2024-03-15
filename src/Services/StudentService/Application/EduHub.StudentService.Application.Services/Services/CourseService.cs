@@ -25,7 +25,7 @@ public class CourseService : ICourseService
     /// </summary>
     /// <param name="courseDto">Курс для добавления.</param>
     /// <returns>Добавленный курс.</returns>
-    public async Task<Course> AsyncAddCourse(CourseDto courseDto)
+    public async Task<CourseDto> AsyncAddCourse(CourseDto courseDto)
     {
         var existingCourse = await _courseRepository.GetCourseById(courseDto.Id);
         if (existingCourse != null)
@@ -36,7 +36,7 @@ public class CourseService : ICourseService
         var newCourse = _mapper.Map<Course>(courseDto);
         await _courseRepository.AddCourse(newCourse);
 
-        return newCourse;
+        return _mapper.Map<CourseDto>(newCourse);
     }
 
     /// <summary>
@@ -44,12 +44,12 @@ public class CourseService : ICourseService
     /// </summary>
     /// <param name="courseDto">Курс для обновления.</param>
     /// <returns>Обновленный курс.</returns>
-    public async Task<Course> AsyncUpdateCourse(CourseDto courseDto)
+    public async Task<CourseDto> AsyncUpdateCourse(CourseDto courseDto)
     {
         var updatedCourse = _mapper.Map<Course>(courseDto);
         await _courseRepository.UpdateCourse(updatedCourse);
 
-        return updatedCourse;
+        return _mapper.Map<CourseDto>(updatedCourse);
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public class CourseService : ICourseService
     /// </summary>
     /// <param name="courseId">Идентификатор курса.</param>
     /// <returns>Выбранный курс.</returns>
-    public async Task<Course> AsyncGetCourse(Guid courseId)
+    public async Task<CourseDto> AsyncGetCourse(Guid courseId)
     {
         var existingCourse = await _courseRepository.GetCourseById(courseId);
         if (existingCourse == null)
@@ -65,26 +65,25 @@ public class CourseService : ICourseService
             throw new EntityNotFoundException<Guid>(courseId, "Course does not exist");
         }
 
-        return existingCourse;
+        return _mapper.Map<CourseDto>(existingCourse);
     }
 
     /// <summary>
     /// Выбор списка курса
     /// </summary>
     /// <returns>Список всех существующих курсов.</returns>
-    public async Task<List<Course>> AsyncGetAllCourses()
+    public async Task<List<CourseDto>> AsyncGetAllCourses()
     {
         var allCourses = await _courseRepository.GetAllCourses();
 
-        return _mapper.Map<List<Course>>(allCourses);
+        return _mapper.Map<List<CourseDto>>(allCourses);
     }
 
     /// <summary>
     /// Удаление курса
     /// </summary>
     /// <param name="courseId">Курс для удаления.</param>
-    /// <returns>Удаленный курс.</returns>
-    public async Task<Course> AsyncDeleteCourse(Guid courseId)
+    public async Task AsyncDeleteCourse(Guid courseId)
     {
         var deletedCourse = await _courseRepository.GetCourseById(courseId);
         if (deletedCourse == null)
@@ -93,7 +92,5 @@ public class CourseService : ICourseService
         }
 
         await _courseRepository.DeleteCourse(courseId);
-
-        return deletedCourse;
     }
 }

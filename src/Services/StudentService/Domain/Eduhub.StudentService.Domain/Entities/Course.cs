@@ -13,17 +13,17 @@ public class Course : BaseEntity
     /// <summary>
     /// Название курса
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
     /// <summary>
     /// Описание курса
     /// </summary>
-    public string Description { get; set; }
+    public string Description { get; private set; }
 
     /// <summary>
     /// Id преподавателя
     /// </summary>
-    public Guid EducatorId { get; set; }
+    public Guid EducatorId { get; private set; }
 
     /// <summary>
     /// Конструктор для установки значений полей для объекта Course.

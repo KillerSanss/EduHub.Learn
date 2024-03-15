@@ -21,22 +21,22 @@ public class Student : BasePerson
     /// <summary>
     /// Дата рождения
     /// </summary>
-    public DateTime BirthDate { get; set; }
+    public DateTime BirthDate { get; private set; }
 
     /// <summary>
     /// Электронная почта
     /// </summary>
-    public Email Email { get; set; }
+    public Email Email { get; private set; }
 
     /// <summary>
     /// Адрес
     /// </summary>
-    public FullAddress Address { get; set; }
+    public FullAddress Address { get; private set; }
 
     /// <summary>
     /// Аватар
     /// </summary>
-    public string Avatar { get; set; }
+    public string Avatar { get; private set; }
 
     /// <summary>
     /// Конструктор для установки значений полей для объекта Student.

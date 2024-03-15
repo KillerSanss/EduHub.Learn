@@ -19,12 +19,12 @@ public class Educator : BasePerson
     /// <summary>
     /// Опыт работы
     /// </summary>
-    public int WorkExperience { get; set; }
+    public int WorkExperience { get; private set; }
 
     /// <summary>
     /// Начало работы
     /// </summary>
-    public DateTime StartDate { get; set; }
+    public DateTime StartDate { get; private set; }
 
     /// <summary>
     /// Конструктор для установки значений полей для объекта Educator.
