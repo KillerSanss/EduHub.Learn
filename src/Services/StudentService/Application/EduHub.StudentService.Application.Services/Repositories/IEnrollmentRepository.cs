@@ -3,13 +3,38 @@
 namespace EduHub.StudentService.Application.Services.Repositories;
 
 /// <summary>
-/// Репозиторий зачисления
+/// Интерфейс описывающий EnrollmentRepository
 /// </summary>
 public interface IEnrollmentRepository
 {
-    Task<Enrollment> GetEnrollmentById(Guid enrollmentId);
-    Task<Enrollment> EnrollStudent(Guid studentId, Guid courseId, DateTime startDate);
-    Task<List<Enrollment>> GetStudentEnrollments(Guid studentId);
-    Task<List<Enrollment>> GetAllEnrollments();
-    Task<Enrollment> DeleteEnrollment(Guid enrollmentId);
+    /// <summary>
+    /// Выбор всех зачислений студента
+    /// </summary>
+    /// <param name="studentId">Идентификатор студента.</param>
+    /// <returns>Массив всех зачислений студента.</returns>
+    Task<Enrollment[]> GetStudentEnrollmentsAsync(Guid studentId);
+
+    /// <summary>
+    /// Зачисление студента
+    /// </summary>
+    Task EnrollStudentAsync(CancellationToken token);
+
+    /// <summary>
+    /// Удаление зачисления
+    /// </summary>
+    /// <param name="entity">Зачисление на удаление.</param>
+    Task DeleteAsync(Enrollment entity, CancellationToken token);
+
+    /// <summary>
+    /// Получение всех существующих зачислений
+    /// </summary>
+    /// <returns>Массив всех зачислений.</returns>
+    Task<Enrollment[]> GetAllAsync();
+
+    /// <summary>
+    /// Выбор одного зачисления
+    /// </summary>
+    /// <param name="enrollmentId">Идентификатор зачисления.</param>
+    /// <returns>Выбранное зачисление.</returns>
+    Task<Enrollment> GetByIdAsync(Guid enrollmentId);
 }

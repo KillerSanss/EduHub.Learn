@@ -6,11 +6,6 @@
 public class CourseDto
 {
     /// <summary>
-    /// Идентификатор
-    /// </summary>
-    public Guid Id { get; init; }
-
-    /// <summary>
     /// Название курса
     /// </summary>
     public string Name { get; init; }

@@ -3,13 +3,8 @@
 namespace EduHub.StudentService.Application.Services.Repositories;
 
 /// <summary>
-/// Репозиторий преподавателя
+/// Интерфейс описывающий EducatorRepository
 /// </summary>
-public interface IEducatorRepository
+public interface IEducatorRepository : IRepository<Educator>
 {
-    Task<Educator> GetEducatorById(Guid educatorId);
-    Task<Educator> AddEducator(Educator educator);
-    Task<Educator> UpdateEducator(Educator educator);
-    Task<List<Educator>> GetAllEducators();
-    Task<Educator> DeleteEducator(Guid educatorId);
 }

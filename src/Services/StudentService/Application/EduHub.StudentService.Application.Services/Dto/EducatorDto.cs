@@ -9,11 +9,6 @@ namespace EduHub.StudentService.Application.Services.Dto;
 public class EducatorDto
 {
     /// <summary>
-    /// Идентификатор
-    /// </summary>
-    public Guid Id { get; init; }
-
-    /// <summary>
     /// Имя
     /// </summary>
     public FullName FullName { get; init; }

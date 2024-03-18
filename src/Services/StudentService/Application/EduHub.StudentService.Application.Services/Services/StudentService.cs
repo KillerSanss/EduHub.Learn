@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using Ardalis.GuardClauses;
+using AutoMapper;
 using EduHub.StudentService.Application.Services.Dto;
 using EduHub.StudentService.Application.Services.Repositories;
-using EduHub.StudentService.Application.Services.Exceptions;
+using EduHub.StudentService.Application.Services.UOW;
 using Eduhub.StudentService.Domain.Entities;
+using Eduhub.StudentService.Domain.Validations.Exceptions;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -13,11 +15,13 @@ public class StudentService : IStudentService
 {
     private readonly IStudentRepository _studentRepository;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public StudentService(IStudentRepository studentRepository, IMapper mapper)
+    public StudentService(IStudentRepository studentRepository, IMapper mapper, IUnitOfWork unitOfWork)
     {
-        _studentRepository = studentRepository;
+        _studentRepository = Guard.Against.Null(studentRepository);
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
     /// <summary>
@@ -25,16 +29,14 @@ public class StudentService : IStudentService
     /// </summary>
     /// <param name="studentDto">Студент для добавления.</param>
     /// <returns>Добавленный студент.</returns>
-    public async Task<StudentDto> AsyncAddStudent(StudentDto studentDto)
+    public async Task<StudentDto> AddAsync(StudentDto studentDto, CancellationToken token)
     {
-        var existingStudent = await _studentRepository.GetStudentById(studentDto.Id);
-        if (existingStudent != null)
-        {
-            throw new EntityConflictException<StudentDto>(studentDto, "Educator is already exist");
-        }
+        Guard.Against.Null(studentDto, nameof(studentDto));
 
         var newStudent = _mapper.Map<Student>(studentDto);
-        await _studentRepository.AddStudent(newStudent);
+        await _studentRepository.AddAsync(newStudent, token);
+
+        await _unitOfWork.SaveChangesAsync(token);
 
         return _mapper.Map<StudentDto>(newStudent);
     }
@@ -44,53 +46,57 @@ public class StudentService : IStudentService
     /// </summary>
     /// <param name="studentDto">Студент для обновления.</param>
     /// <returns>Обновленный студент.</returns>
-    public async Task<StudentDto> AsyncUpdateStudent(StudentDto studentDto)
+    public async Task<StudentDto> UpdateAsync(StudentDto studentDto, CancellationToken token)
     {
+        Guard.Against.Null(studentDto, nameof(studentDto));
+
         var updatedStudent = _mapper.Map<Student>(studentDto);
-        await _studentRepository.UpdateStudent(updatedStudent);
+        await _studentRepository.UpdateAsync(updatedStudent, token);
+
+        await _unitOfWork.SaveChangesAsync(token);
 
         return _mapper.Map<StudentDto>(updatedStudent);
     }
 
     /// <summary>
-    /// Выбор одного студента
+    /// Получение одного студента
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
     /// <returns>Выбранный студент.</returns>
-    public async Task<StudentDto> AsyncGetStudent(Guid studentId)
+    public async Task<StudentDto> GetAsync(Guid studentId)
     {
-        var existingStudent = await _studentRepository.GetStudentById(studentId);
-        if (existingStudent == null)
+        var student = await _studentRepository.GetByIdAsync(studentId);
+        if (student == null)
         {
-            throw new EntityNotFoundException<Guid>(studentId, "Student does not exist");
+            throw new EntityNotFoundException<Course>(nameof(studentId), studentId.ToString());
         }
 
-        return _mapper.Map<StudentDto>(existingStudent);
+        return _mapper.Map<StudentDto>(student);
     }
 
     /// <summary>
-    /// Выбор списка студентов
+    /// Получение списка студентов
     /// </summary>
     /// <returns>Список всех существующих студентов.</returns>
-    public async Task<List<StudentDto>> AsyncGetAllStudents()
+    public async Task<StudentDto[]> GetAllAsync()
     {
-        var allStudents = await _studentRepository.GetAllStudents();
-
-        return _mapper.Map<List<StudentDto>>(allStudents);
+        var students = await _studentRepository.GetAllAsync();
+        return _mapper.Map<StudentDto[]>(students);
     }
 
     /// <summary>
     /// Удаление студента
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
-    public async Task AsyncDeleteStudent(Guid studentId)
+    public async Task DeleteAsync(Guid studentId, CancellationToken token)
     {
-        var deletedStudent = await _studentRepository.GetStudentById(studentId);
+        var deletedStudent = await _studentRepository.GetByIdAsync(studentId);
         if (deletedStudent == null)
         {
-            throw new EntityNotFoundException<Guid>(studentId, "Student does not exist");
+            throw new EntityNotFoundException<Course>(nameof(studentId), studentId.ToString());
         }
 
-        await _studentRepository.DeleteStudent(studentId);
+        await _studentRepository.DeleteAsync(deletedStudent, token);
+        await _unitOfWork.SaveChangesAsync(token);
     }
 }

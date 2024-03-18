@@ -3,13 +3,8 @@
 namespace EduHub.StudentService.Application.Services.Repositories;
 
 /// <summary>
-/// Репозиторий курса
+/// Интерфейс описывающий CourseRepository
 /// </summary>
-public interface ICourseRepository
+public interface ICourseRepository : IRepository<Course>
 {
-    Task<Course> GetCourseById(Guid courseId);
-    Task<Course> AddCourse(Course course);
-    Task<Course> UpdateCourse(Course course);
-    Task<Course> DeleteCourse(Guid courseId);
-    Task<List<Course>> GetAllCourses();
 }

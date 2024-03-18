@@ -6,11 +6,6 @@
 public class EnrollmentDto
 {
     /// <summary>
-    /// Идентификатор
-    /// </summary>
-    public Guid Id { get; init; }
-
-    /// <summary>
     /// Идентификатор студента
     /// </summary>
     public Guid StudentId { get; init; }

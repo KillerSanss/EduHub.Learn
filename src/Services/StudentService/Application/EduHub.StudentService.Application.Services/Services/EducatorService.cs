@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using Ardalis.GuardClauses;
+using AutoMapper;
 using EduHub.StudentService.Application.Services.Dto;
-using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Repositories;
+using EduHub.StudentService.Application.Services.UOW;
 using Eduhub.StudentService.Domain.Entities;
+using Eduhub.StudentService.Domain.Validations.Exceptions;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -13,11 +15,13 @@ public class EducatorService : IEducatorService
 {
     private readonly IEducatorRepository _educatorRepository;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public EducatorService(IEducatorRepository educatorRepository, IMapper mapper)
+    public EducatorService(IEducatorRepository educatorRepository, IMapper mapper, IUnitOfWork unitOfWork)
     {
-        _educatorRepository = educatorRepository;
+        _educatorRepository = Guard.Against.Null(educatorRepository);
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
     /// <summary>
@@ -25,16 +29,14 @@ public class EducatorService : IEducatorService
     /// </summary>
     /// <param name="educatorDto">Преподаватель для добавления.</param>
     /// <returns>Добавленный преподаватель.</returns>
-    public async Task<EducatorDto> AsyncAddEducator(EducatorDto educatorDto)
+    public async Task<EducatorDto> AddAsync(EducatorDto educatorDto, CancellationToken token)
     {
-        var existingEducator = await _educatorRepository.GetEducatorById(educatorDto.Id);
-        if (existingEducator != null)
-        {
-            throw new EntityConflictException<EducatorDto>(educatorDto, "Educator is already exist");
-        }
+        Guard.Against.Null(educatorDto);
 
         var newEducator = _mapper.Map<Educator>(educatorDto);
-        await _educatorRepository.AddEducator(newEducator);
+        await _educatorRepository.AddAsync(newEducator, token);
+
+        await _unitOfWork.SaveChangesAsync(token);
 
         return _mapper.Map<EducatorDto>(newEducator);
     }
@@ -44,53 +46,57 @@ public class EducatorService : IEducatorService
     /// </summary>
     /// <param name="educatorDto">Преподаватель для обновления.</param>
     /// <returns>Обновленный преподаватель.</returns>
-    public async Task<EducatorDto> AsyncUpdateEducator(EducatorDto educatorDto)
+    public async Task<EducatorDto> UpdateAsync(EducatorDto educatorDto, CancellationToken token)
     {
+        Guard.Against.Null(educatorDto);
+
         var updatedEducator = _mapper.Map<Educator>(educatorDto);
-        await _educatorRepository.UpdateEducator(updatedEducator);
+        await _educatorRepository.UpdateAsync(updatedEducator, token);
+
+        await _unitOfWork.SaveChangesAsync(token);
 
         return _mapper.Map<EducatorDto>(updatedEducator);
     }
 
     /// <summary>
-    /// Выбор преподавателя
+    /// Получение преподавателя
     /// </summary>
     /// <param name="educatorId">Индентификатор преподавателя.</param>
-    /// <returns>Выбранный преподаватель.</returns>
-    public async Task<EducatorDto> AsyncGetEducator(Guid educatorId)
+    /// <returns>Преподаватель.</returns>
+    public async Task<EducatorDto> GetAsync(Guid educatorId)
     {
-        var existingEducator = await _educatorRepository.GetEducatorById(educatorId);
-        if (existingEducator == null)
+        var educator = await _educatorRepository.GetByIdAsync(educatorId);
+        if (educator == null)
         {
-            throw new EntityNotFoundException<Guid>(educatorId, "Educator does not exist");
+            throw new EntityNotFoundException<Course>(nameof(educatorId), educatorId.ToString());
         }
 
-        return _mapper.Map<EducatorDto>(existingEducator);
+        return _mapper.Map<EducatorDto>(educator);
     }
 
     /// <summary>
-    /// Выбор всех существующих преподавателей
+    /// Получение всех существующих преподавателей
     /// </summary>
-    /// <returns>Список всех преподавателей.</returns>
-    public async Task<List<EducatorDto>> AsyncGetAllEducators()
+    /// <returns>Массив всех преподавателей.</returns>
+    public async Task<EducatorDto[]> GetAllAsync()
     {
-        var allEducators = await _educatorRepository.GetAllEducators();
-
-        return _mapper.Map<List<EducatorDto>>(allEducators);
+        var educators = await _educatorRepository.GetAllAsync();
+        return _mapper.Map<EducatorDto[]>(educators);
     }
 
     /// <summary>
     /// Удаление преподавателя
     /// </summary>
     /// <param name="educatorId">Идентификатор преподавателя.</param>
-    public async Task AsyncDeleteEducator(Guid educatorId)
+    public async Task DeleteAsync(Guid educatorId, CancellationToken token)
     {
-        var deletedEducator = await _educatorRepository.GetEducatorById(educatorId);
+        var deletedEducator = await _educatorRepository.GetByIdAsync(educatorId);
         if (deletedEducator == null)
         {
-            throw new EntityNotFoundException<Guid>(educatorId, "Educator does not exist");
+            throw new EntityNotFoundException<Course>(nameof(educatorId), educatorId.ToString());
         }
 
-        await _educatorRepository.DeleteEducator(educatorId);
+        await _educatorRepository.DeleteAsync(deletedEducator, token);
+        await _unitOfWork.SaveChangesAsync(token);
     }
 }
