@@ -11,18 +11,18 @@ public interface IEnrollmentService
     /// Зачисление студента на выбранный курс
     /// </summary>
     /// <param name="enrollment">record зачисления.</param>
-    Task EnrollStudentAsync(EnrollmentRecord enrollment, CancellationToken token);
+    Task EnrollStudentAsync(EnrollmentDto enrollment, CancellationToken token);
 
     /// <summary>
     /// Получение всех зачислений студента
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
-    Task<EnrollmentRecord[]> GetStudentEnrollmentsAsync(Guid studentId);
+    Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId);
 
     /// <summary>
     /// Получение всех зачислений
     /// </summary>
-    Task<EnrollmentRecord[]> GetAllAsync();
+    Task<EnrollmentDto[]> GetAllAsync();
 
     /// <summary>
     /// Удаление зачисления

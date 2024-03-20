@@ -11,24 +11,24 @@ public interface IEducatorService
     /// Добавлние нового преподавателя
     /// </summary>
     /// <param name="educator">record преподавателя.</param>
-    Task<EducatorRecord> AddAsync(EducatorRecord educator, CancellationToken token);
+    Task<EducatorDto> AddAsync(EducatorDto educator, CancellationToken token);
 
     /// <summary>
     /// Обновление преподавателя
     /// </summary>
     /// <param name="educator">record преподавателя.</param>
-    Task<EducatorRecord> UpdateAsync(EducatorRecord educator, CancellationToken token);
+    Task<EducatorDto> UpdateAsync(EducatorDto educator, CancellationToken token);
 
     /// <summary>
     /// Получение преподавателя
     /// </summary>
     /// <param name="educatorId">Идентификатор преподавателя.</param>
-    Task<EducatorRecord> GetAsync(Guid educatorId);
+    Task<EducatorDto> GetAsync(Guid educatorId);
 
     /// <summary>
     /// Получение всех преподавателей
     /// </summary>
-    Task<EducatorRecord[]> GetAllAsync();
+    Task<EducatorDto[]> GetAllAsync();
 
     /// <summary>
     /// Удаление преподавателя

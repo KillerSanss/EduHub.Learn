@@ -11,24 +11,24 @@ public interface ICourseService
     /// Добавлние нового курса
     /// </summary>
     /// <param name="course">record Курса.</param>
-    Task<CourseRecord> AddAsync(CourseRecord course, CancellationToken token);
+    Task<CourseDto> AddAsync(CourseDto course, CancellationToken token);
 
     /// <summary>
     /// Обновление курса
     /// </summary>
     /// <param name="course">record Курса.</param>
-    Task<CourseRecord> UpdateAsync(CourseRecord course, CancellationToken token);
+    Task<CourseDto> UpdateAsync(CourseDto course, CancellationToken token);
 
     /// <summary>
     /// Получение курса
     /// </summary>
     /// <param name="courseId">Идентификатор курса.</param>
-    Task<CourseRecord> GetAsync(Guid courseId);
+    Task<CourseDto> GetAsync(Guid courseId);
 
     /// <summary>
     /// Получение всех курсов
     /// </summary>
-    Task<CourseRecord[]> GetAllAsync();
+    Task<CourseDto[]> GetAllAsync();
 
     /// <summary>
     /// Удаление курса

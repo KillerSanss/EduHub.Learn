@@ -12,9 +12,9 @@ public class StudentMapping : Profile
 {
     public StudentMapping()
     {
-        CreateMap<Student, StudentRecord>()
-            .ConstructUsing(s => new StudentRecord(
-                s.Id,
+        CreateMap<Student, StudentDto>()
+            .ConstructUsing(s => new StudentDto(
+                Guid.NewGuid(),
                 new FullName(s.FullName.Surname, s.FullName.FirstName, s.FullName.Patronymic),
                 s.Gender,
                 s.BirthDate,

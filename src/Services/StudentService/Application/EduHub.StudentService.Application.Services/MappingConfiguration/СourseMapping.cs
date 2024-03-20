@@ -11,11 +11,11 @@ public class СourseMapping : Profile
 {
     public СourseMapping()
     {
-        CreateMap<Course, CourseRecord>()
-            .ConstructUsing(c => new CourseRecord(
-                c.Id,
+        CreateMap<Course, CourseDto>()
+            .ConstructUsing(c => new CourseDto(
+                Guid.NewGuid(),
                 c.Name,
                 c.Description,
-                Guid.NewGuid()));
+                c.EducatorId));
     }
 }

@@ -11,24 +11,24 @@ public interface IStudentService
     /// Добавлние нового студента
     /// </summary>
     /// <param name="student">record студента.</param>
-    Task<StudentRecord> AddAsync(StudentRecord student, CancellationToken token);
+    Task<StudentDto> AddAsync(StudentDto student, CancellationToken token);
 
     /// <summary>
     /// Обновление студента
     /// </summary>
     /// <param name="student">record студента.</param>
-    Task<StudentRecord> UpdateAsync(StudentRecord student, CancellationToken  token);
+    Task<StudentDto> UpdateAsync(StudentDto student, CancellationToken  token);
 
     /// <summary>
     /// Получение студента
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
-    Task<StudentRecord> GetAsync(Guid studentId);
+    Task<StudentDto> GetAsync(Guid studentId);
 
     /// <summary>
     /// Получение всех студентов
     /// </summary>
-    Task<StudentRecord[]> GetAllAsync();
+    Task<StudentDto[]> GetAllAsync();
 
     /// <summary>
     /// Удаление студента

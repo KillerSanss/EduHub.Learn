@@ -12,9 +12,9 @@ public class EducatorMapping : Profile
 {
     public EducatorMapping()
     {
-        CreateMap<Educator, EducatorRecord>()
-            .ConstructUsing(e => new EducatorRecord(
-                e.Id,
+        CreateMap<Educator, EducatorDto>()
+            .ConstructUsing(e => new EducatorDto(
+                Guid.NewGuid(),
                 new FullName(e.FullName.Surname, e.FullName.FirstName, e.FullName.Patronymic),
                 e.Gender,
                 e.Phone,

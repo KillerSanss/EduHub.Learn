@@ -3,10 +3,11 @@ using Eduhub.StudentService.Domain.Entities.ValueObjects;
 
 namespace EduHub.StudentService.Application.Services.Dto;
 
-public record EducatorRecord(
-    Guid EducatorId,
+public record StudentDto(
+    Guid Id,
     FullName FullName,
     Gender Gender,
-    Phone Phone,
-    int WorkExperience,
-    DateTime StartDate);
+    DateTime BirthDate,
+    Email Email,
+    FullAddress Address,
+    string Avatar);

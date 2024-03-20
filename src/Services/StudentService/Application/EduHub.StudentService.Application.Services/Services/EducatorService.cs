@@ -29,16 +29,16 @@ public class EducatorService : IEducatorService
     /// </summary>
     /// <param name="educator">Преподаватель для добавления.</param>
     /// <returns>Добавленный преподаватель.</returns>
-    public async Task<EducatorRecord> AddAsync(EducatorRecord educator, CancellationToken token)
+    public async Task<EducatorDto> AddAsync(EducatorDto educator, CancellationToken token)
     {
         Guard.Against.Null(educator);
 
-        var newEducator = _mapper.Map<Educator>(educator with { EducatorId = Guid.NewGuid()});
+        var newEducator = _mapper.Map<Educator>(educator);
         await _educatorRepository.AddAsync(newEducator, token);
 
         await _unitOfWork.SaveChangesAsync(token);
 
-        return _mapper.Map<EducatorRecord>(newEducator);
+        return _mapper.Map<EducatorDto>(newEducator);
     }
 
     /// <summary>
@@ -46,16 +46,16 @@ public class EducatorService : IEducatorService
     /// </summary>
     /// <param name="educator">Преподаватель для обновления.</param>
     /// <returns>Обновленный преподаватель.</returns>
-    public async Task<EducatorRecord> UpdateAsync(EducatorRecord educator, CancellationToken token)
+    public async Task<EducatorDto> UpdateAsync(EducatorDto educator, CancellationToken token)
     {
         Guard.Against.Null(educator);
 
-        var updatedEducator = _mapper.Map<Educator>(educator with { EducatorId = Guid.NewGuid()});
+        var updatedEducator = _mapper.Map<Educator>(educator);
         await _educatorRepository.UpdateAsync(updatedEducator, token);
 
         await _unitOfWork.SaveChangesAsync(token);
 
-        return _mapper.Map<EducatorRecord>(updatedEducator);
+        return _mapper.Map<EducatorDto>(updatedEducator);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class EducatorService : IEducatorService
     /// </summary>
     /// <param name="educatorId">Индентификатор преподавателя.</param>
     /// <returns>Преподаватель.</returns>
-    public async Task<EducatorRecord> GetAsync(Guid educatorId)
+    public async Task<EducatorDto> GetAsync(Guid educatorId)
     {
         var educator = await _educatorRepository.GetByIdAsync(educatorId);
         if (educator == null)
@@ -71,17 +71,17 @@ public class EducatorService : IEducatorService
             throw new EntityNotFoundException<Course>(nameof(educatorId), educatorId.ToString());
         }
 
-        return _mapper.Map<EducatorRecord>(educator);
+        return _mapper.Map<EducatorDto>(educator);
     }
 
     /// <summary>
     /// Получение всех существующих преподавателей
     /// </summary>
     /// <returns>Массив всех преподавателей.</returns>
-    public async Task<EducatorRecord[]> GetAllAsync()
+    public async Task<EducatorDto[]> GetAllAsync()
     {
         var educators = await _educatorRepository.GetAllAsync();
-        return _mapper.Map<EducatorRecord[]>(educators);
+        return _mapper.Map<EducatorDto[]>(educators);
     }
 
     /// <summary>

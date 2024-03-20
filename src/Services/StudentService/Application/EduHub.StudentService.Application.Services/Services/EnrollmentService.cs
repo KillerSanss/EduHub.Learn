@@ -37,7 +37,7 @@ public class EnrollmentService : IEnrollmentService
     /// </summary>
     /// <param name="enrollment">Дто зачисления.</param>
     /// <returns>Новое зачисление.</returns>
-    public async Task EnrollStudentAsync(EnrollmentRecord enrollment, CancellationToken token)
+    public async Task EnrollStudentAsync(EnrollmentDto enrollment, CancellationToken token)
     {
         Guard.Against.Null(enrollment);
 
@@ -61,20 +61,20 @@ public class EnrollmentService : IEnrollmentService
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
     /// <returns>Массив зачислений студента.</returns>
-    public async Task<EnrollmentRecord[]> GetStudentEnrollmentsAsync(Guid studentId)
+    public async Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId)
     {
         var studentEnrollments = await _enrollmentRepository.GetStudentEnrollmentsAsync(studentId);
-        return _mapper.Map<EnrollmentRecord[]>(studentEnrollments);
+        return _mapper.Map<EnrollmentDto[]>(studentEnrollments);
     }
 
     /// <summary>
     /// Получение всех зачислений
     /// </summary>
     /// <returns> Массив всех зачислений.</returns>
-    public async Task<EnrollmentRecord[]> GetAllAsync()
+    public async Task<EnrollmentDto[]> GetAllAsync()
     {
         var enrollments = await _enrollmentRepository.GetAllAsync();
-        return _mapper.Map<EnrollmentRecord[]>(enrollments);
+        return _mapper.Map<EnrollmentDto[]>(enrollments);
     }
 
     /// <summary>

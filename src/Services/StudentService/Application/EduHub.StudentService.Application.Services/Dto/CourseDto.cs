@@ -1,7 +1,7 @@
 ﻿namespace EduHub.StudentService.Application.Services.Dto;
 
-public record CourseRecord(
-    Guid CourseId,
+public record CourseDto(
+    Guid Id,
     string Name,
     string Description,
     Guid EducatorId);
