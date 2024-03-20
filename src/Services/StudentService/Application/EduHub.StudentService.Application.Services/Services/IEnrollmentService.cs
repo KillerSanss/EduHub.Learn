@@ -10,19 +10,19 @@ public interface IEnrollmentService
     /// <summary>
     /// Зачисление студента на выбранный курс
     /// </summary>
-    /// <param name="enrollmentDto">Дто зачисления.</param>
-    Task EnrollStudentAsync(EnrollmentDto enrollmentDto, CancellationToken token);
+    /// <param name="enrollment">record зачисления.</param>
+    Task EnrollStudentAsync(EnrollmentRecord enrollment, CancellationToken token);
 
     /// <summary>
     /// Получение всех зачислений студента
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
-    Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId);
+    Task<EnrollmentRecord[]> GetStudentEnrollmentsAsync(Guid studentId);
 
     /// <summary>
     /// Получение всех зачислений
     /// </summary>
-    Task<EnrollmentDto[]> GetAllAsync();
+    Task<EnrollmentRecord[]> GetAllAsync();
 
     /// <summary>
     /// Удаление зачисления

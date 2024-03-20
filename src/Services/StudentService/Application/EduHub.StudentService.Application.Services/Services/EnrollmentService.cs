@@ -35,22 +35,22 @@ public class EnrollmentService : IEnrollmentService
     /// <summary>
     /// Зачисления студента на выбранный курс
     /// </summary>
-    /// <param name="enrollmentDto">Дто зачисления.</param>
+    /// <param name="enrollment">Дто зачисления.</param>
     /// <returns>Новое зачисление.</returns>
-    public async Task EnrollStudentAsync(EnrollmentDto enrollmentDto, CancellationToken token)
+    public async Task EnrollStudentAsync(EnrollmentRecord enrollment, CancellationToken token)
     {
-        Guard.Against.Null(enrollmentDto);
+        Guard.Against.Null(enrollment);
 
-        var student = await _studentRepository.GetByIdAsync(enrollmentDto.StudentId);
+        var student = await _studentRepository.GetByIdAsync(enrollment.StudentId);
         if (student == null)
         {
-            throw new EntityNotFoundException<Course>(nameof(enrollmentDto.StudentId), enrollmentDto.StudentId.ToString());
+            throw new EntityNotFoundException<Course>(nameof(enrollment.StudentId), enrollment.StudentId.ToString());
         }
 
-        var course = await _courseRepository.GetByIdAsync(enrollmentDto.CourseId);
+        var course = await _courseRepository.GetByIdAsync(enrollment.CourseId);
         if (course == null)
         {
-            throw new EntityNotFoundException<Course>(nameof(enrollmentDto.CourseId), enrollmentDto.CourseId.ToString());
+            throw new EntityNotFoundException<Course>(nameof(enrollment.CourseId), enrollment.CourseId.ToString());
         }
 
         await _enrollmentRepository.EnrollStudentAsync(token);
@@ -61,20 +61,20 @@ public class EnrollmentService : IEnrollmentService
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
     /// <returns>Массив зачислений студента.</returns>
-    public async Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId)
+    public async Task<EnrollmentRecord[]> GetStudentEnrollmentsAsync(Guid studentId)
     {
         var studentEnrollments = await _enrollmentRepository.GetStudentEnrollmentsAsync(studentId);
-        return _mapper.Map<EnrollmentDto[]>(studentEnrollments);
+        return _mapper.Map<EnrollmentRecord[]>(studentEnrollments);
     }
 
     /// <summary>
     /// Получение всех зачислений
     /// </summary>
     /// <returns> Массив всех зачислений.</returns>
-    public async Task<EnrollmentDto[]> GetAllAsync()
+    public async Task<EnrollmentRecord[]> GetAllAsync()
     {
         var enrollments = await _enrollmentRepository.GetAllAsync();
-        return _mapper.Map<EnrollmentDto[]>(enrollments);
+        return _mapper.Map<EnrollmentRecord[]>(enrollments);
     }
 
     /// <summary>

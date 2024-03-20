@@ -3,13 +3,8 @@
 namespace EduHub.StudentService.Application.Services.Repositories;
 
 /// <summary>
-/// Репозиторий студента
+/// Интерфейс описывающий StudentRepository
 /// </summary>
-public interface IStudentRepository
+public interface IStudentRepository : IRepository<Student>
 {
-    Task<Student> GetStudentById(Guid studentId);
-    Task<Student> AddStudent(Student student);
-    Task<Student> UpdateStudent(Student student);
-    Task<Student> DeleteStudent(Guid studentId);
-    Task<List<Student>> GetAllStudents();
 }

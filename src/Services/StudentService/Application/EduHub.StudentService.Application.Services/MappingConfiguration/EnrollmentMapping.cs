@@ -11,6 +11,11 @@ public class EnrollmentMapping : Profile
 {
     public EnrollmentMapping()
     {
-        CreateMap<Enrollment, EnrollmentDto>().ReverseMap();
+        CreateMap<Enrollment, EnrollmentRecord>()
+            .ConstructUsing(e => new EnrollmentRecord(
+                e.Id,
+                e.StudentId,
+                e.CourseId,
+                e.StartDate));
     }
 }

@@ -11,6 +11,11 @@ public class СourseMapping : Profile
 {
     public СourseMapping()
     {
-        CreateMap<Course, CourseDto>().ReverseMap();
+        CreateMap<Course, CourseRecord>()
+            .ConstructUsing(c => new CourseRecord(
+                c.Id,
+                c.Name,
+                c.Description,
+                Guid.NewGuid()));
     }
 }

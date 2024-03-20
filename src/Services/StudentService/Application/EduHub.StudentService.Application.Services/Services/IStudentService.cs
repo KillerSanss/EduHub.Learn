@@ -10,25 +10,25 @@ public interface IStudentService
     /// <summary>
     /// Добавлние нового студента
     /// </summary>
-    /// <param name="studentDto">Дто студента.</param>
-    Task<StudentDto> AddAsync(StudentDto studentDto, CancellationToken token);
+    /// <param name="student">record студента.</param>
+    Task<StudentRecord> AddAsync(StudentRecord student, CancellationToken token);
 
     /// <summary>
     /// Обновление студента
     /// </summary>
-    /// <param name="studentDto">Дто студента.</param>
-    Task<StudentDto> UpdateAsync(StudentDto studentDto, CancellationToken  token);
+    /// <param name="student">record студента.</param>
+    Task<StudentRecord> UpdateAsync(StudentRecord student, CancellationToken  token);
 
     /// <summary>
     /// Получение студента
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
-    Task<StudentDto> GetAsync(Guid studentId);
+    Task<StudentRecord> GetAsync(Guid studentId);
 
     /// <summary>
     /// Получение всех студентов
     /// </summary>
-    Task<StudentDto[]> GetAllAsync();
+    Task<StudentRecord[]> GetAllAsync();
 
     /// <summary>
     /// Удаление студента

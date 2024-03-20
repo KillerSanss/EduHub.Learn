@@ -27,35 +27,35 @@ public class CourseService : ICourseService
     /// <summary>
     /// Добавление нового курса
     /// </summary>
-    /// <param name="courseDto">Курс для добавления.</param>
+    /// <param name="course">Курс для добавления.</param>
     /// <returns>Добавленный курс.</returns>
-    public async Task<CourseDto> AddAsync(CourseDto courseDto, CancellationToken token)
+    public async Task<CourseRecord> AddAsync(CourseRecord course, CancellationToken token)
     {
-        Guard.Against.Null(courseDto);
+        Guard.Against.Null(course);
 
-        var newCourse = _mapper.Map<Course>(courseDto);
+        var newCourse = _mapper.Map<Course>(course with { CourseId = Guid.NewGuid()});
         await _courseRepository.AddAsync(newCourse, token);
 
         await _unitOfWork.SaveChangesAsync(token);
 
-        return _mapper.Map<CourseDto>(newCourse);
+        return _mapper.Map<CourseRecord>(newCourse);
     }
 
     /// <summary>
     /// Обновление курса
     /// </summary>
-    /// <param name="courseDto">Курс для обновления.</param>
+    /// <param name="course">Курс для обновления.</param>
     /// <returns>Обновленный курс.</returns>
-    public async Task<CourseDto> UpdateAsync(CourseDto courseDto, CancellationToken token)
+    public async Task<CourseRecord> UpdateAsync(CourseRecord course, CancellationToken token)
     {
-        Guard.Against.Null(courseDto);
+        Guard.Against.Null(course);
 
-        var updatedCourse = _mapper.Map<Course>(courseDto);
+        var updatedCourse = _mapper.Map<Course>(course with { CourseId = Guid.NewGuid()});
         await _courseRepository.UpdateAsync(updatedCourse, token);
 
         await _unitOfWork.SaveChangesAsync(token);
 
-        return _mapper.Map<CourseDto>(updatedCourse);
+        return _mapper.Map<CourseRecord>(updatedCourse);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class CourseService : ICourseService
     /// </summary>
     /// <param name="courseId">Идентификатор курса.</param>
     /// <returns>Курс.</returns>
-    public async Task<CourseDto> GetAsync(Guid courseId)
+    public async Task<CourseRecord> GetAsync(Guid courseId)
     {
         var course = await _courseRepository.GetByIdAsync(courseId);
         if (course == null)
@@ -71,17 +71,17 @@ public class CourseService : ICourseService
             throw new EntityNotFoundException<Course>(nameof(courseId), courseId.ToString());
         }
 
-        return _mapper.Map<CourseDto>(course);
+        return _mapper.Map<CourseRecord>(course);
     }
 
     /// <summary>
     /// Получение списка курса
     /// </summary>
     /// <returns>Массив всех существующих курсов.</returns>
-    public async Task<CourseDto[]> GetAllAsync()
+    public async Task<CourseRecord[]> GetAllAsync()
     {
         var courses = await _courseRepository.GetAllAsync();
-        return _mapper.Map<CourseDto[]>(courses);
+        return _mapper.Map<CourseRecord[]>(courses);
     }
 
     /// <summary>

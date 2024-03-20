@@ -27,35 +27,35 @@ public class StudentService : IStudentService
     /// <summary>
     /// Добавление нового студента
     /// </summary>
-    /// <param name="studentDto">Студент для добавления.</param>
+    /// <param name="student">Студент для добавления.</param>
     /// <returns>Добавленный студент.</returns>
-    public async Task<StudentDto> AddAsync(StudentDto studentDto, CancellationToken token)
+    public async Task<StudentRecord> AddAsync(StudentRecord student, CancellationToken token)
     {
-        Guard.Against.Null(studentDto, nameof(studentDto));
+        Guard.Against.Null(student, nameof(student));
 
-        var newStudent = _mapper.Map<Student>(studentDto);
+        var newStudent = _mapper.Map<Student>(student with { StudentId = Guid.NewGuid()});
         await _studentRepository.AddAsync(newStudent, token);
 
         await _unitOfWork.SaveChangesAsync(token);
 
-        return _mapper.Map<StudentDto>(newStudent);
+        return _mapper.Map<StudentRecord>(newStudent);
     }
 
     /// <summary>
     /// Обновление студента
     /// </summary>
-    /// <param name="studentDto">Студент для обновления.</param>
+    /// <param name="student">Студент для обновления.</param>
     /// <returns>Обновленный студент.</returns>
-    public async Task<StudentDto> UpdateAsync(StudentDto studentDto, CancellationToken token)
+    public async Task<StudentRecord> UpdateAsync(StudentRecord student, CancellationToken token)
     {
-        Guard.Against.Null(studentDto, nameof(studentDto));
+        Guard.Against.Null(student, nameof(student));
 
-        var updatedStudent = _mapper.Map<Student>(studentDto);
+        var updatedStudent = _mapper.Map<Student>(student with { StudentId = Guid.NewGuid()});
         await _studentRepository.UpdateAsync(updatedStudent, token);
 
         await _unitOfWork.SaveChangesAsync(token);
 
-        return _mapper.Map<StudentDto>(updatedStudent);
+        return _mapper.Map<StudentRecord>(updatedStudent);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class StudentService : IStudentService
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
     /// <returns>Выбранный студент.</returns>
-    public async Task<StudentDto> GetAsync(Guid studentId)
+    public async Task<StudentRecord> GetAsync(Guid studentId)
     {
         var student = await _studentRepository.GetByIdAsync(studentId);
         if (student == null)
@@ -71,17 +71,17 @@ public class StudentService : IStudentService
             throw new EntityNotFoundException<Course>(nameof(studentId), studentId.ToString());
         }
 
-        return _mapper.Map<StudentDto>(student);
+        return _mapper.Map<StudentRecord>(student);
     }
 
     /// <summary>
     /// Получение списка студентов
     /// </summary>
     /// <returns>Список всех существующих студентов.</returns>
-    public async Task<StudentDto[]> GetAllAsync()
+    public async Task<StudentRecord[]> GetAllAsync()
     {
         var students = await _studentRepository.GetAllAsync();
-        return _mapper.Map<StudentDto[]>(students);
+        return _mapper.Map<StudentRecord[]>(students);
     }
 
     /// <summary>
