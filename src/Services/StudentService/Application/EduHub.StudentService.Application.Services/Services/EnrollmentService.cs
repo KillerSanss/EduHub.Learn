@@ -1,8 +1,9 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
 using EduHub.StudentService.Application.Services.Dto;
+using EduHub.StudentService.Application.Services.IServices;
 using EduHub.StudentService.Application.Services.Repositories;
-using EduHub.StudentService.Application.Services.UOW;
+using EduHub.StudentService.Application.Services.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 
@@ -28,52 +29,56 @@ public class EnrollmentService : IEnrollmentService
         _enrollmentRepository = Guard.Against.Null(enrollmentRepository);
         _courseRepository = Guard.Against.Null(courseRepository);
         _studentRepository = Guard.Against.Null(studentRepository);
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
+        _mapper = Guard.Against.Null(mapper);
+        _unitOfWork = Guard.Against.Null(unitOfWork);
     }
 
     /// <summary>
     /// Зачисления студента на выбранный курс
     /// </summary>
-    /// <param name="enrollment">Дто зачисления.</param>
+    /// <param name="enrollmentDto">Дто зачисления.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Новое зачисление.</returns>
-    public async Task EnrollStudentAsync(EnrollmentDto enrollment, CancellationToken token)
+    public async Task AddAsync(EnrollmentDto enrollmentDto, CancellationToken cancellationToken)
     {
-        Guard.Against.Null(enrollment);
+        Guard.Against.Null(enrollmentDto);
 
-        var student = await _studentRepository.GetByIdAsync(enrollment.StudentId);
+        var student = await _studentRepository.GetByIdAsync(enrollmentDto.StudentId, cancellationToken);
         if (student == null)
         {
-            throw new EntityNotFoundException<Course>(nameof(enrollment.StudentId), enrollment.StudentId.ToString());
+            throw new EntityNotFoundException<Course>(nameof(enrollmentDto.StudentId), enrollmentDto.StudentId.ToString());
         }
 
-        var course = await _courseRepository.GetByIdAsync(enrollment.CourseId);
+        var course = await _courseRepository.GetByIdAsync(enrollmentDto.CourseId, cancellationToken);
         if (course == null)
         {
-            throw new EntityNotFoundException<Course>(nameof(enrollment.CourseId), enrollment.CourseId.ToString());
+            throw new EntityNotFoundException<Course>(nameof(enrollmentDto.CourseId), enrollmentDto.CourseId.ToString());
         }
 
-        await _enrollmentRepository.EnrollStudentAsync(token);
+        await _enrollmentRepository.AddAsync(cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
     /// Получение зачислений студента
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений студента.</returns>
-    public async Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId)
+    public async Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken)
     {
-        var studentEnrollments = await _enrollmentRepository.GetStudentEnrollmentsAsync(studentId);
+        var studentEnrollments = await _enrollmentRepository.GetStudentEnrollmentsAsync(studentId, cancellationToken);
         return _mapper.Map<EnrollmentDto[]>(studentEnrollments);
     }
 
     /// <summary>
     /// Получение всех зачислений
     /// </summary>
-    /// <returns> Массив всех зачислений.</returns>
-    public async Task<EnrollmentDto[]> GetAllAsync()
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Массив всех зачислений.</returns>
+    public async Task<EnrollmentDto[]> GetAllAsync(CancellationToken cancellationToken)
     {
-        var enrollments = await _enrollmentRepository.GetAllAsync();
+        var enrollments = await _enrollmentRepository.GetAllAsync(cancellationToken);
         return _mapper.Map<EnrollmentDto[]>(enrollments);
     }
 
@@ -81,15 +86,16 @@ public class EnrollmentService : IEnrollmentService
     /// Удаление зачисления
     /// </summary>
     /// <param name="enrollmentId">Идентификатор зачисления.</param>
-    public async Task DeleteAsync(Guid enrollmentId, CancellationToken token)
+    /// <param name="cancellationToken">Токен отмены.</param>
+    public async Task DeleteAsync(Guid enrollmentId, CancellationToken cancellationToken)
     {
-        var deletedEnrollment = await _enrollmentRepository.GetByIdAsync(enrollmentId);
-        if (deletedEnrollment == null)
+        var enrollment = await _enrollmentRepository.GetByIdAsync(enrollmentId, cancellationToken);
+        if (enrollment == null)
         {
-            throw new EntityNotFoundException<Course>(nameof(deletedEnrollment), enrollmentId.ToString());
+            throw new EntityNotFoundException<Course>(nameof(enrollment), enrollmentId.ToString());
         }
 
-        await _enrollmentRepository.DeleteAsync(deletedEnrollment, token);
-        await _unitOfWork.SaveChangesAsync(token);
+        await _enrollmentRepository.DeleteAsync(enrollment, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

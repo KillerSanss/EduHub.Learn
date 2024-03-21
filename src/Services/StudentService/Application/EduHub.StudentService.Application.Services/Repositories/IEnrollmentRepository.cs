@@ -5,36 +5,19 @@ namespace EduHub.StudentService.Application.Services.Repositories;
 /// <summary>
 /// Интерфейс описывающий EnrollmentRepository
 /// </summary>
-public interface IEnrollmentRepository
+public interface IEnrollmentRepository : IRepository<Enrollment>
 {
     /// <summary>
     /// Выбор всех зачислений студента
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив всех зачислений студента.</returns>
-    Task<Enrollment[]> GetStudentEnrollmentsAsync(Guid studentId);
+    Task<Enrollment[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Зачисление студента
     /// </summary>
-    Task EnrollStudentAsync(CancellationToken token);
-
-    /// <summary>
-    /// Удаление зачисления
-    /// </summary>
-    /// <param name="entity">Зачисление на удаление.</param>
-    Task DeleteAsync(Enrollment entity, CancellationToken token);
-
-    /// <summary>
-    /// Получение всех существующих зачислений
-    /// </summary>
-    /// <returns>Массив всех зачислений.</returns>
-    Task<Enrollment[]> GetAllAsync();
-
-    /// <summary>
-    /// Выбор одного зачисления
-    /// </summary>
-    /// <param name="enrollmentId">Идентификатор зачисления.</param>
-    /// <returns>Выбранное зачисление.</returns>
-    Task<Enrollment> GetByIdAsync(Guid enrollmentId);
+    /// <param name="cancellationToken">Токен отмены.</param>
+    Task AddAsync(CancellationToken cancellationToken);
 }
