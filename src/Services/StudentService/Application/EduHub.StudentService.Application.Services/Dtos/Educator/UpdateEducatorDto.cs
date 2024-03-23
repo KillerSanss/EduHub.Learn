@@ -1,18 +1,20 @@
 ﻿using Eduhub.StudentService.Domain.Entities.Enums;
 
-namespace EduHub.StudentService.Application.Services.Dto;
+namespace EduHub.StudentService.Application.Services.Dtos.Educator;
 
 /// <summary>
-/// Дто преподавателя
+/// Дто класс для преподавателя
 /// </summary>
-/// <param name="Surname">Фамилия.</param>
+/// <param name="Id">Идентификатор.</param>
+/// <param name="Surname">Фамилия</param>
 /// <param name="FirstName">Имя.</param>
 /// <param name="Patronymic">Отчество.</param>
 /// <param name="Gender">Гендер.</param>
 /// <param name="Phone">Номер телефона.</param>
 /// <param name="WorkExperience">Опыт работы.</param>
-/// <param name="StartDate">Наачало работы.</param>
-public record EducatorDto(
+/// <param name="StartDate">Дата начала работы.</param>
+public record UpdateEducatorDto(
+    Guid Id,
     string Surname,
     string FirstName,
     string Patronymic,

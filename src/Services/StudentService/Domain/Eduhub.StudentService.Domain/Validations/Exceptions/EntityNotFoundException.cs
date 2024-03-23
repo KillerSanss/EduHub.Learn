@@ -1,11 +1,13 @@
-﻿using Eduhub.StudentService.Domain.Validations.Exceptions.Base;
+﻿using Eduhub.StudentService.Domain.Entities.Base;
+using Eduhub.StudentService.Domain.Validations.Exceptions.Base;
 
 namespace Eduhub.StudentService.Domain.Validations.Exceptions;
 
 /// <summary>
 /// Исключение для не найденых объектов
 /// </summary>
-public class EntityNotFoundException<T> : BaseNotFoundException where T : class
+/// <typeparam name="T">Сущность.</typeparam>
+public class EntityNotFoundException<T> : BaseNotFoundException where T : BaseEntity
 {
     /// <summary>
     /// Конструктор

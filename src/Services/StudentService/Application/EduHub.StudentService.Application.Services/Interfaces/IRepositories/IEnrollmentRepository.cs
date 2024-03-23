@@ -1,6 +1,6 @@
 ﻿using Eduhub.StudentService.Domain.Entities;
 
-namespace EduHub.StudentService.Application.Services.Repositories;
+namespace EduHub.StudentService.Application.Services.Interfaces.IRepositories;
 
 /// <summary>
 /// Интерфейс описывающий EnrollmentRepository
@@ -19,5 +19,6 @@ public interface IEnrollmentRepository : IRepository<Enrollment>
     /// Зачисление студента
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
-    Task AddAsync(CancellationToken cancellationToken);
+    /// <returns>Добавленное зачисление.</returns>
+    Task<Enrollment> AddAsync(CancellationToken cancellationToken);
 }

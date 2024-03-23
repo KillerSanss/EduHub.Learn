@@ -1,6 +1,6 @@
-﻿using EduHub.StudentService.Application.Services.Dto;
+﻿using EduHub.StudentService.Application.Services.Dtos.Enrollment;
 
-namespace EduHub.StudentService.Application.Services.IServices;
+namespace EduHub.StudentService.Application.Services.Interfaces.IServices;
 
 /// <summary>
 /// Интерфейс описывающий EnrollmentService
@@ -12,7 +12,7 @@ public interface IEnrollmentService
     /// </summary>
     /// <param name="enrollment">Дто зачисления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    Task AddAsync(EnrollmentDto enrollment, CancellationToken cancellationToken);
+    Task<CreateEnrollmentDto> AddAsync(CreateEnrollmentDto enrollment, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех зачислений студента
@@ -20,14 +20,14 @@ public interface IEnrollmentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений студента.</returns>
-    Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken);
+    Task<CreateEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех зачислений
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений.</returns>
-    Task<EnrollmentDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<CreateEnrollmentDto[]> GetAllAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Удаление зачисления

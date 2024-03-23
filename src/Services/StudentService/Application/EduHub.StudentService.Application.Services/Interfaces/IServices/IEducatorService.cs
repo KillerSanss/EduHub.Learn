@@ -1,6 +1,6 @@
-﻿using EduHub.StudentService.Application.Services.Dto;
+﻿using EduHub.StudentService.Application.Services.Dtos.Educator;
 
-namespace EduHub.StudentService.Application.Services.IServices;
+namespace EduHub.StudentService.Application.Services.Interfaces.IServices;
 
 /// <summary>
 /// Интерфейс описывающий EducatorService
@@ -13,7 +13,7 @@ public interface IEducatorService
     /// <param name="educator">Дто Преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный преподаватель.</returns>
-    Task<EducatorDto> AddAsync(EducatorDto educator, CancellationToken cancellationToken);
+    Task<CreateEducatorDto> AddAsync(CreateEducatorDto educator, CancellationToken cancellationToken);
 
     /// <summary>
     /// Обновление преподавателя
@@ -21,7 +21,7 @@ public interface IEducatorService
     /// <param name="educator">Дто Преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный преподаватель.</returns>
-    Task<EducatorDto> UpdateAsync(EducatorDto educator, CancellationToken cancellationToken);
+    Task<UpdateEducatorDto> UpdateAsync(UpdateEducatorDto educator, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение преподавателя
@@ -29,14 +29,14 @@ public interface IEducatorService
     /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный преподаватель.</returns>
-    Task<EducatorDto> GetAsync(Guid educatorId, CancellationToken cancellationToken);
+    Task<CreateEducatorDto> GetByIdAsync(Guid educatorId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех преподавателей
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив преподавателей.</returns>
-    Task<EducatorDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<CreateEducatorDto[]> GetAllAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Удаление преподавателя

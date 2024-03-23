@@ -1,4 +1,4 @@
-﻿namespace EduHub.StudentService.Application.Services.Dto;
+﻿namespace EduHub.StudentService.Application.Services.Dtos.Course;
 
 /// <summary>
 /// Дто класс для курса

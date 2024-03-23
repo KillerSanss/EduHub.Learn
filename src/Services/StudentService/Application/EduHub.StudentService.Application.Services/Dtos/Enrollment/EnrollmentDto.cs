@@ -1,4 +1,4 @@
-﻿namespace EduHub.StudentService.Application.Services.Dto;
+﻿namespace EduHub.StudentService.Application.Services.Dtos.Enrollment;
 
 /// <summary>
 /// Дто класс для зачисления

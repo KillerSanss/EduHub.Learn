@@ -1,6 +1,6 @@
-﻿using EduHub.StudentService.Application.Services.Dto;
+﻿using EduHub.StudentService.Application.Services.Dtos.Student;
 
-namespace EduHub.StudentService.Application.Services.IServices;
+namespace EduHub.StudentService.Application.Services.Interfaces.IServices;
 
 /// <summary>
 /// Интерфейс описывающий StudentService
@@ -13,7 +13,7 @@ public interface IStudentService
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    Task<StudentDto> AddAsync(StudentDto student, CancellationToken cancellationToken);
+    Task<CreateStudentDto> AddAsync(CreateStudentDto student, CancellationToken cancellationToken);
 
     /// <summary>
     /// Обновление студента
@@ -21,7 +21,7 @@ public interface IStudentService
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    Task<StudentDto> UpdateAsync(StudentDto student, CancellationToken  cancellationToken);
+    Task<UpdateStudentDto> UpdateAsync(UpdateStudentDto student, CancellationToken  cancellationToken);
 
     /// <summary>
     /// Получение студента
@@ -29,14 +29,14 @@ public interface IStudentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный студент.</returns>
-    Task<StudentDto> GetAsync(Guid studentId, CancellationToken cancellationToken);
+    Task<CreateStudentDto> GetByIdAsync(Guid studentId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех студентов
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив студентов.</returns>
-    Task<StudentDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<CreateStudentDto[]> GetAllAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Удаление студента

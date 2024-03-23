@@ -1,9 +1,12 @@
-﻿namespace EduHub.StudentService.Application.Services.Repositories;
+﻿using Eduhub.StudentService.Domain.Entities.Base;
+
+namespace EduHub.StudentService.Application.Services.Interfaces.IRepositories;
 
 /// <summary>
 /// Базовый репозиторий
 /// </summary>
-public interface IRepository<TEntity> where TEntity : class
+/// <typeparam name="TEntity">Сущность.</typeparam>
+public interface IRepository<TEntity> where TEntity : BaseEntity
 {
     /// <summary>
     /// Выбор одного
