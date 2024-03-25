@@ -13,6 +13,7 @@ public class EnrollmentMappingProfile : Profile
     {
         CreateMap<Enrollment, EnrollmentDto>()
             .ConstructUsing(e => new EnrollmentDto(
+                Guid.NewGuid(),
                 e.StudentId,
                 e.CourseId,
                 e.StartDate));

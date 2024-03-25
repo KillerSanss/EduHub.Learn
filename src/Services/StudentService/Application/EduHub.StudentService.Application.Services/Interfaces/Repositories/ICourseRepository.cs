@@ -1,6 +1,6 @@
 ﻿using Eduhub.StudentService.Domain.Entities;
 
-namespace EduHub.StudentService.Application.Services.Interfaces.IRepositories;
+namespace EduHub.StudentService.Application.Services.Interfaces.Repositories;
 
 /// <summary>
 /// Интерфейс описывающий CourseRepository

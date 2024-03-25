@@ -1,6 +1,6 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Educator;
 
-namespace EduHub.StudentService.Application.Services.Interfaces.IServices;
+namespace EduHub.StudentService.Application.Services.Interfaces.Services;
 
 /// <summary>
 /// Интерфейс описывающий EducatorService
@@ -13,7 +13,7 @@ public interface IEducatorService
     /// <param name="educator">Дто Преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный преподаватель.</returns>
-    Task<CreateEducatorDto> AddAsync(CreateEducatorDto educator, CancellationToken cancellationToken);
+    Task<EducatorDto> AddAsync(CreateEducatorDto educator, CancellationToken cancellationToken);
 
     /// <summary>
     /// Обновление преподавателя
@@ -21,7 +21,7 @@ public interface IEducatorService
     /// <param name="educator">Дто Преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный преподаватель.</returns>
-    Task<UpdateEducatorDto> UpdateAsync(UpdateEducatorDto educator, CancellationToken cancellationToken);
+    Task<EducatorDto> UpdateAsync(UpdateEducatorDto educator, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение преподавателя
@@ -29,14 +29,14 @@ public interface IEducatorService
     /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный преподаватель.</returns>
-    Task<CreateEducatorDto> GetByIdAsync(Guid educatorId, CancellationToken cancellationToken);
+    Task<EducatorDto> GetByIdAsync(Guid educatorId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех преподавателей
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив преподавателей.</returns>
-    Task<CreateEducatorDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<EducatorDto[]> GetAllAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Удаление преподавателя

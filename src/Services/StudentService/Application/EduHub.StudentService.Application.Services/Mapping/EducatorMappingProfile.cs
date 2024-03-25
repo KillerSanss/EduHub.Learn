@@ -14,6 +14,7 @@ public class EducatorMappingProfile : Profile
     {
         CreateMap<Educator, EducatorDto>()
             .ConstructUsing(e => new EducatorDto(
+                Guid.NewGuid(),
                 e.FullName.Surname,
                 e.FullName.FirstName,
                 e.FullName.Patronymic,

@@ -1,7 +1,7 @@
 ﻿using Eduhub.StudentService.Domain.Entities.Base;
 using Eduhub.StudentService.Domain.Validations.Exceptions.Base;
 
-namespace Eduhub.StudentService.Domain.Validations.Exceptions;
+namespace EduHub.StudentService.Application.Services.Exceptions;
 
 /// <summary>
 /// Исключение для не найденых объектов

@@ -1,12 +1,12 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
 using EduHub.StudentService.Application.Services.Dtos.Student;
-using EduHub.StudentService.Application.Services.Interfaces.IRepositories;
-using EduHub.StudentService.Application.Services.Interfaces.IServices;
-using EduHub.StudentService.Application.Services.UnitOfWork;
+using EduHub.StudentService.Application.Services.Exceptions;
+using EduHub.StudentService.Application.Services.Interfaces.Repositories;
+using EduHub.StudentService.Application.Services.Interfaces.Services;
+using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Eduhub.StudentService.Domain.Validations.Exceptions;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -32,7 +32,7 @@ public class StudentService : IStudentService
     /// <param name="studentDto">Студент для добавления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    public async Task<CreateStudentDto> AddAsync(CreateStudentDto studentDto, CancellationToken cancellationToken)
+    public async Task<StudentDto> AddAsync(CreateStudentDto studentDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(studentDto);
 
@@ -41,7 +41,7 @@ public class StudentService : IStudentService
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<CreateStudentDto>(student);
+        return _mapper.Map<StudentDto>(student);
     }
 
     /// <summary>
@@ -50,9 +50,11 @@ public class StudentService : IStudentService
     /// <param name="studentDto">Студент для обновления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    public async Task<UpdateStudentDto> UpdateAsync(UpdateStudentDto studentDto, CancellationToken cancellationToken)
+    public async Task<StudentDto> UpdateAsync(UpdateStudentDto studentDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(studentDto);
+
+        await ExistAsync(studentDto.Id, cancellationToken);
 
         var student = _mapper.Map<Student>(studentDto);
         student.Update(
@@ -66,7 +68,7 @@ public class StudentService : IStudentService
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<UpdateStudentDto>(student);
+        return _mapper.Map<StudentDto>(student);
     }
 
     /// <summary>
@@ -75,15 +77,11 @@ public class StudentService : IStudentService
     /// <param name="id">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный студент.</returns>
-    public async Task<CreateStudentDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<StudentDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var student = await _studentRepository.GetByIdAsync(id, cancellationToken);
-        if (student == null)
-        {
-            throw new EntityNotFoundException<Student>(nameof(Student.Id), id.ToString());
-        }
+        var student = await ExistAsync(id, cancellationToken);
 
-        return _mapper.Map<CreateStudentDto>(student);
+        return _mapper.Map<StudentDto>(student);
     }
 
     /// <summary>
@@ -91,10 +89,10 @@ public class StudentService : IStudentService
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив студентов.</returns>
-    public async Task<CreateStudentDto[]> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<StudentDto[]> GetAllAsync(CancellationToken cancellationToken)
     {
         var students = await _studentRepository.GetAllAsync(cancellationToken);
-        return _mapper.Map<CreateStudentDto[]>(students);
+        return _mapper.Map<StudentDto[]>(students);
     }
 
     /// <summary>
@@ -104,13 +102,20 @@ public class StudentService : IStudentService
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var student = await _studentRepository.GetByIdAsync(id, cancellationToken);
-        if (student == null)
-        {
-            throw new EntityNotFoundException<Student>(nameof(Student.Id), id.ToString());
-        }
+        var student = await ExistAsync(id, cancellationToken);
 
         await _studentRepository.DeleteAsync(student, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task<Student> ExistAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var student = await _studentRepository.GetByIdAsync(id, cancellationToken);
+        if (student == null)
+        {
+            throw new EntityNotFoundException<Educator>(nameof(Student.Id), id.ToString());
+        }
+
+        return student;
     }
 }

@@ -1,6 +1,6 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Course;
 
-namespace EduHub.StudentService.Application.Services.Interfaces.IServices;
+namespace EduHub.StudentService.Application.Services.Interfaces.Services;
 
 /// <summary>
 /// Интерфейс описывающий CourseService
@@ -13,7 +13,7 @@ public interface ICourseService
     /// <param name="course">Дто Курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный курс.</returns>
-    Task<CreateCourseDto> AddAsync(CreateCourseDto course, CancellationToken cancellationToken);
+    Task<CourseDto> AddAsync(CreateCourseDto course, CancellationToken cancellationToken);
 
     /// <summary>
     /// Обновление курса
@@ -21,7 +21,7 @@ public interface ICourseService
     /// <param name="course">Дто Курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный курс.</returns>
-    Task<UpdateCourseDto> UpdateAsync(UpdateCourseDto course, CancellationToken cancellationToken);
+    Task<CourseDto> UpdateAsync(UpdateCourseDto course, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение курса
@@ -29,14 +29,14 @@ public interface ICourseService
     /// <param name="courseId">Идентификатор курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный курс.</returns>
-    Task<CreateCourseDto> GetByIdAsync(Guid courseId, CancellationToken cancellationToken);
+    Task<CourseDto> GetByIdAsync(Guid courseId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех курсов
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив курсов.</returns>
-    Task<CreateCourseDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<CourseDto[]> GetAllAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Удаление курса

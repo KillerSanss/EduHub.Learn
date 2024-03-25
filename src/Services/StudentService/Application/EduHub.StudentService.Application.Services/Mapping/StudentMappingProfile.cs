@@ -14,6 +14,7 @@ public class StudentMappingProfile : Profile
     {
         CreateMap<Student, StudentDto>()
             .ConstructUsing(s => new StudentDto(
+                Guid.NewGuid(),
                 s.FullName.Surname,
                 s.FullName.FirstName,
                 s.FullName.Patronymic,

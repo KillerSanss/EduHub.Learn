@@ -2,10 +2,10 @@
 using AutoMapper;
 using Ardalis.GuardClauses;
 using EduHub.StudentService.Application.Services.Dtos.Course;
-using EduHub.StudentService.Application.Services.Interfaces.IRepositories;
-using EduHub.StudentService.Application.Services.Interfaces.IServices;
-using EduHub.StudentService.Application.Services.UnitOfWork;
-using Eduhub.StudentService.Domain.Validations.Exceptions;
+using EduHub.StudentService.Application.Services.Exceptions;
+using EduHub.StudentService.Application.Services.Interfaces.Repositories;
+using EduHub.StudentService.Application.Services.Interfaces.Services;
+using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -31,7 +31,7 @@ public class CourseService : ICourseService
     /// <param name="courseDto">Курс для добавления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный курс.</returns>
-    public async Task<CreateCourseDto> AddAsync(CreateCourseDto courseDto, CancellationToken cancellationToken)
+    public async Task<CourseDto> AddAsync(CreateCourseDto courseDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(courseDto);
 
@@ -40,7 +40,7 @@ public class CourseService : ICourseService
         await _courseRepository.AddAsync(course, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<CreateCourseDto>(course);
+        return _mapper.Map<CourseDto>(course);
     }
 
     /// <summary>
@@ -49,16 +49,18 @@ public class CourseService : ICourseService
     /// <param name="courseDto">Курс для обновления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный курс.</returns>
-    public async Task<UpdateCourseDto> UpdateAsync(UpdateCourseDto courseDto, CancellationToken cancellationToken)
+    public async Task<CourseDto> UpdateAsync(UpdateCourseDto courseDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(courseDto);
+
+        await ExistAsync(courseDto.Id, cancellationToken);
 
         var course = _mapper.Map<Course>(courseDto);
         course.Update(courseDto.Name, courseDto.Description, courseDto.EducatorId);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<UpdateCourseDto>(course);
+        return _mapper.Map<CourseDto>(course);
     }
 
     /// <summary>
@@ -67,15 +69,11 @@ public class CourseService : ICourseService
     /// <param name="id">Идентификатор курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Курс.</returns>
-    public async Task<CreateCourseDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<CourseDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var course = await _courseRepository.GetByIdAsync(id, cancellationToken);
-        if (course == null)
-        {
-            throw new EntityNotFoundException<Course>(nameof(Course.Id), id.ToString());
-        }
+        var course = await ExistAsync(id, cancellationToken);
 
-        return _mapper.Map<CreateCourseDto>(course);
+        return _mapper.Map<CourseDto>(course);
     }
 
     /// <summary>
@@ -83,10 +81,10 @@ public class CourseService : ICourseService
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив всех существующих курсов.</returns>
-    public async Task<CreateCourseDto[]> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<CourseDto[]> GetAllAsync(CancellationToken cancellationToken)
     {
         var courses = await _courseRepository.GetAllAsync(cancellationToken);
-        return _mapper.Map<CreateCourseDto[]>(courses);
+        return _mapper.Map<CourseDto[]>(courses);
     }
 
     /// <summary>
@@ -96,13 +94,20 @@ public class CourseService : ICourseService
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
+        var course = await ExistAsync(id, cancellationToken);
+
+        await _courseRepository.DeleteAsync(course, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task<Course> ExistAsync(Guid id, CancellationToken cancellationToken)
+    {
         var course = await _courseRepository.GetByIdAsync(id, cancellationToken);
         if (course == null)
         {
             throw new EntityNotFoundException<Course>(nameof(Course.Id), id.ToString());
         }
 
-        await _courseRepository.DeleteAsync(course, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return course;
     }
 }

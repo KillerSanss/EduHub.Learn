@@ -5,6 +5,7 @@ namespace EduHub.StudentService.Application.Services.Dtos.Student;
 /// <summary>
 /// Дто студента
 /// </summary>
+/// <param name="Id">Идентификатор.</param>
 /// <param name="Surname">Фамилия.</param>
 /// <param name="FirstName">Имя.</param>
 /// <param name="Patronymic">Отчество.</param>
@@ -17,6 +18,7 @@ namespace EduHub.StudentService.Application.Services.Dtos.Student;
 /// <param name="HouseNumber">Номер дома.</param>
 /// <param name="Avatar">Аватар.</param>
 public record StudentDto(
+    Guid Id,
     string Surname,
     string FirstName,
     string Patronymic,

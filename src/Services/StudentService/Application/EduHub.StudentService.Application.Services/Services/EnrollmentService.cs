@@ -1,11 +1,11 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
 using EduHub.StudentService.Application.Services.Dtos.Enrollment;
-using EduHub.StudentService.Application.Services.Interfaces.IRepositories;
-using EduHub.StudentService.Application.Services.Interfaces.IServices;
-using EduHub.StudentService.Application.Services.UnitOfWork;
+using EduHub.StudentService.Application.Services.Exceptions;
+using EduHub.StudentService.Application.Services.Interfaces.Repositories;
+using EduHub.StudentService.Application.Services.Interfaces.Services;
+using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
-using Eduhub.StudentService.Domain.Validations.Exceptions;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -15,21 +15,15 @@ namespace EduHub.StudentService.Application.Services.Services;
 public class EnrollmentService : IEnrollmentService
 {
     private readonly IEnrollmentRepository _enrollmentRepository;
-    private readonly IStudentRepository _studentRepository;
-    private readonly ICourseRepository _courseRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
     public EnrollmentService(
         IEnrollmentRepository enrollmentRepository,
-        ICourseRepository courseRepository,
-        IStudentRepository studentRepository,
         IMapper mapper,
         IUnitOfWork unitOfWork)
     {
         _enrollmentRepository = Guard.Against.Null(enrollmentRepository);
-        _courseRepository = Guard.Against.Null(courseRepository);
-        _studentRepository = Guard.Against.Null(studentRepository);
         _mapper = Guard.Against.Null(mapper);
         _unitOfWork = Guard.Against.Null(unitOfWork);
     }
@@ -44,19 +38,7 @@ public class EnrollmentService : IEnrollmentService
     {
         Guard.Against.Null(enrollmentDto);
 
-        var student = await _studentRepository.GetByIdAsync(enrollmentDto.StudentId, cancellationToken);
-        if (student == null)
-        {
-            throw new EntityNotFoundException<Student>(nameof(CreateEnrollmentDto.StudentId), enrollmentDto.StudentId.ToString());
-        }
-
-        var course = await _courseRepository.GetByIdAsync(enrollmentDto.CourseId, cancellationToken);
-        if (course == null)
-        {
-            throw new EntityNotFoundException<Course>(nameof(CreateEnrollmentDto.CourseId), enrollmentDto.CourseId.ToString());
-        }
-
-        await _enrollmentRepository.AddAsync(cancellationToken);
+        await _enrollmentRepository.AddAsync(enrollmentDto.StudentId, enrollmentDto.CourseId, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return enrollmentDto;
@@ -68,10 +50,10 @@ public class EnrollmentService : IEnrollmentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений студента.</returns>
-    public async Task<CreateEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken)
+    public async Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken)
     {
         var studentEnrollments = await _enrollmentRepository.GetStudentEnrollmentsAsync(studentId, cancellationToken);
-        return _mapper.Map<CreateEnrollmentDto[]>(studentEnrollments);
+        return _mapper.Map<EnrollmentDto[]>(studentEnrollments);
     }
 
     /// <summary>
@@ -79,10 +61,10 @@ public class EnrollmentService : IEnrollmentService
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив всех зачислений.</returns>
-    public async Task<CreateEnrollmentDto[]> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<EnrollmentDto[]> GetAllAsync(CancellationToken cancellationToken)
     {
         var enrollments = await _enrollmentRepository.GetAllAsync(cancellationToken);
-        return _mapper.Map<CreateEnrollmentDto[]>(enrollments);
+        return _mapper.Map<EnrollmentDto[]>(enrollments);
     }
 
     /// <summary>
@@ -92,13 +74,20 @@ public class EnrollmentService : IEnrollmentService
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var enrollment = await _enrollmentRepository.GetByIdAsync(id, cancellationToken);
-        if (enrollment == null)
-        {
-            throw new EntityNotFoundException<Enrollment>(nameof(Enrollment.Id), id.ToString());
-        }
+        var enrollment = await ExistAsync(id, cancellationToken);
 
         await _enrollmentRepository.DeleteAsync(enrollment, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task<Enrollment> ExistAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var enrollment = await _enrollmentRepository.GetByIdAsync(id, cancellationToken);
+        if (enrollment == null)
+        {
+            throw new EntityNotFoundException<Educator>(nameof(Enrollment.Id), id.ToString());
+        }
+
+        return enrollment;
     }
 }

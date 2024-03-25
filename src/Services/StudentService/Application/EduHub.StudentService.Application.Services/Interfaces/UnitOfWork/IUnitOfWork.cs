@@ -1,4 +1,4 @@
-﻿namespace EduHub.StudentService.Application.Services.UnitOfWork;
+﻿namespace EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 
 /// <summary>
 /// Интерфейс описывающий UnitOfWork

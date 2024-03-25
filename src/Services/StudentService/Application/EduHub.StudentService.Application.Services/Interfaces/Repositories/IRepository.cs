@@ -1,6 +1,6 @@
 ﻿using Eduhub.StudentService.Domain.Entities.Base;
 
-namespace EduHub.StudentService.Application.Services.Interfaces.IRepositories;
+namespace EduHub.StudentService.Application.Services.Interfaces.Repositories;
 
 /// <summary>
 /// Базовый репозиторий

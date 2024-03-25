@@ -1,6 +1,6 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Student;
 
-namespace EduHub.StudentService.Application.Services.Interfaces.IServices;
+namespace EduHub.StudentService.Application.Services.Interfaces.Services;
 
 /// <summary>
 /// Интерфейс описывающий StudentService
@@ -13,7 +13,7 @@ public interface IStudentService
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    Task<CreateStudentDto> AddAsync(CreateStudentDto student, CancellationToken cancellationToken);
+    Task<StudentDto> AddAsync(CreateStudentDto student, CancellationToken cancellationToken);
 
     /// <summary>
     /// Обновление студента
@@ -21,7 +21,7 @@ public interface IStudentService
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    Task<UpdateStudentDto> UpdateAsync(UpdateStudentDto student, CancellationToken  cancellationToken);
+    Task<StudentDto> UpdateAsync(UpdateStudentDto student, CancellationToken  cancellationToken);
 
     /// <summary>
     /// Получение студента
@@ -29,14 +29,14 @@ public interface IStudentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный студент.</returns>
-    Task<CreateStudentDto> GetByIdAsync(Guid studentId, CancellationToken cancellationToken);
+    Task<StudentDto> GetByIdAsync(Guid studentId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех студентов
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив студентов.</returns>
-    Task<CreateStudentDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<StudentDto[]> GetAllAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Удаление студента

@@ -7,12 +7,13 @@ namespace EduHub.StudentService.Application.Services.Mapping;
 /// <summary>
 /// Конфигурация маппинга для курса
 /// </summary>
-public class СourseMappingProfile : Profile
+public class CourseMappingProfile : Profile
 {
-    public СourseMappingProfile()
+    public CourseMappingProfile()
     {
         CreateMap<Course, CourseDto>()
             .ConstructUsing(c => new CourseDto(
+                Guid.NewGuid(),
                 c.Name,
                 c.Description,
                 c.EducatorId));

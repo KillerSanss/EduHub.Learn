@@ -1,6 +1,6 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Enrollment;
 
-namespace EduHub.StudentService.Application.Services.Interfaces.IServices;
+namespace EduHub.StudentService.Application.Services.Interfaces.Services;
 
 /// <summary>
 /// Интерфейс описывающий EnrollmentService
@@ -20,14 +20,14 @@ public interface IEnrollmentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений студента.</returns>
-    Task<CreateEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken);
+    Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех зачислений
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений.</returns>
-    Task<CreateEnrollmentDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<EnrollmentDto[]> GetAllAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Удаление зачисления

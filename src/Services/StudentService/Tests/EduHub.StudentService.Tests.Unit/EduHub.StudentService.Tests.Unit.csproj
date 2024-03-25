@@ -28,8 +28,4 @@
       <ProjectReference Include="..\..\Domain\Eduhub.StudentService.Domain\Eduhub.StudentService.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\Domain\Eduhub.StudentService.Domain\Eduhub.StudentService.Domain.csproj" />
-    </ItemGroup>
-
 </Project>
