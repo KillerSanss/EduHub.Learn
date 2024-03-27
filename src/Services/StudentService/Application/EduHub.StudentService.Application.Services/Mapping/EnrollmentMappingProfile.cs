@@ -24,5 +24,12 @@ public class EnrollmentMappingProfile : Profile
                 dto.StudentId,
                 dto.CourseId,
                 dto.StartDate));
+
+        CreateMap<Enrollment, ResponseEnrollmentDto>()
+            .ConstructUsing(e => new ResponseEnrollmentDto(
+                Guid.NewGuid(),
+                e.StartDate,
+                e.CourseId,
+                e.Course.Name));
     }
 }

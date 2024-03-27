@@ -25,6 +25,11 @@ public class Enrollment : BaseEntity
     public DateTime StartDate { get; private set; }
 
     /// <summary>
+    /// Навигационное поле - курс
+    /// </summary>
+    public Course Course { get; set; }
+
+    /// <summary>
     /// Конструктор для установки значений полей для объекта Enrollment.
     /// </summary>
     /// <param name="id">Id.</param>

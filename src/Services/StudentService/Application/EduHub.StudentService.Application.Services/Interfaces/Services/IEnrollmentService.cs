@@ -20,7 +20,7 @@ public interface IEnrollmentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений студента.</returns>
-    Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken);
+    Task<ResponseEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех зачислений

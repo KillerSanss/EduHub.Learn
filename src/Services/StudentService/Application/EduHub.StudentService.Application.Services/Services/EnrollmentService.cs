@@ -52,10 +52,10 @@ public class EnrollmentService : IEnrollmentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений студента.</returns>
-    public async Task<EnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken)
+    public async Task<ResponseEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken)
     {
         var studentEnrollments = await _enrollmentRepository.GetStudentEnrollmentsAsync(studentId, cancellationToken);
-        return _mapper.Map<EnrollmentDto[]>(studentEnrollments);
+        return _mapper.Map<ResponseEnrollmentDto[]>(studentEnrollments);
     }
 
     /// <summary>
