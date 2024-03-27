@@ -18,12 +18,11 @@ public class CourseMappingProfile : Profile
                 c.Description,
                 c.EducatorId));
 
-        CreateMap<CourseDto, Course>()
-            .ConstructUsing(dto => new Course(
+        CreateMap<Course, ResponseCourseDto>()
+            .ConstructUsing(c => new ResponseCourseDto(
                 Guid.NewGuid(),
-                dto.Name,
-                dto.Description,
-                dto.EducatorId));
+                c.Name,
+                c.Description));
 
         CreateMap<CreateCourseDto, Course>()
             .ConstructUsing(c => new Course(
@@ -32,24 +31,11 @@ public class CourseMappingProfile : Profile
                 c.Description,
                 c.EducatorId));
 
-        CreateMap<Course, CreateCourseDto>()
-            .ConstructUsing(dto => new CreateCourseDto(
-                dto.Name,
-                dto.Description,
-                dto.EducatorId));
-
         CreateMap<UpdateCourseDto, Course>()
             .ConstructUsing(c => new Course(
                 Guid.NewGuid(),
                 c.Name,
                 c.Description,
                 c.EducatorId));
-
-        CreateMap<Course, UpdateCourseDto>()
-            .ConstructUsing(dto => new UpdateCourseDto(
-                dto.Id,
-                dto.Name,
-                dto.Description,
-                dto.EducatorId));
     }
 }

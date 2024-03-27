@@ -34,14 +34,16 @@ public class EnrollmentService : IEnrollmentService
     /// <param name="enrollmentDto">Дто зачисления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Новое зачисление.</returns>
-    public async Task<CreateEnrollmentDto> AddAsync(CreateEnrollmentDto enrollmentDto, CancellationToken cancellationToken)
+    public async Task<EnrollmentDto> AddAsync(CreateEnrollmentDto enrollmentDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(enrollmentDto);
 
-        await _enrollmentRepository.AddAsync(enrollmentDto.StudentId, enrollmentDto.CourseId, cancellationToken);
+        var enrollment = _mapper.Map<Enrollment>(enrollmentDto);
+
+        await _enrollmentRepository.AddAsync(enrollment, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return enrollmentDto;
+        return _mapper.Map<EnrollmentDto>(enrollment);
     }
 
     /// <summary>
@@ -74,18 +76,18 @@ public class EnrollmentService : IEnrollmentService
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var enrollment = await ExistAsync(id, cancellationToken);
+        var enrollment = await IsExistEnrollmentAsync(id, cancellationToken);
 
         await _enrollmentRepository.DeleteAsync(enrollment, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<Enrollment> ExistAsync(Guid id, CancellationToken cancellationToken)
+    private async Task<Enrollment> IsExistEnrollmentAsync(Guid id, CancellationToken cancellationToken)
     {
         var enrollment = await _enrollmentRepository.GetByIdAsync(id, cancellationToken);
         if (enrollment == null)
         {
-            throw new EntityNotFoundException<Educator>(nameof(Enrollment.Id), id.ToString());
+            throw new EntityNotFoundException<Enrollment>(nameof(Enrollment.Id), id.ToString());
         }
 
         return enrollment;

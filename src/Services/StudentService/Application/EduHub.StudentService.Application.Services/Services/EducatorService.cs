@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
+using EduHub.StudentService.Application.Services.Dtos.Course;
 using EduHub.StudentService.Application.Services.Dtos.Educator;
 using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
@@ -16,6 +17,7 @@ namespace EduHub.StudentService.Application.Services.Services;
 public class EducatorService : IEducatorService
 {
     private readonly IEducatorRepository _educatorRepository;
+    private readonly ICourseRepository _courseRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -54,9 +56,7 @@ public class EducatorService : IEducatorService
     {
         Guard.Against.Null(educatorDto);
 
-        await ExistAsync(educatorDto.Id, cancellationToken);
-
-        var educator = _mapper.Map<Educator>(educatorDto);
+        var educator = await IsExistEducatorAsync(educatorDto.Id, cancellationToken);
         educator.Update(
             new FullName(educatorDto.Surname, educatorDto.FirstName, educatorDto.Patronymic),
             educatorDto.Gender,
@@ -77,7 +77,7 @@ public class EducatorService : IEducatorService
     /// <returns>Преподаватель.</returns>
     public async Task<EducatorDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var educator = await ExistAsync(id, cancellationToken);
+        var educator = await IsExistEducatorAsync(id, cancellationToken);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -94,19 +94,33 @@ public class EducatorService : IEducatorService
     }
 
     /// <summary>
+    /// Получение всех курсов преподавателя
+    /// </summary>
+    /// <param name="id">Идентификатор преподавателя.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns></returns>
+    public async Task<ResponseCourseDto[]> GetAllCourses(Guid id, CancellationToken cancellationToken)
+    {
+        var educator = await IsExistEducatorAsync(id, cancellationToken);
+        var courses = await _courseRepository.GetAllByEducatorIdAsync(educator.Id, cancellationToken);
+
+        return _mapper.Map<ResponseCourseDto[]>(courses);
+    }
+
+    /// <summary>
     /// Удаление преподавателя
     /// </summary>
     /// <param name="id">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var educator = await ExistAsync(id, cancellationToken);
+        var educator = await IsExistEducatorAsync(id, cancellationToken);
 
         await _educatorRepository.DeleteAsync(educator, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<Educator> ExistAsync(Guid id, CancellationToken cancellationToken)
+    private async Task<Educator> IsExistEducatorAsync(Guid id, CancellationToken cancellationToken)
     {
         var educator = await _educatorRepository.GetByIdAsync(id, cancellationToken);
         if (educator == null)

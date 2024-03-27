@@ -12,7 +12,7 @@ public interface IEnrollmentService
     /// </summary>
     /// <param name="enrollment">Дто зачисления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    Task<CreateEnrollmentDto> AddAsync(CreateEnrollmentDto enrollment, CancellationToken cancellationToken);
+    Task<EnrollmentDto> AddAsync(CreateEnrollmentDto enrollment, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение всех зачислений студента

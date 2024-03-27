@@ -14,13 +14,4 @@ public interface IEnrollmentRepository : IRepository<Enrollment>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив всех зачислений студента.</returns>
     Task<Enrollment[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Зачисление студента на выбранный курс
-    /// </summary>
-    /// <param name="studentId">Идентификатор студента.</param>
-    /// <param name="courseId">Идентификатор курса.</param>
-    /// <param name="cancellationToken">Токен отмены.</param>
-    /// <returns>Добавленное зачисление.</returns>
-    Task<Enrollment> AddAsync(Guid studentId, Guid courseId, CancellationToken cancellationToken);
 }

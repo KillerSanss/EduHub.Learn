@@ -23,25 +23,6 @@ public class EducatorMappingProfile : Profile
                 e.WorkExperience,
                 e.StartDate));
 
-        CreateMap<EducatorDto, Educator>()
-            .ConstructUsing(dto => new Educator(
-                Guid.NewGuid(),
-                new FullName(dto.Surname, dto.FirstName, dto.Patronymic),
-                dto.Gender,
-                dto.WorkExperience,
-                dto.StartDate,
-                new Phone(dto.Phone)));
-
-        CreateMap<Educator, CreateEducatorDto>()
-            .ConstructUsing(e => new CreateEducatorDto(
-                e.FullName.Surname,
-                e.FullName.FirstName,
-                e.FullName.Patronymic,
-                e.Gender,
-                e.Phone.Value,
-                e.WorkExperience,
-                e.StartDate));
-
         CreateMap<CreateEducatorDto, Educator>()
             .ConstructUsing(dto => new Educator(
                 Guid.NewGuid(),
@@ -50,17 +31,6 @@ public class EducatorMappingProfile : Profile
                 dto.WorkExperience,
                 dto.StartDate,
                 new Phone(dto.Phone)));
-
-        CreateMap<Educator, UpdateEducatorDto>()
-            .ConstructUsing(e => new UpdateEducatorDto(
-                e.Id,
-                e.FullName.Surname,
-                e.FullName.FirstName,
-                e.FullName.Patronymic,
-                e.Gender,
-                e.Phone.Value,
-                e.WorkExperience,
-                e.StartDate));
 
         CreateMap<UpdateEducatorDto, Educator>()
             .ConstructUsing(dto => new Educator(

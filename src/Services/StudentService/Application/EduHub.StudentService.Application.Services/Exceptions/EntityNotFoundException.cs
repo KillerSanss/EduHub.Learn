@@ -1,5 +1,4 @@
 ﻿using Eduhub.StudentService.Domain.Entities.Base;
-using Eduhub.StudentService.Domain.Validations.Exceptions.Base;
 
 namespace EduHub.StudentService.Application.Services.Exceptions;
 

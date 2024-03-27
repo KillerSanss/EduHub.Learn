@@ -54,9 +54,7 @@ public class StudentService : IStudentService
     {
         Guard.Against.Null(studentDto);
 
-        await ExistAsync(studentDto.Id, cancellationToken);
-
-        var student = _mapper.Map<Student>(studentDto);
+        var student = await IsExistStudentAsync(studentDto.Id, cancellationToken);
         student.Update(
             new FullName(studentDto.Surname, studentDto.FirstName, studentDto.Patronymic),
             studentDto.Gender,
@@ -79,7 +77,7 @@ public class StudentService : IStudentService
     /// <returns>Выбранный студент.</returns>
     public async Task<StudentDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var student = await ExistAsync(id, cancellationToken);
+        var student = await IsExistStudentAsync(id, cancellationToken);
 
         return _mapper.Map<StudentDto>(student);
     }
@@ -102,18 +100,18 @@ public class StudentService : IStudentService
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var student = await ExistAsync(id, cancellationToken);
+        var student = await IsExistStudentAsync(id, cancellationToken);
 
         await _studentRepository.DeleteAsync(student, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<Student> ExistAsync(Guid id, CancellationToken cancellationToken)
+    private async Task<Student> IsExistStudentAsync(Guid id, CancellationToken cancellationToken)
     {
         var student = await _studentRepository.GetByIdAsync(id, cancellationToken);
         if (student == null)
         {
-            throw new EntityNotFoundException<Educator>(nameof(Student.Id), id.ToString());
+            throw new EntityNotFoundException<Student>(nameof(Student.Id), id.ToString());
         }
 
         return student;

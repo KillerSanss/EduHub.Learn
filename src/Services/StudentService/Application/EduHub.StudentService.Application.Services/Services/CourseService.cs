@@ -53,9 +53,7 @@ public class CourseService : ICourseService
     {
         Guard.Against.Null(courseDto);
 
-        await ExistAsync(courseDto.Id, cancellationToken);
-
-        var course = _mapper.Map<Course>(courseDto);
+        var course = await IsExistCourseAsync(courseDto.Id, cancellationToken);
         course.Update(courseDto.Name, courseDto.Description, courseDto.EducatorId);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -71,7 +69,7 @@ public class CourseService : ICourseService
     /// <returns>Курс.</returns>
     public async Task<CourseDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var course = await ExistAsync(id, cancellationToken);
+        var course = await IsExistCourseAsync(id, cancellationToken);
 
         return _mapper.Map<CourseDto>(course);
     }
@@ -94,13 +92,13 @@ public class CourseService : ICourseService
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var course = await ExistAsync(id, cancellationToken);
+        var course = await IsExistCourseAsync(id, cancellationToken);
 
         await _courseRepository.DeleteAsync(course, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<Course> ExistAsync(Guid id, CancellationToken cancellationToken)
+    private async Task<Course> IsExistCourseAsync(Guid id, CancellationToken cancellationToken)
     {
         var course = await _courseRepository.GetByIdAsync(id, cancellationToken);
         if (course == null)

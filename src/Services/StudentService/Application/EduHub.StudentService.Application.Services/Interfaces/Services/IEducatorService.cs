@@ -1,4 +1,5 @@
-﻿using EduHub.StudentService.Application.Services.Dtos.Educator;
+﻿using EduHub.StudentService.Application.Services.Dtos.Course;
+using EduHub.StudentService.Application.Services.Dtos.Educator;
 
 namespace EduHub.StudentService.Application.Services.Interfaces.Services;
 
@@ -44,4 +45,12 @@ public interface IEducatorService
     /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     Task DeleteAsync(Guid educatorId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получение всех курсов преподавателя
+    /// </summary>
+    /// <param name="educatorId">Идентификатор преподавателя.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns></returns>
+    Task<ResponseCourseDto[]> GetAllCourses(Guid educatorId, CancellationToken cancellationToken);
 }
