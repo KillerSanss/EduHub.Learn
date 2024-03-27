@@ -79,7 +79,7 @@ public static class ErrorMessage
     /// Использовать вместе со string.Format
     /// {0} - имя сущности
     /// {1} - имя свойства
-    /// {2} - значение свойтсва
+    /// {2} - значение свойства
     /// </remarks>
     public const string NotFoundError = "Entity {0} with {1} = {2} not found.";
 }

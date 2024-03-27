@@ -14,7 +14,7 @@ public class Educator : BasePerson
     /// <summary>
     /// Список курсов
     /// </summary>
-    private readonly List<Course> _courses = new();
+    public readonly List<Course> Courses = new();
 
     /// <summary>
     /// Опыт работы
@@ -49,14 +49,6 @@ public class Educator : BasePerson
         SetPhone(phone);
         SetWorkExperience(workExperience);
         SetStartDate(startDate);
-    }
-
-    /// <summary>
-    /// Метод для получения списка всех курсов учителя
-    /// </summary>
-    public IEnumerable<Course> GetCourse()
-    {
-        return _courses;
     }
 
     /// <summary>
