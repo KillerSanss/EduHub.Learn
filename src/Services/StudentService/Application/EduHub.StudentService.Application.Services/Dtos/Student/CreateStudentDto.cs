@@ -5,26 +5,46 @@ namespace EduHub.StudentService.Application.Services.Dtos.Student;
 /// <summary>
 /// Дто для студента
 /// </summary>
-/// <param name="Surname">Фамилия.</param>
-/// <param name="FirstName">Имя.</param>
-/// <param name="Patronymic">Отчество.</param>
-/// <param name="Gender">Гендер.</param>
-/// <param name="BirthDate">Дата рождения.</param>
-/// <param name="Email">Електоронная почта</param>
-/// <param name="Phone">Телефон.</param>
-/// <param name="City">Город.</param>
-/// <param name="Street">Улица.</param>
-/// <param name="HouseNumber">Номер дома.</param>
-/// <param name="Avatar">Аватар.</param>
-public record CreateStudentDto(
-    string Surname,
-    string FirstName,
-    string Patronymic,
-    Gender Gender,
-    DateTime BirthDate,
-    string Email,
-    string Phone,
-    string City,
-    string Street,
-    int HouseNumber,
-    string Avatar);
+public record CreateStudentDto : BaseStudentDto
+{
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="surname">Фамилия.</param>
+    /// <param name="firstName">Имя.</param>
+    /// <param name="patronymic">Отчество.</param>
+    /// <param name="gender">Гендер.</param>
+    /// <param name="birthDate">День рождения</param>
+    /// <param name="email">Электронная почта.</param>
+    /// <param name="phone">Номер телефона.</param>
+    /// <param name="city">Город.</param>
+    /// <param name="street">Улица.</param>
+    /// <param name="houseNumber">Номер дома.</param>
+    /// <param name="avatar">Аватар.</param>
+    public CreateStudentDto(
+        string surname,
+        string firstName,
+        string patronymic,
+        Gender gender,
+        DateTime birthDate,
+        string email,
+        string phone,
+        string city,
+        string street,
+        int houseNumber,
+        string avatar)
+        : base(
+            surname,
+            firstName,
+            patronymic,
+            gender,
+            birthDate,
+            email,
+            phone,
+            city,
+            street,
+            houseNumber,
+            avatar)
+    {
+    }
+};

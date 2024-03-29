@@ -3,12 +3,22 @@
 /// <summary>
 /// Дто для зачисления
 /// </summary>
-/// <param name="Id">Идентификатор.</param>
-/// <param name="StudentId">Идентификатор студента.</param>
-/// <param name="CourseId">Идентификатор курса.</param>
-/// <param name="StartDate">Дата начала курса.</param>
-public record CreateEnrollmentDto(
-    Guid Id,
-    Guid StudentId,
-    Guid CourseId,
-    DateTime StartDate);
+public record CreateEnrollmentDto : BaseEnrollmentDto
+{
+    /// <summary>
+    /// Идентификатор студента
+    /// </summary>
+    public Guid StudentId { get; }
+
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="id">Идентификатор зачисления.</param>
+    /// <param name="studentId">Идентификатор студента.</param>
+    /// <param name="startDate">Дата зачисления.</param>
+    /// <param name="courseId">Идентификатор курса</param>
+    public CreateEnrollmentDto(Guid id, Guid studentId, DateTime startDate, Guid courseId) : base(id, startDate, courseId)
+    {
+        StudentId = studentId;
+    }
+}

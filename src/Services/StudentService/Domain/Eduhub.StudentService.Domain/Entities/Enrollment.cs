@@ -47,7 +47,7 @@ public class Enrollment : BaseEntity
     /// <summary>
     /// Установка индентификатора студента
     /// </summary>
-    private void SetStudentId(Guid studentId)
+    private void SetStudentId(Guid studentId) 
     {
         StudentId = Guard.Against.NullOrEmpty(studentId);
     }

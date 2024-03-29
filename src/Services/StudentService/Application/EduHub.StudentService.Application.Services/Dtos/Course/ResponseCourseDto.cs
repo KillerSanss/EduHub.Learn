@@ -3,10 +3,21 @@
 /// <summary>
 /// Дто курса
 /// </summary>
-/// <param name="Id">Идентификатор курса.</param>
-/// <param name="Name">Название курса.</param>
-/// <param name="Description">Описание курса.</param>
-public record ResponseCourseDto(
-    Guid Id,
-    string Name,
-    string Description);
+public record ResponseCourseDto : BaseCourseDto
+{
+    /// <summary>
+    /// Идентификатор курса
+    /// </summary>
+    public Guid Id { get; init; }
+
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="id">Идентификатор курса.</param>
+    /// <param name="name">Название курса.</param>
+    /// <param name="description">Описание курса.</param>
+    public ResponseCourseDto(Guid id, string name, string description) : base(name, description)
+    {
+        Id = id;
+    }
+}

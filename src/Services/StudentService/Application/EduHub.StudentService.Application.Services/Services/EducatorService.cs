@@ -21,9 +21,10 @@ public class EducatorService : IEducatorService
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public EducatorService(IEducatorRepository educatorRepository, IMapper mapper, IUnitOfWork unitOfWork)
+    public EducatorService(IEducatorRepository educatorRepository, ICourseRepository courseRepository, IMapper mapper, IUnitOfWork unitOfWork)
     {
         _educatorRepository = Guard.Against.Null(educatorRepository);
+        _courseRepository = Guard.Against.Null(courseRepository);
         _mapper = Guard.Against.Null(mapper);
         _unitOfWork = Guard.Against.Null(unitOfWork);
     }

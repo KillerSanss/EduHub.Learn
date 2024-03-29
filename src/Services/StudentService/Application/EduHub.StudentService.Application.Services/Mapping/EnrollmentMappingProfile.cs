@@ -15,8 +15,8 @@ public class EnrollmentMappingProfile : Profile
             .ConstructUsing(e => new EnrollmentDto(
                 Guid.NewGuid(),
                 e.StudentId,
-                e.CourseId,
-                e.StartDate));
+                e.StartDate,
+                e.CourseId));
 
         CreateMap<CreateEnrollmentDto, Enrollment>()
             .ConstructUsing(dto => new Enrollment(
