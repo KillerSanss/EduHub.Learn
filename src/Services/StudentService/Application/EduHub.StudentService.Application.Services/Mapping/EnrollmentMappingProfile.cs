@@ -12,11 +12,10 @@ public class EnrollmentMappingProfile : Profile
     public EnrollmentMappingProfile()
     {
         CreateMap<Enrollment, EnrollmentDto>()
-            .ConstructUsing(e => new EnrollmentDto(
-                Guid.NewGuid(),
-                e.StudentId,
-                e.StartDate,
-                e.CourseId));
+            .ForMember(d => d.Id, o => o.MapFrom(e => e.Id))
+            .ForMember(d => d.StudentId, o => o.MapFrom(e => e.StudentId))
+            .ForMember(d => d.StartDate, o => o.MapFrom(e => e.StartDate))
+            .ForMember(d => d.CourseId, o => o.MapFrom(e => e.CourseId));
 
         CreateMap<CreateEnrollmentDto, Enrollment>()
             .ConstructUsing(dto => new Enrollment(
@@ -25,11 +24,10 @@ public class EnrollmentMappingProfile : Profile
                 dto.CourseId,
                 dto.StartDate));
 
-        CreateMap<Enrollment, ResponseEnrollmentDto>()
-            .ConstructUsing(e => new ResponseEnrollmentDto(
-                Guid.NewGuid(),
-                e.StartDate,
-                e.CourseId,
-                e.Course.Name));
+        CreateMap<Enrollment, StudentEnrollmentDto>()
+            .ForMember(d => d.Id, o => o.MapFrom(e => e.Id))
+            .ForMember(d => d.StartDate, o => o.MapFrom(e => e.StartDate))
+            .ForMember(d => d.CourseId, o => o.MapFrom(e => e.CourseId))
+            .ForMember(d => d.Name, o => o.MapFrom(e => e.Course.Name));
     }
 }

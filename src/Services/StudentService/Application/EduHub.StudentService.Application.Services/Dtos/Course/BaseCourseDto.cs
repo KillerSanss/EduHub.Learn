@@ -1,10 +1,17 @@
 ﻿namespace EduHub.StudentService.Application.Services.Dtos.Course;
 
 /// <summary>
-/// Базовое дто для курса
+/// Базоваое дто для курса
 /// </summary>
-/// <param name="Name">Название курса.</param>
-/// <param name="Description">Описание курса.</param>
-public record BaseCourseDto(
-    string Name,
-    string Description);
+public abstract class BaseCourseDto
+{
+    /// <summary>
+    /// Название курса
+    /// </summary>
+    public string Name { get; init; }
+
+    /// <summary>
+    /// Описание курса
+    /// </summary>
+    public string Description { get; init; }
+}

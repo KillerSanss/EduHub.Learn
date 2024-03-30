@@ -54,7 +54,7 @@ public class StudentService : IStudentService
     {
         Guard.Against.Null(studentDto);
 
-        var student = await IsExistStudentAsync(studentDto.Id, cancellationToken);
+        var student = await GetByIdOrThrowAsync(studentDto.Id, cancellationToken);
         student.Update(
             new FullName(studentDto.Surname, studentDto.FirstName, studentDto.Patronymic),
             studentDto.Gender,
@@ -77,7 +77,7 @@ public class StudentService : IStudentService
     /// <returns>Выбранный студент.</returns>
     public async Task<StudentDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var student = await IsExistStudentAsync(id, cancellationToken);
+        var student = await GetByIdOrThrowAsync(id, cancellationToken);
 
         return _mapper.Map<StudentDto>(student);
     }
@@ -100,13 +100,13 @@ public class StudentService : IStudentService
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var student = await IsExistStudentAsync(id, cancellationToken);
+        var student = await GetByIdOrThrowAsync(id, cancellationToken);
 
         await _studentRepository.DeleteAsync(student, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<Student> IsExistStudentAsync(Guid id, CancellationToken cancellationToken)
+    private async Task<Student> GetByIdOrThrowAsync(Guid id, CancellationToken cancellationToken)
     {
         var student = await _studentRepository.GetByIdAsync(id, cancellationToken);
         if (student == null)

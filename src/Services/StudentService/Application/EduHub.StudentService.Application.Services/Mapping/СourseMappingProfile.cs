@@ -12,17 +12,15 @@ public class CourseMappingProfile : Profile
     public CourseMappingProfile()
     {
         CreateMap<Course, CourseDto>()
-            .ConstructUsing(c => new CourseDto(
-                Guid.NewGuid(),
-                c.Name,
-                c.Description,
-                c.EducatorId));
+            .ForMember(d => d.Id, o => o.MapFrom(c => c.Id))
+            .ForMember(d => d.Name, o => o.MapFrom(c => c.Name))
+            .ForMember(d => d.Description, o => o.MapFrom(c => c.Description))
+            .ForMember(d => d.EducatorId, o => o.MapFrom(c => c.EducatorId));
 
-        CreateMap<Course, ResponseCourseDto>()
-            .ConstructUsing(c => new ResponseCourseDto(
-                Guid.NewGuid(),
-                c.Name,
-                c.Description));
+        CreateMap<Course, EducatorCourseDto>()
+            .ForMember(d => d.Id, o => o.MapFrom(c => c.Id))
+            .ForMember(d => d.Name, o => o.MapFrom(c => c.Name))
+            .ForMember(d => d.Description, o => o.MapFrom(c => c.Description));
 
         CreateMap<CreateCourseDto, Course>()
             .ConstructUsing(c => new Course(

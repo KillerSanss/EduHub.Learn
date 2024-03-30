@@ -3,10 +3,20 @@
 /// <summary>
 /// Базовое дто для зачисления
 /// </summary>
-/// <param name="Id">Идентификатор зачисления.</param>
-/// <param name="StartDate">Дата зачисления.</param>
-/// <param name="CourseId">Идентификатор курса.</param>
-public record BaseEnrollmentDto(
-    Guid Id,
-    DateTime StartDate,
-    Guid CourseId);
+public abstract class BaseEnrollmentDto
+{
+    /// <summary>
+    /// Идентификатор зачиселния
+    /// </summary>
+    public Guid Id { get; init; }
+
+    /// <summary>
+    /// Дата зачисления
+    /// </summary>
+    public DateTime StartDate { get; init; }
+
+    /// <summary>
+    /// Идентификатор курса
+    /// </summary>
+    public Guid CourseId { get; init; }
+}

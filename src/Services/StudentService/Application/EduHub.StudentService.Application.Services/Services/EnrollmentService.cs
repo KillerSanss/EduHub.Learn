@@ -52,10 +52,10 @@ public class EnrollmentService : IEnrollmentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений студента.</returns>
-    public async Task<ResponseEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken)
+    public async Task<StudentEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken)
     {
         var studentEnrollments = await _enrollmentRepository.GetStudentEnrollmentsAsync(studentId, cancellationToken);
-        return _mapper.Map<ResponseEnrollmentDto[]>(studentEnrollments);
+        return _mapper.Map<StudentEnrollmentDto[]>(studentEnrollments);
     }
 
     /// <summary>
@@ -76,13 +76,13 @@ public class EnrollmentService : IEnrollmentService
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var enrollment = await IsExistEnrollmentAsync(id, cancellationToken);
+        var enrollment = await GetByIdOrThrowAsync(id, cancellationToken);
 
         await _enrollmentRepository.DeleteAsync(enrollment, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<Enrollment> IsExistEnrollmentAsync(Guid id, CancellationToken cancellationToken)
+    private async Task<Enrollment> GetByIdOrThrowAsync(Guid id, CancellationToken cancellationToken)
     {
         var enrollment = await _enrollmentRepository.GetByIdAsync(id, cancellationToken);
         if (enrollment == null)

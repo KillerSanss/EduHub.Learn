@@ -52,5 +52,5 @@ public interface IEducatorService
     /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns></returns>
-    Task<ResponseCourseDto[]> GetAllCourses(Guid educatorId, CancellationToken cancellationToken);
+    Task<EducatorCourseDto[]> GetAllCourses(Guid educatorId, CancellationToken cancellationToken);
 }

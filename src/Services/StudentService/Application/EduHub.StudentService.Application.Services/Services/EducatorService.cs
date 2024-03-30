@@ -57,7 +57,7 @@ public class EducatorService : IEducatorService
     {
         Guard.Against.Null(educatorDto);
 
-        var educator = await IsExistEducatorAsync(educatorDto.Id, cancellationToken);
+        var educator = await GetByIdOrThrowAsync(educatorDto.Id, cancellationToken);
         educator.Update(
             new FullName(educatorDto.Surname, educatorDto.FirstName, educatorDto.Patronymic),
             educatorDto.Gender,
@@ -78,7 +78,7 @@ public class EducatorService : IEducatorService
     /// <returns>Преподаватель.</returns>
     public async Task<EducatorDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var educator = await IsExistEducatorAsync(id, cancellationToken);
+        var educator = await GetByIdOrThrowAsync(id, cancellationToken);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -100,12 +100,12 @@ public class EducatorService : IEducatorService
     /// <param name="id">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns></returns>
-    public async Task<ResponseCourseDto[]> GetAllCourses(Guid id, CancellationToken cancellationToken)
+    public async Task<EducatorCourseDto[]> GetAllCourses(Guid id, CancellationToken cancellationToken)
     {
-        var educator = await IsExistEducatorAsync(id, cancellationToken);
+        var educator = await GetByIdOrThrowAsync(id, cancellationToken);
         var courses = await _courseRepository.GetAllByEducatorIdAsync(educator.Id, cancellationToken);
 
-        return _mapper.Map<ResponseCourseDto[]>(courses);
+        return _mapper.Map<EducatorCourseDto[]>(courses);
     }
 
     /// <summary>
@@ -115,13 +115,13 @@ public class EducatorService : IEducatorService
     /// <param name="cancellationToken">Токен отмены.</param>
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var educator = await IsExistEducatorAsync(id, cancellationToken);
+        var educator = await GetByIdOrThrowAsync(id, cancellationToken);
 
         await _educatorRepository.DeleteAsync(educator, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<Educator> IsExistEducatorAsync(Guid id, CancellationToken cancellationToken)
+    private async Task<Educator> GetByIdOrThrowAsync(Guid id, CancellationToken cancellationToken)
     {
         var educator = await _educatorRepository.GetByIdAsync(id, cancellationToken);
         if (educator == null)
