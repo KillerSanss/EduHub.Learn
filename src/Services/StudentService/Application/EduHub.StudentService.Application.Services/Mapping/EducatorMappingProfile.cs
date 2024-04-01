@@ -13,14 +13,9 @@ public class EducatorMappingProfile : Profile
     public EducatorMappingProfile()
     {
         CreateMap<Educator, EducatorDto>()
-            .ForMember(d => d.Id, o => o.MapFrom(e => e.Id))
             .ForMember(d => d.Surname, o => o.MapFrom(e => e.FullName.Surname))
             .ForMember(d => d.FirstName, o => o.MapFrom(e => e.FullName.FirstName))
-            .ForMember(d => d.Patronymic, o => o.MapFrom(e => e.FullName.Patronymic))
-            .ForMember(d => d.Gender, o => o.MapFrom(e => e.Gender))
-            .ForMember(d => d.Phone, o => o.MapFrom(e => e.Phone.Value))
-            .ForMember(d => d.WorkExperience, o => o.MapFrom(e => e.WorkExperience))
-            .ForMember(d => d.StartDate, o => o.MapFrom(e => e.StartDate));
+            .ForMember(d => d.Patronymic, o => o.MapFrom(e => e.FullName.Patronymic));
 
         CreateMap<CreateEducatorDto, Educator>()
             .ConstructUsing(dto => new Educator(
