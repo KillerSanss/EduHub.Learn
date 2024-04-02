@@ -7,6 +7,10 @@ namespace Eduhub.StudentService.Domain.Validations.Exceptions;
 /// </summary>
 public class GuardValidationException : BaseEntityException
 {
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="message">Сообщение об ошибке.</param>
     public GuardValidationException(string message) : base(message)
     {
     }

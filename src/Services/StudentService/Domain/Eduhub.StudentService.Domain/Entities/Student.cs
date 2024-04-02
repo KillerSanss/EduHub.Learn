@@ -2,7 +2,6 @@
 using Eduhub.StudentService.Domain.Entities.Base;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Eduhub.StudentService.Domain.Validations.Exceptions.Enrollment;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
 using Eduhub.StudentService.Domain.Validations;
 using Eduhub.StudentService.Domain.Validations.Enums;
@@ -17,7 +16,7 @@ public class Student : BasePerson
     /// <summary>
     /// Список зачислений
     /// </summary>
-    private readonly List<Enrollment> _enrollments = new();
+    public readonly List<Enrollment> Enrollments = new();
 
     /// <summary>
     /// Дата рождения
@@ -71,31 +70,6 @@ public class Student : BasePerson
     }
 
     /// <summary>
-    /// Метод для получения списка всех зачислений студента
-    /// </summary>
-    public IEnumerable<Enrollment> GetEnrollments()
-    {
-        return _enrollments;
-    }
-
-    /// <summary>
-    /// Метод для добавления нового зачисления в список
-    /// </summary>
-    public void AddEnrollment(Guid enrollmentId, Guid courseId, DateTime startCourseDate)
-    {
-        Guard.Against.Null(enrollmentId);
-
-        var enrollment = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
-        if (enrollment != null)
-        {
-            throw new EnrollmentConflictException(nameof(enrollmentId), enrollmentId.ToString());
-        }
-
-        var newEnrollment = new Enrollment(enrollmentId, Id, courseId, startCourseDate);
-        _enrollments.Add(newEnrollment);
-    }
-
-    /// <summary>
     /// Метод для обновления значений полей сущности Student
     /// </summary>
     public void Update(
@@ -114,22 +88,6 @@ public class Student : BasePerson
         SetEmail(email);
         SetAddress(address);
         SetAvatar(avatar);
-    }
-
-    /// <summary>
-    /// Метод для удаления зачисления
-    /// </summary>
-    public void DeleteEnrollment(Guid enrollmentId)
-    {
-        Guard.Against.Null(enrollmentId);
-
-        var enrollment = _enrollments.FirstOrDefault(e => e.Id == enrollmentId);
-        if (enrollment == null)
-        {
-            throw new EnrollmentNotFoundException(nameof(enrollmentId), enrollmentId.ToString());
-        }
-
-        _enrollments.Remove(enrollment);
     }
 
     /// <summary>

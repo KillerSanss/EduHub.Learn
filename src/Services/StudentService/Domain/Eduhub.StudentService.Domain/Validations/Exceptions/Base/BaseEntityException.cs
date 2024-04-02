@@ -3,8 +3,12 @@
 /// <summary>
 /// Базовове исключение для сущностей
 /// </summary>
-public class BaseEntityException : Exception
+public abstract class BaseEntityException : Exception
 {
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="message">Сообщение об ошибке.</param>
     protected BaseEntityException(string message) : base(message)
     {
     }
