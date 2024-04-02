@@ -13,12 +13,18 @@ public class StudentMappingProfile : Profile
     public StudentMappingProfile()
     {
         CreateMap<Student, StudentDto>()
-            .ForMember(d => d.Surname, o => o.MapFrom(s => s.FullName.Surname))
-            .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FullName.FirstName))
-            .ForMember(d => d.Patronymic, o => o.MapFrom(s => s.FullName.Patronymic))
-            .ForMember(d => d.City, o => o.MapFrom(s => s.Address.City))
-            .ForMember(d => d.Street, o => o.MapFrom(s => s.Address.Street))
-            .ForMember(d => d.HouseNumber, o => o.MapFrom(s => s.Address.HouseNumber));
+            .ForMember(dest => dest.Surname,
+                opt => opt.MapFrom(s => s.FullName.Surname))
+            .ForMember(dest => dest.FirstName,
+                opt => opt.MapFrom(s => s.FullName.FirstName))
+            .ForMember(dest => dest.Patronymic,
+                opt => opt.MapFrom(s => s.FullName.Patronymic))
+            .ForMember(dest => dest.City,
+                opt => opt.MapFrom(s => s.Address.City))
+            .ForMember(dest => dest.Street,
+                opt => opt.MapFrom(s => s.Address.Street))
+            .ForMember(dest => dest.HouseNumber,
+                opt => opt.MapFrom(s => s.Address.HouseNumber));
 
         CreateMap<CreateStudentDto, Student>()
             .ConstructUsing(dto => new Student(
@@ -33,7 +39,7 @@ public class StudentMappingProfile : Profile
 
         CreateMap<UpdateStudentDto, Student>()
             .ConstructUsing(dto => new Student(
-                Guid.NewGuid(),
+                dto.Id,
                 new FullName(dto.Surname, dto.FirstName, dto.Patronymic),
                 dto.Gender,
                 dto.BirthDate,

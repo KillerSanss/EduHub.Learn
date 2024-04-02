@@ -24,7 +24,7 @@ public class CourseMappingProfile : Profile
 
         CreateMap<UpdateCourseDto, Course>()
             .ConstructUsing(c => new Course(
-                Guid.NewGuid(),
+                c.Id,
                 c.Name,
                 c.Description,
                 c.EducatorId));

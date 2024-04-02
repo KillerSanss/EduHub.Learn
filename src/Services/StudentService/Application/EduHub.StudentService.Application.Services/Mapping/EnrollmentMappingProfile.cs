@@ -21,6 +21,7 @@ public class EnrollmentMappingProfile : Profile
                 dto.StartDate));
 
         CreateMap<Enrollment, StudentEnrollmentDto>()
-            .ForMember(d => d.Name, o => o.MapFrom(e => e.Course.Name));
+            .ForMember(dest => dest.Name,
+                opt => opt.MapFrom(e => e.Course.Name));
     }
 }

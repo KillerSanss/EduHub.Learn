@@ -13,9 +13,12 @@ public class EducatorMappingProfile : Profile
     public EducatorMappingProfile()
     {
         CreateMap<Educator, EducatorDto>()
-            .ForMember(d => d.Surname, o => o.MapFrom(e => e.FullName.Surname))
-            .ForMember(d => d.FirstName, o => o.MapFrom(e => e.FullName.FirstName))
-            .ForMember(d => d.Patronymic, o => o.MapFrom(e => e.FullName.Patronymic));
+            .ForMember(dest => dest.Surname,
+                opt => opt.MapFrom(e => e.FullName.Surname))
+            .ForMember(dest => dest.FirstName,
+                opt => opt.MapFrom(e => e.FullName.FirstName))
+            .ForMember(dest => dest.Patronymic,
+                opt => opt.MapFrom(e => e.FullName.Patronymic));
 
         CreateMap<CreateEducatorDto, Educator>()
             .ConstructUsing(dto => new Educator(
@@ -28,7 +31,7 @@ public class EducatorMappingProfile : Profile
 
         CreateMap<UpdateEducatorDto, Educator>()
             .ConstructUsing(dto => new Educator(
-                Guid.NewGuid(),
+                dto.Id,
                 new FullName(dto.Surname, dto.FirstName, dto.Patronymic),
                 dto.Gender,
                 dto.WorkExperience,
