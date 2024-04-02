@@ -1,6 +1,6 @@
 ﻿using Eduhub.StudentService.Domain.Validations;
 
-namespace EduHub.StudentService.Application.Services.Exceptions;
+namespace EduHub.StudentService.Application.Services.Exceptions.Base;
 
 /// <summary>
 /// Базовое исключение для не найденых объектов

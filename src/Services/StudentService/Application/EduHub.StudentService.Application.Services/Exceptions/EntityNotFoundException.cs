@@ -1,4 +1,5 @@
-﻿using Eduhub.StudentService.Domain.Entities.Base;
+﻿using EduHub.StudentService.Application.Services.Exceptions.Base;
+using Eduhub.StudentService.Domain.Entities.Base;
 
 namespace EduHub.StudentService.Application.Services.Exceptions;
 
