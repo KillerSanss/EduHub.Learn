@@ -1,6 +1,5 @@
 ﻿using Ardalis.GuardClauses;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
-using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +12,10 @@ namespace EduHub.StudentService.Infrastructure.Repositories.Repositories;
 public class EnrollmentRepository : IEnrollmentRepository
 {
     private readonly StudentDbContext _dbContext;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public EnrollmentRepository(StudentDbContext dbContext, IUnitOfWork unitOfWork)
+    public EnrollmentRepository(StudentDbContext dbContext)
     {
         _dbContext = Guard.Against.Null(dbContext);
-        _unitOfWork = Guard.Against.Null(unitOfWork);
     }
 
     /// <summary>
@@ -30,8 +27,7 @@ public class EnrollmentRepository : IEnrollmentRepository
     public async Task<Enrollment> AddAsync(Enrollment enrollment, CancellationToken cancellationToken)
     {
         await _dbContext.Enrollments.AddAsync(enrollment, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return enrollment;
+        return await Task.FromResult(enrollment);
     }
 
     /// <summary>
@@ -51,7 +47,7 @@ public class EnrollmentRepository : IEnrollmentRepository
     public async Task DeleteAsync(Enrollment enrollment, CancellationToken cancellationToken)
     {
         _dbContext.Enrollments.Remove(enrollment);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await Task.CompletedTask;
     }
 
     /// <summary>
@@ -84,8 +80,7 @@ public class EnrollmentRepository : IEnrollmentRepository
     /// <returns>Обновленное зачисление.</returns>
     public async Task<Enrollment> UpdateAsync(Enrollment enrollment, CancellationToken cancellationToken)
     {
-        _dbContext.Enrollments.UpdateRange(enrollment);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return enrollment;
+        _dbContext.Enrollments.Update(enrollment);
+        return await Task.FromResult(enrollment);
     }
 }

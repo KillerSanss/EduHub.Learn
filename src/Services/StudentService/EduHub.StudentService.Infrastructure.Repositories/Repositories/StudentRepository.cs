@@ -1,6 +1,5 @@
 ﻿using Ardalis.GuardClauses;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
-using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +12,10 @@ namespace EduHub.StudentService.Infrastructure.Repositories.Repositories;
 public class StudentRepository : IStudentRepository
 {
     private readonly StudentDbContext _dbContext;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public StudentRepository(StudentDbContext dbContext, IUnitOfWork unitOfWork)
+    public StudentRepository(StudentDbContext dbContext)
     {
         _dbContext = Guard.Against.Null(dbContext);
-        _unitOfWork = Guard.Against.Null(unitOfWork);
     }
 
     /// <summary>
@@ -30,8 +27,7 @@ public class StudentRepository : IStudentRepository
     public async Task<Student> AddAsync(Student student, CancellationToken cancellationToken)
     {
         await _dbContext.Students.AddAsync(student, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return student;
+        return await Task.FromResult(student);
     }
 
     /// <summary>
@@ -42,9 +38,8 @@ public class StudentRepository : IStudentRepository
     /// <returns>Обновленный студент.</returns>
     public async Task<Student> UpdateAsync(Student student, CancellationToken cancellationToken)
     {
-        _dbContext.Students.UpdateRange(student);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return student;
+        _dbContext.Students.Update(student);
+        return await Task.FromResult(student);
     }
 
     /// <summary>
@@ -76,6 +71,6 @@ public class StudentRepository : IStudentRepository
     public async Task DeleteAsync(Student student, CancellationToken cancellationToken)
     {
         _dbContext.Students.Remove(student);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await Task.CompletedTask;
     }
 }

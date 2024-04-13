@@ -14,8 +14,7 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
     /// </summary>
     public void Configure(EntityTypeBuilder<Enrollment> builder)
     {
-        builder.Property(e => e.Id)
-            .IsRequired();
+        builder.HasKey(e => e.Id);
 
         builder.Property(e => e.StudentId)
             .IsRequired();
@@ -27,7 +26,7 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
             .IsRequired();
 
         builder.HasOne<Student>()
-            .WithMany()
+            .WithMany(s => s.Enrollments)
             .HasForeignKey(e => e.StudentId);
     }
 }

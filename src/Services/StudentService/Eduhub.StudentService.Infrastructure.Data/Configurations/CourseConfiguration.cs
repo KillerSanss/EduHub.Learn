@@ -14,8 +14,7 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
     /// </summary>
     public void Configure(EntityTypeBuilder<Course> builder)
     {
-        builder.Property(c => c.Id)
-            .IsRequired();
+        builder.HasKey(c => c.Id);
 
         builder.Property(c => c.Name)
             .IsRequired()
@@ -27,7 +26,7 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
             .IsRequired();
 
         builder.HasOne<Educator>()
-            .WithMany()
+            .WithMany(e => e.Courses)
             .HasForeignKey(c => c.EducatorId);
     }
 }

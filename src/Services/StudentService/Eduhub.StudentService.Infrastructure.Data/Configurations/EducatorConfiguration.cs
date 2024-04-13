@@ -1,4 +1,6 @@
 ﻿using Eduhub.StudentService.Domain.Entities;
+using Eduhub.StudentService.Domain.Entities.Enums;
+using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,45 +16,53 @@ public class EducatorConfiguration : IEntityTypeConfiguration<Educator>
     /// </summary>
     public void Configure(EntityTypeBuilder<Educator> builder)
     {
-        builder.Property(e => e.Id)
-            .IsRequired();
+        builder.HasKey(e => e.Id);
 
         builder.OwnsOne(e => e.FullName, fullName =>
         {
             fullName.Property(f => f.FirstName)
                 .IsRequired()
-                .HasMaxLength(60)
-                .HasAnnotation("RegularExpression", "\\p{L}'?$");
+                .HasMaxLength(60);
 
             fullName.Property(f => f.Surname)
                 .IsRequired()
-                .HasMaxLength(60)
-                .HasAnnotation("RegularExpression", "\\p{L}'?$");
+                .HasMaxLength(60);
 
             fullName.Property(f => f.Patronymic)
                 .IsRequired()
-                .HasMaxLength(60)
-                .HasAnnotation("RegularExpression", "\\p{L}'?$");
+                .HasMaxLength(60);
         });
 
         builder.Property(e => e.Gender)
+            .IsRequired()
+            .HasDefaultValue(Gender.None)
+            .HasConversion<int>();
+
+        builder.Property(e => e.Phone)
             .IsRequired();
 
-        builder.Property(e => e.Phone.Value)
-            .IsRequired()
-            .HasAnnotation("RegularExpression", @"^\+373\d{8}$");
+        builder.HasIndex(e => e.Phone)
+            .IsUnique();
 
         builder.Property(e => e.WorkExperience)
-            .IsRequired()
-            .HasAnnotation("CheckConstraint", "WorkExperience >= 0");
+            .IsRequired();
 
         builder.Property(e => e.StartDate)
             .IsRequired();
 
-        builder.Property(e => e.Courses);
-
         builder.HasMany(e => e.Courses)
             .WithOne()
             .HasForeignKey(c => c.EducatorId);
+
+        builder.Property(e => e.Phone)
+            .HasConversion(
+                p => p.ToString(),
+                p => new Phone(p)
+            );
+
+        builder.Property(e => e.Gender)
+            .HasConversion(g => g.ToString(),
+                g => (Gender) Enum.Parse(typeof(Gender), g)
+            );
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Ardalis.GuardClauses;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
-using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +12,10 @@ namespace EduHub.StudentService.Infrastructure.Repositories.Repositories;
 public class EducatorRepository : IEducatorRepository
 {
     private readonly StudentDbContext _dbContext;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public EducatorRepository(StudentDbContext dbContext, IUnitOfWork unitOfWork)
+    public EducatorRepository(StudentDbContext dbContext)
     {
         _dbContext = Guard.Against.Null(dbContext);
-        _unitOfWork = Guard.Against.Null(unitOfWork);
     }
 
     /// <summary>
@@ -30,8 +27,7 @@ public class EducatorRepository : IEducatorRepository
     public async Task<Educator> AddAsync(Educator educator, CancellationToken cancellationToken)
     {
         await _dbContext.Educators.AddAsync(educator, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return educator;
+        return await Task.FromResult(educator);
     }
 
     /// <summary>
@@ -42,9 +38,8 @@ public class EducatorRepository : IEducatorRepository
     /// <returns>Обновленный преподаватель.</returns>
     public async Task<Educator> UpdateAsync(Educator educator, CancellationToken cancellationToken)
     {
-        _dbContext.Educators.UpdateRange(educator);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return educator;
+        _dbContext.Educators.Update(educator);
+        return await Task.FromResult(educator);
     }
 
     /// <summary>
@@ -76,6 +71,6 @@ public class EducatorRepository : IEducatorRepository
     public async Task DeleteAsync(Educator educator, CancellationToken cancellationToken)
     {
         _dbContext.Educators.Remove(educator);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await Task.CompletedTask;
     }
 }

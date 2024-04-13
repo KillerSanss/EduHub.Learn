@@ -44,10 +44,14 @@ public class Enrollment : BaseEntity
         SetStartDate(startDate);
     }
 
+    private Enrollment()
+    {
+    }
+
     /// <summary>
     /// Установка индентификатора студента
     /// </summary>
-    private void SetStudentId(Guid studentId) 
+    private void SetStudentId(Guid studentId)
     {
         StudentId = Guard.Against.NullOrEmpty(studentId);
     }

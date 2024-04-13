@@ -51,6 +51,10 @@ public class Educator : BasePerson
         SetStartDate(startDate);
     }
 
+    private Educator()
+    {
+    }
+
     /// <summary>
     /// Метод для обновления полей сущности Educator
     /// </summary>

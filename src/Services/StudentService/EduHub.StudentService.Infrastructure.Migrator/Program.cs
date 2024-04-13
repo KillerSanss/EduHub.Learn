@@ -1,15 +1,28 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Eduhub.StudentService.Infrastructure.Data.Context;
+﻿using Eduhub.StudentService.Infrastructure.Data.Context;
+using EduHub.StudentService.Infrastructure.Migrator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-var config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", false)
-    .Build();
+var config = ConfigurationLoader.Load();
+
+var services = new ServiceCollection();
+
+services.AddDbContext<StudentDbContext>(options =>
+    options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+
+await using var serviceProvider = services.BuildServiceProvider();
+
+var dbContext = serviceProvider.GetRequiredService<StudentDbContext>();
 
 var optionsBuilder = new DbContextOptionsBuilder<StudentDbContext>()
-    .UseNpgsql(config.GetConnectionString("Server=localhost;Port=5432;Database=Student;User Id=user;Password=password;"));
+    .UseNpgsql(config.GetConnectionString("DefaultConnection"));
 
-using var dbContext = new StudentDbContext(optionsBuilder.Options);
-dbContext.Database.Migrate();
+await using var db = new StudentDbContext(optionsBuilder.Options);
+
+var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
+
+if (pendingMigrations.Any())
+{
+    await dbContext.Database.MigrateAsync();
+}

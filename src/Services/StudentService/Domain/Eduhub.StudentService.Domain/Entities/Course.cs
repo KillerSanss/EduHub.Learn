@@ -40,6 +40,10 @@ public class Course : BaseEntity
         SetEducatorId(educatorId);
     }
 
+    private Course()
+    {
+    }
+
     /// <summary>
     /// Метод для обновления курса
     /// </summary>

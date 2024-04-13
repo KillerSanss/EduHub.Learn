@@ -1,4 +1,6 @@
 ﻿using Eduhub.StudentService.Domain.Entities;
+using Eduhub.StudentService.Domain.Entities.Enums;
+using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,41 +16,43 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
     /// </summary>
     public void Configure(EntityTypeBuilder<Student> builder)
     {
-        builder.Property(s => s.Id)
-            .IsRequired();
+        builder.HasKey(s => s.Id);
 
         builder.OwnsOne(s => s.FullName, fullName =>
         {
             fullName.Property(f => f.FirstName)
                 .IsRequired()
-                .HasMaxLength(60)
-                .HasAnnotation("RegularExpression", "\\p{L}'?$");
+                .HasMaxLength(60);
 
             fullName.Property(f => f.Surname)
                 .IsRequired()
-                .HasMaxLength(60)
-                .HasAnnotation("RegularExpression", "\\p{L}'?$");
+                .HasMaxLength(60);
 
             fullName.Property(f => f.Patronymic)
                 .IsRequired()
-                .HasMaxLength(60)
-                .HasAnnotation("RegularExpression", "\\p{L}'?$");
+                .HasMaxLength(60);
         });
 
         builder.Property(s => s.Gender)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValue(Gender.None)
+            .HasConversion<int>();
 
         builder.Property(s => s.BirthDate)
             .IsRequired();
 
-        builder.Property(s => s.Email.Value)
+        builder.Property(s => s.Email)
             .IsRequired()
-            .HasMaxLength(255)
-            .HasAnnotation("RegularExpression", @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}");
+            .HasMaxLength(255);
 
-        builder.Property(s => s.Phone.Value)
-            .IsRequired()
-            .HasAnnotation("RegularExpression", @"^\+373\d{8}$");
+        builder.HasIndex(s => s.Email)
+            .IsUnique();
+
+        builder.Property(s => s.Phone)
+            .IsRequired();
+
+        builder.HasIndex(s => s.Phone)
+            .IsUnique();
 
         builder.OwnsOne(s => s.Address, address =>
         {
@@ -61,16 +65,31 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
                 .HasMaxLength(100);
 
             address.Property(a => a.HouseNumber)
-                .IsRequired()
-                .HasAnnotation("CheckConstraint", "HouseNumber >= 0");
+                .IsRequired();
         });
 
         builder.Property(s => s.Avatar)
-            .IsRequired()
-            .HasAnnotation("RegularExpression", @"^https?://.+\.(jpeg|png)$");
+            .IsRequired();
 
         builder.HasMany<Enrollment>()
             .WithOne()
             .HasForeignKey(e => e.StudentId);
+
+        builder.Property(s => s.Phone)
+            .HasConversion(
+                p => p.ToString(),
+                p => new Phone(p)
+            );
+
+        builder.Property(s => s.Email)
+            .HasConversion(
+                e => e.ToString(),
+                e => new Email(e)
+            );
+
+        builder.Property(e => e.Gender)
+            .HasConversion(g => g.ToString(),
+                g => (Gender) Enum.Parse(typeof(Gender), g)
+            );
     }
 }

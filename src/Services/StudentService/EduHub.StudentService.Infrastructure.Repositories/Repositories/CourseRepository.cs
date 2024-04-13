@@ -1,6 +1,5 @@
 ﻿using Ardalis.GuardClauses;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
-using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +12,10 @@ namespace EduHub.StudentService.Infrastructure.Repositories.Repositories;
 public class CourseRepository : ICourseRepository
 {
     private readonly StudentDbContext _dbContext;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public CourseRepository(StudentDbContext dbContext, IUnitOfWork unitOfWork)
+    public CourseRepository(StudentDbContext dbContext)
     {
         _dbContext = Guard.Against.Null(dbContext);
-        _unitOfWork = Guard.Against.Null(unitOfWork);
     }
 
     /// <summary>
@@ -30,8 +27,7 @@ public class CourseRepository : ICourseRepository
     public async Task<Course> AddAsync(Course course, CancellationToken cancellationToken)
     {
         await _dbContext.Courses.AddAsync(course, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return course;
+        return await Task.FromResult(course);
     }
 
     /// <summary>
@@ -42,9 +38,8 @@ public class CourseRepository : ICourseRepository
     /// <returns>Обновленный курс.</returns>
     public async Task<Course> UpdateAsync(Course course, CancellationToken cancellationToken)
     {
-        _dbContext.Courses.UpdateRange(course);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return course;
+        _dbContext.Courses.Update(course);
+        return await Task.FromResult(course);
     }
 
     /// <summary>
@@ -76,7 +71,7 @@ public class CourseRepository : ICourseRepository
     public async Task DeleteAsync(Course course, CancellationToken cancellationToken)
     {
         _dbContext.Courses.Remove(course);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await Task.CompletedTask;
     }
 
     /// <summary>
