@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Eduhub.StudentService.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    [Migration("20240413183027_Init")]
+    [Migration("20240414213908_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -29,18 +29,22 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<Guid>("EducatorId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("educator_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
@@ -53,23 +57,28 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Gender")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
-                        .HasDefaultValue("None");
+                        .HasDefaultValue("None")
+                        .HasColumnName("gender");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("phone");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_date");
 
                     b.Property<int>("WorkExperience")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("work_experience");
 
                     b.HasKey("Id");
 
@@ -83,16 +92,20 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("CourseId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("course_id");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_date");
 
                     b.Property<Guid>("StudentId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("student_id");
 
                     b.HasKey("Id");
 
@@ -107,29 +120,35 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Avatar")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("avatar");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("birth_date");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("email");
 
                     b.Property<string>("Gender")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
-                        .HasDefaultValue("None");
+                        .HasDefaultValue("None")
+                        .HasColumnName("gender");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("phone");
 
                     b.HasKey("Id");
 
@@ -161,17 +180,20 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                             b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasMaxLength(60)
-                                .HasColumnType("character varying(60)");
+                                .HasColumnType("character varying(60)")
+                                .HasColumnName("first_name");
 
                             b1.Property<string>("Patronymic")
                                 .IsRequired()
                                 .HasMaxLength(60)
-                                .HasColumnType("character varying(60)");
+                                .HasColumnType("character varying(60)")
+                                .HasColumnName("patronymic");
 
                             b1.Property<string>("Surname")
                                 .IsRequired()
                                 .HasMaxLength(60)
-                                .HasColumnType("character varying(60)");
+                                .HasColumnType("character varying(60)")
+                                .HasColumnName("surname");
 
                             b1.HasKey("EducatorId");
 
@@ -211,17 +233,20 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                             b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasMaxLength(60)
-                                .HasColumnType("character varying(60)");
+                                .HasColumnType("character varying(60)")
+                                .HasColumnName("first_name");
 
                             b1.Property<string>("Patronymic")
                                 .IsRequired()
                                 .HasMaxLength(60)
-                                .HasColumnType("character varying(60)");
+                                .HasColumnType("character varying(60)")
+                                .HasColumnName("patronymic");
 
                             b1.Property<string>("Surname")
                                 .IsRequired()
                                 .HasMaxLength(60)
-                                .HasColumnType("character varying(60)");
+                                .HasColumnType("character varying(60)")
+                                .HasColumnName("surname");
 
                             b1.HasKey("StudentId");
 
@@ -239,15 +264,18 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                             b1.Property<string>("City")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("character varying(100)");
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("city");
 
                             b1.Property<int>("HouseNumber")
-                                .HasColumnType("integer");
+                                .HasColumnType("integer")
+                                .HasColumnName("house_number");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("character varying(100)");
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("street");
 
                             b1.HasKey("StudentId");
 

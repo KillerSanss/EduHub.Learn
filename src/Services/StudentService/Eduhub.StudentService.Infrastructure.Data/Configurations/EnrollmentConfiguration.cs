@@ -16,14 +16,20 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
     {
         builder.HasKey(e => e.Id);
 
+        builder.Property(e => e.Id)
+            .HasColumnName("id");
+
         builder.Property(e => e.StudentId)
-            .IsRequired();
+            .IsRequired()
+            .HasColumnName("student_id");
 
         builder.Property(e => e.CourseId)
-            .IsRequired();
+            .IsRequired()
+            .HasColumnName("course_id");
 
         builder.Property(e => e.StartDate)
-            .IsRequired();
+            .IsRequired()
+            .HasColumnName("start_date");
 
         builder.HasOne<Student>()
             .WithMany(s => s.Enrollments)

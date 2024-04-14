@@ -15,7 +15,9 @@ services:
             interval: 10s
             timeout: 5s
             retries: 5
-    
+        volumes:
+            - database_data:/var/lib/postgresql/data
+
     migrator:
         build:
             context: .
@@ -24,5 +26,8 @@ services:
         depends_on:
             database:
                 condition: service_healthy
+        environment:
+            CONNECTION_STRING: "Host=database;Port=5432;Database=Student;Username=user;Password=password"
 
-
+volumes:
+    database_data:

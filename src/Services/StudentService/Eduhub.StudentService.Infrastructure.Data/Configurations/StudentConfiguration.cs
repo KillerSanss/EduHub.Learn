@@ -18,38 +18,47 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
     {
         builder.HasKey(s => s.Id);
 
+        builder.Property(s => s.Id)
+            .HasColumnName("id");
+
         builder.OwnsOne(s => s.FullName, fullName =>
         {
             fullName.Property(f => f.FirstName)
                 .IsRequired()
-                .HasMaxLength(60);
+                .HasMaxLength(60)
+                .HasColumnName("first_name");
 
             fullName.Property(f => f.Surname)
                 .IsRequired()
-                .HasMaxLength(60);
+                .HasMaxLength(60)
+                .HasColumnName("surname");
 
             fullName.Property(f => f.Patronymic)
                 .IsRequired()
-                .HasMaxLength(60);
+                .HasMaxLength(60)
+                .HasColumnName("patronymic");
         });
 
         builder.Property(s => s.Gender)
             .IsRequired()
             .HasDefaultValue(Gender.None)
-            .HasConversion<int>();
+            .HasColumnName("gender");
 
         builder.Property(s => s.BirthDate)
-            .IsRequired();
+            .IsRequired()
+            .HasColumnName("birth_date");
 
         builder.Property(s => s.Email)
             .IsRequired()
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .HasColumnName("email");
 
         builder.HasIndex(s => s.Email)
             .IsUnique();
 
         builder.Property(s => s.Phone)
-            .IsRequired();
+            .IsRequired()
+            .HasColumnName("phone");
 
         builder.HasIndex(s => s.Phone)
             .IsUnique();
@@ -58,18 +67,22 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         {
             address.Property(a => a.City)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(100)
+                .HasColumnName("city");
 
             address.Property(a => a.Street)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(100)
+                .HasColumnName("street");
 
             address.Property(a => a.HouseNumber)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnName("house_number");
         });
 
         builder.Property(s => s.Avatar)
-            .IsRequired();
+            .IsRequired()
+            .HasColumnName("avatar");
 
         builder.HasMany<Enrollment>()
             .WithOne()

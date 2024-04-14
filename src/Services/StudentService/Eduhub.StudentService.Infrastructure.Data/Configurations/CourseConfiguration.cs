@@ -16,14 +16,20 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
     {
         builder.HasKey(c => c.Id);
 
+        builder.Property(c => c.Id)
+            .HasColumnName("id");
+
         builder.Property(c => c.Name)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(50)
+            .HasColumnName("name");
 
-        builder.Property(c => c.Description);
+        builder.Property(c => c.Description)
+            .HasColumnName("description");
 
         builder.Property(c => c.EducatorId)
-            .IsRequired();
+            .IsRequired()
+            .HasColumnName("educator_id");
 
         builder.HasOne<Educator>()
             .WithMany(e => e.Courses)
