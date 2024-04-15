@@ -1,6 +1,5 @@
 ﻿using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
-using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -44,12 +43,17 @@ public class EducatorConfiguration : IEntityTypeConfiguration<Educator>
             .HasDefaultValue(Gender.None)
             .HasColumnName("gender");
 
-        builder.Property(e => e.Phone)
-            .IsRequired()
-            .HasColumnName("phone");
+        builder.OwnsOne(e => e.Phone, phone =>
+        {
+            phone.Property(p => p.Value)
+                .IsRequired()
+                .HasMaxLength(11)
+                .HasColumnName("phone");
 
-        builder.HasIndex(e => e.Phone)
-            .IsUnique();
+            builder.HasIndex(s => s.Phone)
+                .IsUnique()
+                .HasDatabaseName("IX_Student_Phone");
+        });
 
         builder.Property(e => e.WorkExperience)
             .IsRequired()
@@ -62,16 +66,5 @@ public class EducatorConfiguration : IEntityTypeConfiguration<Educator>
         builder.HasMany(e => e.Courses)
             .WithOne()
             .HasForeignKey(c => c.EducatorId);
-
-        builder.Property(e => e.Phone)
-            .HasConversion(
-                p => p.ToString(),
-                p => new Phone(p)
-            );
-
-        builder.Property(e => e.Gender)
-            .HasConversion(g => g.ToString(),
-                g => (Gender) Enum.Parse(typeof(Gender), g)
-            );
     }
 }

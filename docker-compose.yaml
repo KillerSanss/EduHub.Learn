@@ -3,7 +3,7 @@
 services:
     database:
         image: postgres
-        container_name: student_database
+        container_name: eduhub_database
         environment:
             POSTGRES_DB: Student
             POSTGRES_USER: user
