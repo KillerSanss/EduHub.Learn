@@ -27,7 +27,7 @@ services:
             database:
                 condition: service_healthy
         environment:
-            CONNECTION_STRING: "Host=database;Port=5432;Database=Student;Username=user;Password=password"
+            - ConnectionStrings__DefaultConnection=Host=eduhublearn;Port=5432;Database=Student;Username=user;Password=password
 
 volumes:
     database_data:

@@ -1,9 +1,10 @@
 ﻿using System;
+using Eduhub.StudentService.Domain.Entities.Enums;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Eduhub.StudentService.Infrastructure.Data.Migrations
+namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -11,6 +12,9 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("Npgsql:Enum:gender", "none,male,female");
+
             migrationBuilder.CreateTable(
                 name: "Educators",
                 columns: table => new
@@ -21,8 +25,8 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                     surname = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
                     first_name = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
                     patronymic = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
-                    gender = table.Column<string>(type: "text", nullable: false, defaultValue: "None"),
-                    phone = table.Column<string>(type: "text", nullable: false)
+                    gender = table.Column<Gender>(type: "gender", nullable: false, defaultValue: Gender.None),
+                    phone = table.Column<string>(type: "character varying(11)", maxLength: 11, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -35,7 +39,7 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     birth_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     house_number = table.Column<int>(type: "integer", nullable: true),
@@ -43,8 +47,8 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                     surname = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
                     first_name = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
                     patronymic = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
-                    gender = table.Column<string>(type: "text", nullable: false, defaultValue: "None"),
-                    phone = table.Column<string>(type: "text", nullable: false)
+                    gender = table.Column<Gender>(type: "gender", nullable: false, defaultValue: Gender.None),
+                    phone = table.Column<string>(type: "character varying(11)", maxLength: 11, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,7 +107,7 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                 column: "educator_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Educators_phone",
+                name: "IX_Educator_Phone",
                 table: "Educators",
                 column: "phone",
                 unique: true);
@@ -119,13 +123,13 @@ namespace Eduhub.StudentService.Infrastructure.Data.Migrations
                 column: "student_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_email",
+                name: "IX_Student_Email",
                 table: "Students",
                 column: "email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_phone",
+                name: "IX_Student_Phone",
                 table: "Students",
                 column: "phone",
                 unique: true);

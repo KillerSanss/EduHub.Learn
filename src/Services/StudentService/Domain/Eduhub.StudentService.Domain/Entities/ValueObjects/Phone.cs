@@ -22,4 +22,8 @@ public class Phone
     {
         Value = Guard.Against.Regex(phoneNumber, RegexPatterns.PhonePattern, ErrorMessage.PhoneFormat);
     }
+
+    private Phone()
+    {
+    }
 }

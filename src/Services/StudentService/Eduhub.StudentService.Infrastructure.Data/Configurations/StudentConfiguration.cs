@@ -1,5 +1,6 @@
 ﻿using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
+using Eduhub.StudentService.Infrastructure.Data.DbIndexes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -54,9 +55,9 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
                 .HasMaxLength(11)
                 .HasColumnName("phone");
 
-            builder.HasIndex(s => s.Phone)
+            phone.HasIndex(s => s.Value)
                 .IsUnique()
-                .HasDatabaseName("IX_Student_Phone");
+                .HasDatabaseName(Indexes.StudentPhone);
         });
 
         builder.OwnsOne(s => s.Email, email =>
@@ -66,9 +67,9 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
                 .HasMaxLength(255)
                 .HasColumnName("email");
 
-            builder.HasIndex(s => s.Email)
+            email.HasIndex(s => s.Value)
                 .IsUnique()
-                .HasDatabaseName("IX_Student_Email");
+                .HasDatabaseName(Indexes.StudentEmail);
         });
 
         builder.OwnsOne(s => s.Address, address =>

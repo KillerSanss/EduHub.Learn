@@ -7,6 +7,9 @@ using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
+using Eduhub.StudentService.Infrastructure.Data.DbIndexes;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -39,7 +42,26 @@ public class StudentService : IStudentService
         var student = _mapper.Map<Student>(studentDto);
         await _studentRepository.AddAsync(student, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex)
+        {
+            var innerException = ex.InnerException;
+            if (innerException != null && innerException is SqlException sqlException)
+            {
+                if (sqlException.Message.Contains(Indexes.StudentPhone))
+                {
+                    throw new EntityConflictException<Student>(nameof(Student.Phone), studentDto.Phone);
+                }
+
+                if (sqlException.Message.Contains(Indexes.StudentEmail))
+                {
+                    throw new EntityConflictException<Student>(nameof(Student.Email), studentDto.Email);
+                }
+            }
+        }
 
         return _mapper.Map<StudentDto>(student);
     }
@@ -64,7 +86,26 @@ public class StudentService : IStudentService
             new FullAddress(studentDto.City, studentDto.Street, studentDto.HouseNumber),
             studentDto.Avatar);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex)
+        {
+            var innerException = ex.InnerException;
+            if (innerException != null && innerException is SqlException sqlException)
+            {
+                if (sqlException.Message.Contains(Indexes.StudentPhone))
+                {
+                    throw new EntityConflictException<Student>(nameof(Student.Phone), studentDto.Phone);
+                }
+
+                if (sqlException.Message.Contains(Indexes.StudentEmail))
+                {
+                    throw new EntityConflictException<Student>(nameof(Student.Email), studentDto.Email);
+                }
+            }
+        }
 
         return _mapper.Map<StudentDto>(student);
     }

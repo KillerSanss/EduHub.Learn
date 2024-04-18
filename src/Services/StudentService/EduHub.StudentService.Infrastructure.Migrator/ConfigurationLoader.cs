@@ -13,8 +13,11 @@ public static class ConfigurationLoader
     /// <returns>Конфиг.</returns>
     public static IConfiguration Load()
     {
-        return new ConfigurationBuilder()
+        var configBuilder = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", false)
-            .Build();
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
+            .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.local.json"), true);
+
+        return configBuilder.Build();
     }
 }

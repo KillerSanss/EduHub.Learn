@@ -18,7 +18,8 @@ public class StudentDbContextFactory : IDesignTimeDbContextFactory<StudentDbCont
                                   ?? throw new ArgumentNullException(nameof(connectionString));
 
         var optionsBuilder = new DbContextOptionsBuilder<StudentDbContext>();
-        optionsBuilder.UseNpgsql(connectionString);
+        optionsBuilder.UseNpgsql(EduhubNpgsqlDataSource.Create(connectionString),
+            o => o.MigrationsAssembly("EduHub.StudentService.Infrastructure.Migrator"));
 
         return new StudentDbContext(optionsBuilder.Options);
     }

@@ -1,5 +1,4 @@
 ﻿using Eduhub.StudentService.Domain.Entities;
-using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Infrastructure.Data.Configurations;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,14 +14,14 @@ public class StudentDbContext : DbContext
     public DbSet<Educator> Educators { get; init; }
     public DbSet<Enrollment> Enrollments { get; init; }
 
-    public StudentDbContext(DbContextOptions options)
+    public StudentDbContext(DbContextOptions<StudentDbContext> options)
         : base(options)
     {
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasPostgresEnum<Gender>();
+        modelBuilder.RegisterEnums();
         modelBuilder.ApplyConfiguration(new StudentConfiguration());
         modelBuilder.ApplyConfiguration(new CourseConfiguration());
         modelBuilder.ApplyConfiguration(new EducatorConfiguration());
