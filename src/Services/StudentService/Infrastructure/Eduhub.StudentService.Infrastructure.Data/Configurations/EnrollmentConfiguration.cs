@@ -29,7 +29,8 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
 
         builder.Property(e => e.StartDate)
             .IsRequired()
-            .HasColumnName("start_date");
+            .HasColumnName("start_date")
+            .HasColumnType("timestamp");
 
         builder.HasOne<Student>()
             .WithMany(s => s.Enrollments)

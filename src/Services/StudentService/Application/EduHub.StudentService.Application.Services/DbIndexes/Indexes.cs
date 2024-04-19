@@ -1,4 +1,4 @@
-﻿namespace Eduhub.StudentService.Infrastructure.Data.DbIndexes;
+﻿namespace EduHub.StudentService.Application.Services.DbIndexes;
 
 /// <summary>
 /// Класс описывающий индексы для базы данных

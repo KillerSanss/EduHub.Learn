@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
+using EduHub.StudentService.Application.Services.DbIndexes;
 using EduHub.StudentService.Application.Services.Dtos.Course;
 using EduHub.StudentService.Application.Services.Dtos.Educator;
 using EduHub.StudentService.Application.Services.Exceptions;
@@ -8,8 +9,6 @@ using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Eduhub.StudentService.Infrastructure.Data.DbIndexes;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduHub.StudentService.Application.Services.Services;
@@ -51,14 +50,10 @@ public class EducatorService : IEducatorService
         }
         catch (DbUpdateException ex)
         {
-            var innerException = ex.InnerException;
-            if (innerException != null && innerException is SqlException sqlException)
-            {
-                if (sqlException.Message.Contains(Indexes.EducatorPhone))
-                {
-                    throw new EntityConflictException<Educator>(nameof(educator.Phone), educator.Phone.ToString());
-                }
-            }
+            CheckIndexes<Educator>.Check(ex,
+                educator,
+                e => e.Phone.ToString(),
+                Indexes.EducatorPhone);
         }
 
         return _mapper.Map<EducatorDto>(educator);
@@ -88,14 +83,10 @@ public class EducatorService : IEducatorService
         }
         catch (DbUpdateException ex)
         {
-            var innerException = ex.InnerException;
-            if (innerException != null && innerException is SqlException sqlException)
-            {
-                if (sqlException.Message.Contains(Indexes.EducatorPhone))
-                {
-                    throw new EntityConflictException<Educator>(nameof(educator.Phone), educatorDto.Phone);
-                }
-            }
+            CheckIndexes<Educator>.Check(ex,
+                educator,
+                e => e.Phone.ToString(),
+                Indexes.EducatorPhone);
         }
 
         return _mapper.Map<EducatorDto>(educator);

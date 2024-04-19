@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
+using EduHub.StudentService.Application.Services.DbIndexes;
 using EduHub.StudentService.Application.Services.Dtos.Student;
 using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
@@ -7,8 +8,6 @@ using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Eduhub.StudentService.Infrastructure.Data.DbIndexes;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduHub.StudentService.Application.Services.Services;
@@ -48,19 +47,15 @@ public class StudentService : IStudentService
         }
         catch (DbUpdateException ex)
         {
-            var innerException = ex.InnerException;
-            if (innerException != null && innerException is SqlException sqlException)
-            {
-                if (sqlException.Message.Contains(Indexes.StudentPhone))
-                {
-                    throw new EntityConflictException<Student>(nameof(Student.Phone), studentDto.Phone);
-                }
+            CheckIndexes<Student>.Check(ex,
+                student,
+                s => s.Phone.ToString(),
+                Indexes.StudentPhone);
 
-                if (sqlException.Message.Contains(Indexes.StudentEmail))
-                {
-                    throw new EntityConflictException<Student>(nameof(Student.Email), studentDto.Email);
-                }
-            }
+            CheckIndexes<Student>.Check(ex,
+                student,
+                s => s.Email.ToString(),
+                Indexes.StudentEmail);
         }
 
         return _mapper.Map<StudentDto>(student);
@@ -92,19 +87,15 @@ public class StudentService : IStudentService
         }
         catch (DbUpdateException ex)
         {
-            var innerException = ex.InnerException;
-            if (innerException != null && innerException is SqlException sqlException)
-            {
-                if (sqlException.Message.Contains(Indexes.StudentPhone))
-                {
-                    throw new EntityConflictException<Student>(nameof(Student.Phone), studentDto.Phone);
-                }
+            CheckIndexes<Student>.Check(ex,
+                student,
+                s => s.Phone.ToString(),
+                Indexes.StudentPhone);
 
-                if (sqlException.Message.Contains(Indexes.StudentEmail))
-                {
-                    throw new EntityConflictException<Student>(nameof(Student.Email), studentDto.Email);
-                }
-            }
+            CheckIndexes<Student>.Check(ex,
+                student,
+                s => s.Email.ToString(),
+                Indexes.StudentEmail);
         }
 
         return _mapper.Map<StudentDto>(student);

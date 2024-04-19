@@ -1,6 +1,6 @@
-﻿using Eduhub.StudentService.Domain.Entities;
+﻿using EduHub.StudentService.Application.Services.DbIndexes;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
-using Eduhub.StudentService.Infrastructure.Data.DbIndexes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -46,7 +46,8 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
 
         builder.Property(s => s.BirthDate)
             .IsRequired()
-            .HasColumnName("birth_date");
+            .HasColumnName("birth_date")
+            .HasColumnType("timestamp");
 
         builder.OwnsOne(s => s.Phone, phone =>
         {

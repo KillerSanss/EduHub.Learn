@@ -1,6 +1,6 @@
-﻿using Eduhub.StudentService.Domain.Entities;
+﻿using EduHub.StudentService.Application.Services.DbIndexes;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
-using Eduhub.StudentService.Infrastructure.Data.DbIndexes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -62,7 +62,8 @@ public class EducatorConfiguration : IEntityTypeConfiguration<Educator>
 
         builder.Property(e => e.StartDate)
             .IsRequired()
-            .HasColumnName("start_date");
+            .HasColumnName("start_date")
+            .HasColumnType("timestamp");
 
         builder.HasMany(e => e.Courses)
             .WithOne()

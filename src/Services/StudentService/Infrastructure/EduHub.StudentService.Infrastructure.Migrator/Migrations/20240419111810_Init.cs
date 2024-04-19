@@ -21,7 +21,7 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     work_experience = table.Column<int>(type: "integer", nullable: false),
-                    start_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    start_date = table.Column<DateTime>(type: "timestamp", nullable: false),
                     surname = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
                     first_name = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
                     patronymic = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
@@ -38,7 +38,7 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    birth_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    birth_date = table.Column<DateTime>(type: "timestamp", nullable: false),
                     email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
@@ -82,7 +82,7 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     student_id = table.Column<Guid>(type: "uuid", nullable: false),
                     course_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    start_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    start_date = table.Column<DateTime>(type: "timestamp", nullable: false)
                 },
                 constraints: table =>
                 {

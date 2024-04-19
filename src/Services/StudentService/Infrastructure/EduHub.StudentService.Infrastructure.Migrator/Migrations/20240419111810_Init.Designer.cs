@@ -4,6 +4,7 @@ using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    partial class StudentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240419111810_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,7 +69,7 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                         .HasColumnName("gender");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp")
                         .HasColumnName("start_date");
 
                     b.Property<int>("WorkExperience")
@@ -90,7 +93,7 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                         .HasColumnName("course_id");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp")
                         .HasColumnName("start_date");
 
                     b.Property<Guid>("StudentId")
@@ -119,7 +122,7 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                         .HasColumnName("avatar");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp")
                         .HasColumnName("birth_date");
 
                     b.Property<Gender>("Gender")

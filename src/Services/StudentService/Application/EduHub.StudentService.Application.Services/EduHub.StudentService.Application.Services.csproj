@@ -7,13 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Domain\Eduhub.StudentService.Domain\Eduhub.StudentService.Domain.csproj" />
-        <ProjectReference Include="..\..\Eduhub.StudentService.Infrastructure.Data\Eduhub.StudentService.Infrastructure.Data.csproj" />
+      <ProjectReference Include="..\..\Domain\Eduhub.StudentService.Domain\Eduhub.StudentService.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="13.0.1" />
-      <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
     </ItemGroup>
 
     <ItemGroup>

@@ -7,9 +7,9 @@ var dbContext = dbContextFactory.CreateDbContext([]);
 
 var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
 
-var migrations = pendingMigrations.ToList();
+var migrations = pendingMigrations.ToArray();
 
-if (migrations.Any())
+if (migrations.Length > 0)
 {
     Console.WriteLine("Был запущен метод Migrate.");
     Console.WriteLine("Примененные миграции:");

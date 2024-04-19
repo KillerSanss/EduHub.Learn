@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Domain\Eduhub.StudentService.Domain\Eduhub.StudentService.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         <PrivateAssets>all</PrivateAssets>
@@ -21,6 +17,11 @@
         <PrivateAssets>all</PrivateAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Application\EduHub.StudentService.Application.Services\EduHub.StudentService.Application.Services.csproj" />
+      <ProjectReference Include="..\..\Domain\Eduhub.StudentService.Domain\Eduhub.StudentService.Domain.csproj" />
     </ItemGroup>
 
 </Project>

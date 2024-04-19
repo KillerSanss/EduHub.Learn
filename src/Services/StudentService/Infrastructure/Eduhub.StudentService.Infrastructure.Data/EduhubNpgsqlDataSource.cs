@@ -3,7 +3,7 @@ using Eduhub.StudentService.Domain.Entities.Enums;
 using Npgsql;
 using Npgsql.TypeMapping;
 
-namespace EduHub.StudentService.Infrastructure.Migrator;
+namespace Eduhub.StudentService.Infrastructure.Data;
 
 public static class EduhubNpgsqlDataSource
 {

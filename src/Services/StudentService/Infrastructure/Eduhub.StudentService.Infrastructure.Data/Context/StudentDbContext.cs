@@ -1,5 +1,6 @@
 ﻿using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.Data.Configurations;
+using Eduhub.StudentService.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eduhub.StudentService.Infrastructure.Data.Context;
