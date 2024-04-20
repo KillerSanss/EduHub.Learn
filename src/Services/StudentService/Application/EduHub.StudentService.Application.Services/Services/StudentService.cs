@@ -9,6 +9,7 @@ using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -46,16 +47,17 @@ public class StudentService : IStudentService
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException exception)
         {
-            CheckIndexes<Student>.Check(ex,
-                student,
-                s => s.Phone.ToString(),
-                Indexes.StudentPhone);
+            if (exception.Message.Contains(Indexes.StudentPhone))
+            {
+                throw new EntityConflictException<Student>(nameof(student.Phone), student.Phone.ToString());
+            }
 
-            CheckIndexes<Student>.Check(ex,
-                student,
-                s => s.Email.ToString(),
-                Indexes.StudentEmail);
+            if (exception.Message.Contains(Indexes.StudentEmail))
+            {
+                throw new EntityConflictException<Student>(nameof(student.Email), student.Email.ToString());
+            }
         }
 
         return _mapper.Map<StudentDto>(student);
@@ -86,16 +88,17 @@ public class StudentService : IStudentService
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException exception)
         {
-            CheckIndexes<Student>.Check(ex,
-                student,
-                s => s.Phone.ToString(),
-                Indexes.StudentPhone);
+            if (exception.Message.Contains(Indexes.StudentPhone))
+            {
+                throw new EntityConflictException<Student>(nameof(student.Phone), student.Phone.ToString());
+            }
 
-            CheckIndexes<Student>.Check(ex,
-                student,
-                s => s.Email.ToString(),
-                Indexes.StudentEmail);
+            if (exception.Message.Contains(Indexes.StudentEmail))
+            {
+                throw new EntityConflictException<Student>(nameof(student.Email), student.Email.ToString());
+            }
         }
 
         return _mapper.Map<StudentDto>(student);

@@ -10,6 +10,7 @@ using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -49,11 +50,9 @@ public class EducatorService : IEducatorService
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException exception && exception.Message.Contains(Indexes.EducatorPhone))
         {
-            CheckIndexes<Educator>.Check(ex,
-                educator,
-                e => e.Phone.ToString(),
-                Indexes.EducatorPhone);
+            throw new EntityConflictException<Educator>(nameof(educator.Phone), educator.Phone.ToString());
         }
 
         return _mapper.Map<EducatorDto>(educator);
@@ -82,11 +81,9 @@ public class EducatorService : IEducatorService
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException exception && exception.Message.Contains(Indexes.EducatorPhone))
         {
-            CheckIndexes<Educator>.Check(ex,
-                educator,
-                e => e.Phone.ToString(),
-                Indexes.EducatorPhone);
+            throw new EntityConflictException<Educator>(nameof(educator.Phone), educator.Phone.ToString());
         }
 
         return _mapper.Map<EducatorDto>(educator);
