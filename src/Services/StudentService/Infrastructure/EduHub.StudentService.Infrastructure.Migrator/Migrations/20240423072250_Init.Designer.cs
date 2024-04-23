@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    [Migration("20240419111810_Init")]
+    [Migration("20240423072250_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -215,7 +215,7 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                         .IsRequired();
 
                     b.HasOne("Eduhub.StudentService.Domain.Entities.Student", null)
-                        .WithMany("Enrollments")
+                        .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -343,11 +343,6 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
             modelBuilder.Entity("Eduhub.StudentService.Domain.Entities.Educator", b =>
                 {
                     b.Navigation("Courses");
-                });
-
-            modelBuilder.Entity("Eduhub.StudentService.Domain.Entities.Student", b =>
-                {
-                    b.Navigation("Enrollments");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
-using EduHub.StudentService.Application.Services.DbIndexes;
+using EduHub.StudentService.Application.Services.Constants;
 using EduHub.StudentService.Application.Services.Dtos.Student;
 using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
@@ -42,23 +42,7 @@ public class StudentService : IStudentService
         var student = _mapper.Map<Student>(studentDto);
         await _studentRepository.AddAsync(student, cancellationToken);
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException ex)
-            when (ex.InnerException is PostgresException exception)
-        {
-            if (exception.Message.Contains(Indexes.StudentPhone))
-            {
-                throw new EntityConflictException<Student>(nameof(student.Phone), student.Phone.ToString());
-            }
-
-            if (exception.Message.Contains(Indexes.StudentEmail))
-            {
-                throw new EntityConflictException<Student>(nameof(student.Email), student.Email.ToString());
-            }
-        }
+        await HandleDbException(() => _unitOfWork.SaveChangesAsync(cancellationToken), student);
 
         return _mapper.Map<StudentDto>(student);
     }
@@ -83,23 +67,7 @@ public class StudentService : IStudentService
             new FullAddress(studentDto.City, studentDto.Street, studentDto.HouseNumber),
             studentDto.Avatar);
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException ex)
-            when (ex.InnerException is PostgresException exception)
-        {
-            if (exception.Message.Contains(Indexes.StudentPhone))
-            {
-                throw new EntityConflictException<Student>(nameof(student.Phone), student.Phone.ToString());
-            }
-
-            if (exception.Message.Contains(Indexes.StudentEmail))
-            {
-                throw new EntityConflictException<Student>(nameof(student.Email), student.Email.ToString());
-            }
-        }
+        await HandleDbException(() => _unitOfWork.SaveChangesAsync(cancellationToken), student);
 
         return _mapper.Map<StudentDto>(student);
     }
@@ -139,6 +107,24 @@ public class StudentService : IStudentService
 
         await _studentRepository.DeleteAsync(student, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task HandleDbException(Func<Task> action, Student student)
+    {
+        try
+        {
+            await action();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException exception && exception.Message.Contains(IndexConstants.StudentPhone))
+        {
+            throw new EntityConflictException<Student>(nameof(student.Phone), student.Phone.ToString());
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException exception && exception.Message.Contains(IndexConstants.StudentEmail))
+        {
+            throw new EntityConflictException<Student>(nameof(student.Enrollments), student.Email.ToString());
+        }
     }
 
     private async Task<Student> GetByIdOrThrowAsync(Guid id, CancellationToken cancellationToken)

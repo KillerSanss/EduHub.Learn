@@ -1,6 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
-using EduHub.StudentService.Application.Services.DbIndexes;
+using EduHub.StudentService.Application.Services.Constants;
 using EduHub.StudentService.Application.Services.Dtos.Course;
 using EduHub.StudentService.Application.Services.Dtos.Educator;
 using EduHub.StudentService.Application.Services.Exceptions;
@@ -45,15 +45,7 @@ public class EducatorService : IEducatorService
         var educator = _mapper.Map<Educator>(educatorDto);
         await _educatorRepository.AddAsync(educator, cancellationToken);
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException ex)
-            when (ex.InnerException is PostgresException exception && exception.Message.Contains(Indexes.EducatorPhone))
-        {
-            throw new EntityConflictException<Educator>(nameof(educator.Phone), educator.Phone.ToString());
-        }
+        await HandleDbException(() => _unitOfWork.SaveChangesAsync(cancellationToken), educator);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -76,15 +68,7 @@ public class EducatorService : IEducatorService
             educatorDto.StartDate,
             new Phone(educatorDto.Phone));
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException ex)
-            when (ex.InnerException is PostgresException exception && exception.Message.Contains(Indexes.EducatorPhone))
-        {
-            throw new EntityConflictException<Educator>(nameof(educator.Phone), educator.Phone.ToString());
-        }
+        await HandleDbException(() => _unitOfWork.SaveChangesAsync(cancellationToken), educator);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -138,6 +122,19 @@ public class EducatorService : IEducatorService
 
         await _educatorRepository.DeleteAsync(educator, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task HandleDbException(Func<Task> action, Educator educator)
+    {
+        try
+        {
+            await action();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException exception && exception.Message.Contains(IndexConstants.EducatorPhone))
+        {
+            throw new EntityConflictException<Student>(nameof(educator.Phone), educator.Phone.ToString());
+        }
     }
 
     private async Task<Educator> GetByIdOrThrowAsync(Guid id, CancellationToken cancellationToken)

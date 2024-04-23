@@ -1,9 +1,9 @@
-﻿namespace EduHub.StudentService.Application.Services.DbIndexes;
+﻿namespace EduHub.StudentService.Application.Services.Constants;
 
 /// <summary>
 /// Класс описывающий индексы для базы данных
 /// </summary>
-public static class Indexes
+public static class IndexConstants
 {
     /// <summary>
     /// Индекс для электронной почты студента

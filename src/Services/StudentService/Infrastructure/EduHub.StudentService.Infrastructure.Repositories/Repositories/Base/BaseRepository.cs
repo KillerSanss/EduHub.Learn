@@ -27,7 +27,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     /// <returns>Добавленная сущнсоть.</returns>
     public Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        _dbContext.Set<TEntity>().Add(entity);
+        _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
         return Task.FromResult(entity);
     }
 

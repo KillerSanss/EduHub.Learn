@@ -13,14 +13,14 @@ public class StudentDbContextFactory : IDesignTimeDbContextFactory<StudentDbCont
 {
     public StudentDbContext CreateDbContext(string[] args)
     {
-        IConfiguration configuration = ConfigurationLoader.Load();
+        IConfiguration configuration = Appsettings.Get();
 
         string connectionString = configuration.GetConnectionString("DefaultConnection")
                                   ?? throw new ArgumentNullException(nameof(connectionString));
 
         var optionsBuilder = new DbContextOptionsBuilder<StudentDbContext>();
         optionsBuilder.UseNpgsql(EduhubNpgsqlDataSource.Create(connectionString),
-            o => o.MigrationsAssembly("EduHub.StudentService.Infrastructure.Migrator"));
+            o => o.MigrationsAssembly(typeof(Program).Assembly.FullName));
 
         return new StudentDbContext(optionsBuilder.Options);
     }
