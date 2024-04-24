@@ -45,7 +45,7 @@ public class EducatorService : IEducatorService
         var educator = _mapper.Map<Educator>(educatorDto);
         await _educatorRepository.AddAsync(educator, cancellationToken);
 
-        await HandleDbException(() => _unitOfWork.SaveChangesAsync(cancellationToken), educator);
+        await SaveChangesOrThrowAsync(cancellationToken, educator);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -68,7 +68,7 @@ public class EducatorService : IEducatorService
             educatorDto.StartDate,
             new Phone(educatorDto.Phone));
 
-        await HandleDbException(() => _unitOfWork.SaveChangesAsync(cancellationToken), educator);
+        await SaveChangesOrThrowAsync(cancellationToken, educator);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -124,11 +124,11 @@ public class EducatorService : IEducatorService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task HandleDbException(Func<Task> action, Educator educator)
+    private async Task SaveChangesOrThrowAsync(CancellationToken cancellationToken, Educator educator)
     {
         try
         {
-            await action();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateException ex)
             when (ex.InnerException is PostgresException exception && exception.Message.Contains(IndexConstants.EducatorPhone))
