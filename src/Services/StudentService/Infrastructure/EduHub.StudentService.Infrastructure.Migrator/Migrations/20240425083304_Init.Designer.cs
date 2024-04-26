@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    [Migration("20240423072250_Init")]
+    [Migration("20240425083304_Init")]
     partial class Init
     {
         /// <inheritdoc />

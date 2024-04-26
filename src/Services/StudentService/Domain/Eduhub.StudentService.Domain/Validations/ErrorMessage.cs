@@ -70,7 +70,7 @@ public static class ErrorMessage
     /// {1} - имя свойства
     /// {2} - значение свойтсва
     /// </remarks>
-    public const string ConflictError = "Entity {0} with {1} = {2} is already exist";
+    public const string ConflictError = "Entity {0} with similar {1} is already exist";
 
     /// <summary>
     /// Сообщение об ошибке не найденной сущности

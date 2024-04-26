@@ -1,4 +1,5 @@
-﻿using Eduhub.StudentService.Domain.Entities;
+﻿using System.Reflection;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,6 @@ public class StudentDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.RegisterEnums();
-        modelBuilder.ApplyAllConfigurations();
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(StudentDbContext)) ?? throw new InvalidOperationException());
     }
 }

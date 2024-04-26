@@ -9,8 +9,6 @@ using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -45,7 +43,7 @@ public class EducatorService : IEducatorService
         var educator = _mapper.Map<Educator>(educatorDto);
         await _educatorRepository.AddAsync(educator, cancellationToken);
 
-        await SaveChangesOrThrowAsync(cancellationToken, educator);
+        await SaveChangesOrThrowAsync(cancellationToken);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -68,7 +66,7 @@ public class EducatorService : IEducatorService
             educatorDto.StartDate,
             new Phone(educatorDto.Phone));
 
-        await SaveChangesOrThrowAsync(cancellationToken, educator);
+        await SaveChangesOrThrowAsync(cancellationToken);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -124,16 +122,16 @@ public class EducatorService : IEducatorService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task SaveChangesOrThrowAsync(CancellationToken cancellationToken, Educator educator)
+    private async Task SaveChangesOrThrowAsync(CancellationToken cancellationToken)
     {
         try
         {
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
-        catch (DbUpdateException ex)
-            when (ex.InnerException is PostgresException exception && exception.Message.Contains(IndexConstants.EducatorPhone))
+        catch (Exception ex)
+            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.EducatorPhone))
         {
-            throw new EntityConflictException<Student>(nameof(educator.Phone), educator.Phone.ToString());
+            throw new EntityConflictException<Educator>(nameof(Educator.Phone));
         }
     }
 

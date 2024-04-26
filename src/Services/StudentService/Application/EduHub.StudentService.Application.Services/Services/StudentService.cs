@@ -8,8 +8,6 @@ using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -42,7 +40,7 @@ public class StudentService : IStudentService
         var student = _mapper.Map<Student>(studentDto);
         await _studentRepository.AddAsync(student, cancellationToken);
 
-        await SaveChangesOrThrowAsync(cancellationToken, student);
+        await SaveChangesOrThrowAsync(cancellationToken);
 
         return _mapper.Map<StudentDto>(student);
     }
@@ -67,7 +65,7 @@ public class StudentService : IStudentService
             new FullAddress(studentDto.City, studentDto.Street, studentDto.HouseNumber),
             studentDto.Avatar);
 
-        await SaveChangesOrThrowAsync(cancellationToken, student);
+        await SaveChangesOrThrowAsync(cancellationToken);
 
         return _mapper.Map<StudentDto>(student);
     }
@@ -109,21 +107,21 @@ public class StudentService : IStudentService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task SaveChangesOrThrowAsync(CancellationToken cancellationToken, Student student)
+    private async Task SaveChangesOrThrowAsync(CancellationToken cancellationToken)
     {
         try
         {
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
-        catch (DbUpdateException ex)
-            when (ex.InnerException is PostgresException exception && exception.Message.Contains(IndexConstants.StudentPhone))
+        catch (Exception ex)
+            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.StudentPhone))
         {
-            throw new EntityConflictException<Student>(nameof(student.Phone), student.Phone.ToString());
+            throw new EntityConflictException<Student>(nameof(Student.Phone));
         }
-        catch (DbUpdateException ex)
-            when (ex.InnerException is PostgresException exception && exception.Message.Contains(IndexConstants.StudentEmail))
+        catch (Exception ex)
+            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.StudentEmail))
         {
-            throw new EntityConflictException<Student>(nameof(student.Enrollments), student.Email.ToString());
+            throw new EntityConflictException<Student>(nameof(Student.Enrollments));
         }
     }
 

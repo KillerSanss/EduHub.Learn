@@ -13,9 +13,8 @@ public class EntityConflictException<T> : BaseConflictException where T : BaseEn
     /// Конструктор
     /// </summary>
     /// <param name="paramName">Название параметра.</param>
-    /// <param name="value">Значение параметра.</param>
-    public EntityConflictException(string paramName, string value)
-        : base(nameof(T), paramName, value)
+    public EntityConflictException(string paramName)
+        : base(nameof(T), paramName)
     {
     }
 }

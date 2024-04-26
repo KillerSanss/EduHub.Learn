@@ -25,10 +25,10 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     /// <param name="entity">Сущность для добавления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленная сущнсоть.</returns>
-    public Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)
+    public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
-        return Task.FromResult(entity);
+        await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
+        return entity;
     }
 
     /// <summary>
