@@ -1,7 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using Eduhub.StudentService.Domain.Entities.Base;
-using Eduhub.StudentService.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduHub.StudentService.Infrastructure.Repositories.Repositories.Base;
@@ -12,9 +11,9 @@ namespace EduHub.StudentService.Infrastructure.Repositories.Repositories.Base;
 /// <typeparam name="TEntity">Сущность.</typeparam>
 public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
 {
-    private readonly StudentDbContext _dbContext;
+    private readonly DbContext _dbContext;
 
-    protected BaseRepository(StudentDbContext dbContext)
+    protected BaseRepository(DbContext dbContext)
     {
         _dbContext = Guard.Against.Null(dbContext);
     }

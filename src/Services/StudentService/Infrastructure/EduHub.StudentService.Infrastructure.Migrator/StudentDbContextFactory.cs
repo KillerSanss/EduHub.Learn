@@ -13,7 +13,7 @@ public class StudentDbContextFactory : IDesignTimeDbContextFactory<StudentDbCont
 {
     public StudentDbContext CreateDbContext(string[] args)
     {
-        IConfiguration configuration = Appsettings.Get();
+        var configuration = Appsettings.Get();
 
         string connectionString = configuration.GetConnectionString("DefaultConnection")
                                   ?? throw new ArgumentNullException(nameof(connectionString));

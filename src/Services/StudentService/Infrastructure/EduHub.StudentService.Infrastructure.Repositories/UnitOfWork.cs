@@ -1,17 +1,18 @@
-﻿namespace EduHub.StudentService.Infrastructure.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace EduHub.StudentService.Infrastructure.Repositories;
 
 using Ardalis.GuardClauses;
-using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
-using Eduhub.StudentService.Infrastructure.Data.Context;
+using Application.Services.Interfaces.UnitOfWork;
 
 /// <summary>
 /// Реализция IUnitOfWork
 /// </summary>
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
 {
-    private readonly StudentDbContext _dbContext;
+    private readonly TContext _dbContext;
 
-    public UnitOfWork(StudentDbContext dbContext)
+    public UnitOfWork(TContext dbContext)
     {
         _dbContext = Guard.Against.Null(dbContext);
     }

@@ -8,15 +8,15 @@ public static class IndexConstants
     /// <summary>
     /// Индекс для электронной почты студента
     /// </summary>
-    public const string StudentEmail = "IX_Student_Email";
+    public const string UniqueStudentEmail = "IX_Student_Email";
 
     /// <summary>
     /// Индекс для телефона студента
     /// </summary>
-    public const string StudentPhone = "IX_Student_Phone";
+    public const string UniqueStudentPhone = "IX_Student_Phone";
 
     /// <summary>
     /// Индекс для телефона преподавателя
     /// </summary>
-    public const string EducatorPhone = "IX_Educator_Phone";
+    public const string UniqueEducatorPhone = "IX_Educator_Phone";
 }

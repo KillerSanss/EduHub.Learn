@@ -58,7 +58,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
 
             phone.HasIndex(s => s.Value)
                 .IsUnique()
-                .HasDatabaseName(IndexConstants.StudentPhone);
+                .HasDatabaseName(IndexConstants.UniqueStudentPhone);
         });
 
         builder.OwnsOne(s => s.Email, email =>
@@ -70,7 +70,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
 
             email.HasIndex(s => s.Value)
                 .IsUnique()
-                .HasDatabaseName(IndexConstants.StudentEmail);
+                .HasDatabaseName(IndexConstants.UniqueStudentEmail);
         });
 
         builder.OwnsOne(s => s.Address, address =>

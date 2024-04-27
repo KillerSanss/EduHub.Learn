@@ -114,14 +114,14 @@ public class StudentService : IStudentService
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)
-            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.StudentPhone))
+            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.UniqueStudentPhone))
         {
             throw new EntityConflictException<Student>(nameof(Student.Phone));
         }
         catch (Exception ex)
-            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.StudentEmail))
+            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.UniqueStudentEmail))
         {
-            throw new EntityConflictException<Student>(nameof(Student.Enrollments));
+            throw new EntityConflictException<Student>(nameof(Student.Email));
         }
     }
 

@@ -19,7 +19,7 @@ public static class Appsettings
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", false, true)
             .AddJsonFile($"appsettings.{environment}.json", true, true)
-            .AddJsonFile($"appsettings.local.json", true, true)
+            .AddJsonFile("appsettings.local.json", true, true)
             .AddEnvironmentVariables();
 
         return configBuilder.Build();

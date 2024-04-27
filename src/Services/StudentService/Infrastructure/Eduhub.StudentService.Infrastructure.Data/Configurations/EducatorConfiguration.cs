@@ -53,7 +53,7 @@ public class EducatorConfiguration : IEntityTypeConfiguration<Educator>
 
             phone.HasIndex(s => s.Value)
                 .IsUnique()
-                .HasDatabaseName(IndexConstants.EducatorPhone);
+                .HasDatabaseName(IndexConstants.UniqueEducatorPhone);
         });
 
         builder.Property(e => e.WorkExperience)

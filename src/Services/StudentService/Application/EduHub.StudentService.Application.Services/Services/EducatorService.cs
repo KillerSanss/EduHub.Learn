@@ -129,7 +129,7 @@ public class EducatorService : IEducatorService
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)
-            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.EducatorPhone))
+            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.UniqueEducatorPhone))
         {
             throw new EntityConflictException<Educator>(nameof(Educator.Phone));
         }
