@@ -11,11 +11,11 @@ namespace EduHub.StudentService.Infrastructure.Repositories.Repositories.Base;
 /// <typeparam name="TEntity">Сущность.</typeparam>
 public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
 {
-    private readonly DbContext _dbContext;
+    protected readonly DbContext DbContext;
 
     protected BaseRepository(DbContext dbContext)
     {
-        _dbContext = Guard.Against.Null(dbContext);
+        DbContext = Guard.Against.Null(dbContext);
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     /// <returns>Добавленная сущнсоть.</returns>
     public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
+        await DbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
         return entity;
     }
 
@@ -38,7 +38,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     /// <returns>Обновленная сущность.</returns>
     public Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        _dbContext.Set<TEntity>().Update(entity);
+        DbContext.Set<TEntity>().Update(entity);
         return Task.FromResult(entity);
     }
 
@@ -49,7 +49,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     /// <returns>Массив сущностей.</returns>
     public async Task<TEntity[]> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await _dbContext.Set<TEntity>().ToArrayAsync(cancellationToken);
+        return await DbContext.Set<TEntity>().ToArrayAsync(cancellationToken);
     }
 
     /// <summary>
@@ -60,17 +60,17 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     /// <returns>Сущность.</returns>
     public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+        return await DbContext.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
     /// <summary>
     /// Удаление сущности из базы данных
     /// </summary>
-    /// <param name="entity">Сущнсоть на удаление.</param>
+    /// <param name="entity">Сущность на удаление.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     public Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        _dbContext.Set<TEntity>().Remove(entity);
+        DbContext.Set<TEntity>().Remove(entity);
         return Task.CompletedTask;
     }
 }

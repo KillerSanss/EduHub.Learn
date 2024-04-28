@@ -1,5 +1,4 @@
-﻿using Ardalis.GuardClauses;
-using EduHub.StudentService.Application.Services.Interfaces.Repositories;
+﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.Data.Context;
 using EduHub.StudentService.Infrastructure.Repositories.Repositories.Base;
@@ -12,11 +11,8 @@ namespace EduHub.StudentService.Infrastructure.Repositories.Repositories;
 /// </summary>
 public class CourseRepository : BaseRepository<Course>, ICourseRepository
 {
-    private readonly StudentDbContext _dbContext;
-
     public CourseRepository(StudentDbContext dbContext): base(dbContext)
     {
-        _dbContext = Guard.Against.Null(dbContext);
     }
 
     /// <summary>
@@ -27,6 +23,6 @@ public class CourseRepository : BaseRepository<Course>, ICourseRepository
     /// <returns>Массив всех курсов преподавателя.</returns>
     public async Task<Course[]> GetAllByEducatorIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Courses.Where(c => c.EducatorId == id).ToArrayAsync(cancellationToken);
+        return await DbContext.Set<Course>().Where(c => c.EducatorId == id).ToArrayAsync(cancellationToken);
     }
 }
