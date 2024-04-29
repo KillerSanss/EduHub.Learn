@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
+using EduHub.StudentService.Application.Services.Constants;
 using EduHub.StudentService.Application.Services.Dtos.Course;
 using EduHub.StudentService.Application.Services.Dtos.Educator;
 using EduHub.StudentService.Application.Services.Exceptions;
@@ -42,7 +43,7 @@ public class EducatorService : IEducatorService
         var educator = _mapper.Map<Educator>(educatorDto);
         await _educatorRepository.AddAsync(educator, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await SaveChangesOrThrowAsync(cancellationToken);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -65,7 +66,7 @@ public class EducatorService : IEducatorService
             educatorDto.StartDate,
             new Phone(educatorDto.Phone));
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await SaveChangesOrThrowAsync(cancellationToken);
 
         return _mapper.Map<EducatorDto>(educator);
     }
@@ -119,6 +120,19 @@ public class EducatorService : IEducatorService
 
         await _educatorRepository.DeleteAsync(educator, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SaveChangesOrThrowAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+            when (ex.InnerException is not null && ex.Message.Contains(IndexConstants.UniqueEducatorPhone))
+        {
+            throw new EntityConflictException<Educator>(nameof(Educator.Phone));
+        }
     }
 
     private async Task<Educator> GetByIdOrThrowAsync(Guid id, CancellationToken cancellationToken)

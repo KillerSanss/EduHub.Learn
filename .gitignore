@@ -366,4 +366,8 @@ __pycache__/
 *_LOCAL_*.txt
 *_REMOTE_*.txt
 
+*.local.*
+
+**/appsettings.Development.json
+
 # End of https://www.toptal.com/developers/gitignore/api/git

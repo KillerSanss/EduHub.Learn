@@ -24,4 +24,8 @@ public class Email
         Guard.Against.String(email, 255, Operation.LessThanOrEqual);
         Value = Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessage.EmailFormat);
     }
+
+    private Email()
+    {
+    }
 }

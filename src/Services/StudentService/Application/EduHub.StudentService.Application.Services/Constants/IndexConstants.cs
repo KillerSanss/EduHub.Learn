@@ -1,0 +1,22 @@
+﻿namespace EduHub.StudentService.Application.Services.Constants;
+
+/// <summary>
+/// Класс описывающий индексы для базы данных
+/// </summary>
+public static class IndexConstants
+{
+    /// <summary>
+    /// Индекс для электронной почты студента
+    /// </summary>
+    public const string UniqueStudentEmail = "IX_Student_Email";
+
+    /// <summary>
+    /// Индекс для телефона студента
+    /// </summary>
+    public const string UniqueStudentPhone = "IX_Student_Phone";
+
+    /// <summary>
+    /// Индекс для телефона преподавателя
+    /// </summary>
+    public const string UniqueEducatorPhone = "IX_Educator_Phone";
+}

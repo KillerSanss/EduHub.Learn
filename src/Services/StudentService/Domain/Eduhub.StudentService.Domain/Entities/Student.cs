@@ -69,6 +69,10 @@ public class Student : BasePerson
         SetAvatar(avatar);
     }
 
+    private Student()
+    {
+    }
+
     /// <summary>
     /// Метод для обновления значений полей сущности Student
     /// </summary>
