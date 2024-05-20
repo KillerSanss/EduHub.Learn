@@ -9,10 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Eduhub.StudentService.Infrastructure.Data\Eduhub.StudentService.Infrastructure.Data.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         <PrivateAssets>all</PrivateAssets>
@@ -35,6 +31,10 @@
       <Content Include="..\..\..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Eduhub.StudentService.Infrastructure.Data\Eduhub.StudentService.Infrastructure.Data.csproj" />
     </ItemGroup>
 
 </Project>
