@@ -54,13 +54,8 @@ public class IntegrationTestFixture : IAsyncLifetime
 
     private static void AddDbContext(IServiceCollection serviceCollection)
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        // configuration.GetConnectionStrings("TestConnection");
-        var connectionString = "Host=localhost;Port=5432;Database=Student_Test;Username=user;Password=password;"; // при явном указании работает только с Localhost
+        var configuration = Appsettings.Get();
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         serviceCollection.AddDbContext<StudentDbContext>(o => o
             .UseNpgsql(EduhubNpgsqlDataSource.Create(connectionString),
