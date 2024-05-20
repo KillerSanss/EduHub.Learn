@@ -5,12 +5,10 @@ using EduHub.StudentService.Application.Services.Mapping;
 using EduHub.StudentService.Application.Services.Services;
 using Eduhub.StudentService.Infrastructure.Data;
 using Eduhub.StudentService.Infrastructure.Data.Context;
-using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 using EduHub.StudentService.Infrastructure.Migrator;
 using EduHub.StudentService.Infrastructure.Repositories;
 using EduHub.StudentService.Infrastructure.Repositories.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -60,7 +58,7 @@ public class IntegrationTestFixture : IAsyncLifetime
         serviceCollection.AddDbContext<StudentDbContext>(o => o
             .UseNpgsql(EduhubNpgsqlDataSource.Create(connectionString),
                 builder => builder.MigrationsAssembly(typeof(StudentDbContextFactory).Assembly.FullName))
-            .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.ManyServiceProvidersCreatedWarning)));
+            .EnableServiceProviderCaching(false));
 
         AddServices(serviceCollection);
     }
@@ -87,9 +85,5 @@ public class IntegrationTestFixture : IAsyncLifetime
         serviceCollection.AddAutoMapper(typeof(EducatorMappingProfile));
         serviceCollection.AddAutoMapper(typeof(StudentMappingProfile));
         serviceCollection.AddAutoMapper(typeof(EnrollmentMappingProfile));
-        serviceCollection.AddScoped<StudentGenerator>();
-        serviceCollection.AddScoped<CourseGenerator>();
-        serviceCollection.AddScoped<EducatorGenerator>();
-        serviceCollection.AddScoped<EnrollmentGenerator>();
     }
 }
