@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Eduhub.StudentService.Infrastructure.IntegrationTests;
+namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 
 /// <summary>
 /// Фикстура
@@ -37,17 +37,15 @@ public class IntegrationTestFixture : IAsyncLifetime
         await MigrateDatabase(scope);
     }
 
+    /// <summary>
+    /// Удаление базы после тестов
+    /// </summary>
     public async Task DisposeAsync()
     {
         using var scope = ServiceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<StudentDbContext>();
 
-        dbContext.RemoveRange(await dbContext.Courses.ToListAsync());
-        dbContext.RemoveRange(await dbContext.Educators.ToListAsync());
-        dbContext.RemoveRange(await dbContext.Students.ToListAsync());
-        dbContext.RemoveRange(await dbContext.Enrollments.ToListAsync());
-
-        await dbContext.DisposeAsync();
+        await dbContext.Database.EnsureDeletedAsync();
     }
 
     private static void AddDbContext(IServiceCollection serviceCollection)
@@ -66,7 +64,6 @@ public class IntegrationTestFixture : IAsyncLifetime
     private static async Task MigrateDatabase(IServiceScope scope)
     {
         await using var dbContext = scope.ServiceProvider.GetRequiredService<StudentDbContext>();
-
         await dbContext.Database.MigrateAsync();
     }
 

@@ -1,5 +1,6 @@
 ﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
+using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +29,7 @@ public class EnrollmentServicePositiveTests
     /// Проверка верного создания зачисления
     /// </summary>
     [Fact]
-    public async Task Add_ReturnCreatedEnrollment()
+    public async Task Add_Enrollment_ReturnCreatedEnrollment()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -46,17 +47,15 @@ public class EnrollmentServicePositiveTests
         var action = await enrollmentService.AddAsync(addedEnrollment,default);
 
         // Assert
-        action.Should().NotBeNull();
-        action.StartDate.Should().Be(addedEnrollment.StartDate);
-        action.StudentId.Should().Be(addedEnrollment.StudentId);
-        action.CourseId.Should().Be(addedEnrollment.CourseId);
+        action.Should().BeEquivalentTo(addedEnrollment, options => options
+            .Excluding(e => e.Id));
     }
 
     /// <summary>
     /// Проверка получения всех существующих зачислений
     /// </summary>
     [Fact]
-    public async Task GetAll_ReturnAllEnrollments()
+    public async Task GetAll_Enrollments_ReturnAllEnrollments()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -68,20 +67,21 @@ public class EnrollmentServicePositiveTests
         var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
         var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id), default);
         var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
-        await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id), default);
+        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id), default);
 
         // Act
         var enrollments = await enrollmentService.GetAllAsync(default);
 
         // Assert
-        enrollments.Should().NotBeNull();
+        enrollments.Should().NotBeEmpty();
+        enrollments.Should().ContainSingle(e => e.Id == addedEnrollment.Id);
     }
 
     /// <summary>
     /// Проверка удаления зачисления
     /// </summary>
     [Fact]
-    public async Task Delete_ShouldDeleteEnrollment()
+    public async Task Delete_Enrollment_ReturnNull()
     {
         // Assert
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -126,7 +126,6 @@ public class EnrollmentServicePositiveTests
         var studentEnrollments = await enrollmentService.GetStudentEnrollmentsAsync(addedStudent.Id, default);
 
         // Assert
-        studentEnrollments.Should().NotBeNull();
         studentEnrollments.Should().ContainSingle(e => e.Id == addedEnrollment.Id);
     }
 }

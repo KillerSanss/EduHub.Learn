@@ -4,10 +4,17 @@ using Eduhub.StudentService.Domain.Entities.Enums;
 
 namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 
+/// <summary>
+/// Класс генерации студента
+/// </summary>
 public class StudentGenerator
 {
     private readonly Faker _faker = new();
 
+    /// <summary>
+    /// Генерация студента
+    /// </summary>
+    /// <returns>Студент.</returns>
     public CreateStudentDto GenerateStudent()
     {
         var student = new CreateStudentDto
@@ -16,7 +23,7 @@ public class StudentGenerator
             Surname = _faker.Name.LastName(),
             Patronymic = _faker.Name.LastName(),
             BirthDate = _faker.Date.Past(),
-            Gender = Gender.Male,
+            Gender = _faker.PickRandom(Gender.Female, Gender.Male),
             Phone = _faker.Phone.PhoneNumber("373########"),
             Email = _faker.Internet.Email(),
             City = _faker.Address.City(),
@@ -28,9 +35,14 @@ public class StudentGenerator
         return student;
     }
 
+    /// <summary>
+    /// Генерация студента для обновления
+    /// </summary>
+    /// <param name="id">Идентификатор студента.</param>
+    /// <returns>Студент.</returns>
     public UpdateStudentDto GenerateUpdateStudent(Guid id)
     {
-        var newStudent = new UpdateStudentDto
+        var student = new UpdateStudentDto
         {
             Id = id,
             FirstName = _faker.Name.FirstName(),
@@ -46,6 +58,6 @@ public class StudentGenerator
             Avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png")
         };
 
-        return newStudent;
+        return student;
     }
 }

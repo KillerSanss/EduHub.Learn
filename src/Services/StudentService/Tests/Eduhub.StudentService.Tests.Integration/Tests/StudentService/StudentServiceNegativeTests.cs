@@ -1,5 +1,6 @@
 ﻿using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
+using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,7 @@ public class StudentServiceNegativeTests
     /// Проверка, что у метода DeleteAsync сервиса студента выбрасывается EntityNotFoundException
     /// </summary>
     [Fact]
-    public async Task Delete_ThrowEntityNotFoundException()
+    public async Task Delete_Student_ThrowEntityNotFoundException()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -42,7 +43,7 @@ public class StudentServiceNegativeTests
     /// Проверка, что у метода GetByIdAsync сервиса студента выбрасывается EntityNotFoundException
     /// </summary>
     [Fact]
-    public async Task GetById_ThrowEntityNotFoundException()
+    public async Task GetById_Student_ThrowEntityNotFoundException()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -59,7 +60,7 @@ public class StudentServiceNegativeTests
     /// Проверка, что у метода UpdateAsync сервиса студента выбрасывается EntityNotFoundException
     /// </summary>
     [Fact]
-    public async Task Update_ThrowEntityNotFoundException()
+    public async Task Update_Student_ThrowEntityNotFoundException()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();

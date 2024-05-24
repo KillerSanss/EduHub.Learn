@@ -1,7 +1,9 @@
 ﻿using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
+using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -26,7 +28,7 @@ public class CourseServiceNegativeTests
     /// Проверка, что у метода DeleteAsync сервиса курса выбрасывается EntityNotFoundException
     /// </summary>
     [Fact]
-    public async Task Delete_ThrowEntityNotFoundException()
+    public async Task Delete_Course_ThrowEntityNotFoundException()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -43,7 +45,7 @@ public class CourseServiceNegativeTests
     /// Проверка, что у метода GetByIdAsync сервиса курса выбрасывается EntityNotFoundException
     /// </summary>
     [Fact]
-    public async Task GetById_ThrowEntityNotFoundException()
+    public async Task GetById_Course_ThrowEntityNotFoundException()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -60,7 +62,7 @@ public class CourseServiceNegativeTests
     /// Проверка, что у метода UpdateAsync сервиса курса выбрасывается EntityNotFoundException
     /// </summary>
     [Fact]
-    public async Task Update_ThrowEntityNotFoundException()
+    public async Task Update_Course_ThrowEntityNotFoundException()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -74,5 +76,22 @@ public class CourseServiceNegativeTests
 
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException<Domain.Entities.Course>>();
+    }
+    
+    /// <summary>
+    /// Создания курса с несуществующим преподавателем
+    /// </summary>
+    [Fact]
+    public async Task Add_Course_ThrowDbUpdateException()
+    {
+        // Arrange
+        using var scope = _fixture.ServiceProvider.CreateScope();
+        var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
+        
+        // Act
+        var action = async () => await courseService.AddAsync(_courseGenerator.GenerateCourse(Guid.NewGuid()), default);
+        
+        // Assert
+        await action.Should().ThrowAsync<DbUpdateException>();
     }
 }

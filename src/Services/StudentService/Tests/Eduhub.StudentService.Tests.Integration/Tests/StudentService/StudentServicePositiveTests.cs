@@ -1,6 +1,7 @@
 ﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
+using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,7 @@ public class StudentServicePositiveTests
     /// Проверка верного создания студента
     /// </summary>
     [Fact]
-    public async Task Add_ReturnCreatedStudent()
+    public async Task Add_Student_ReturnCreatedStudent()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -38,25 +39,19 @@ public class StudentServicePositiveTests
         var action = await studentService.AddAsync(addedStudent, default);
 
         // Assert
-        action.Should().NotBeNull();
-        action.FirstName.Should().Be(addedStudent.FirstName);
-        action.Surname.Should().Be(addedStudent.Surname);
-        action.Patronymic.Should().Be(addedStudent.Patronymic);
-        action.Gender.Should().Be(addedStudent.Gender);
+        action.Should().BeEquivalentTo(addedStudent, options => options
+            .Excluding(s => s.Phone)
+            .Excluding(s => s.Email));
+
         action.Phone.Should().Be(new Phone(addedStudent.Phone).ToString());
         action.Email.Should().Be(new Email(addedStudent.Email).ToString());
-        action.BirthDate.Should().Be(addedStudent.BirthDate);
-        action.City.Should().Be(addedStudent.City);
-        action.Street.Should().Be(addedStudent.Street);
-        action.HouseNumber.Should().Be(addedStudent.HouseNumber);
-        action.Avatar.Should().Be(addedStudent.Avatar);
     }
 
     /// <summary>
     /// Проверка обновления студента
     /// </summary>
     [Fact]
-    public async Task Update_ReturnUpdatedStudent()
+    public async Task Update_Student_ReturnUpdatedStudent()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -70,44 +65,39 @@ public class StudentServicePositiveTests
         var action = await studentService.UpdateAsync(newStudent, default);
 
         // Assert
-        action.Should().NotBeNull();
-        action.Id.Should().Be(addedStudent.Id);
-        action.FirstName.Should().Be(newStudent.FirstName);
-        action.Surname.Should().Be(newStudent.Surname);
-        action.Patronymic.Should().Be(newStudent.Patronymic);
-        action.Gender.Should().Be(newStudent.Gender);
+        action.Should().BeEquivalentTo(newStudent, options => options
+            .Excluding(s => s.Phone)
+            .Excluding(s => s.Email));
+
         action.Phone.Should().Be(new Phone(newStudent.Phone).ToString());
         action.Email.Should().Be(new Email(newStudent.Email).ToString());
-        action.City.Should().Be(newStudent.City);
-        action.Street.Should().Be(newStudent.Street);
-        action.HouseNumber.Should().Be(newStudent.HouseNumber);
-        action.Avatar.Should().Be(newStudent.Avatar);
     }
 
     /// <summary>
     /// Проверка получения всех существующих студентов
     /// </summary>
     [Fact]
-    public async Task GetAll_ReturnAllStudents()
+    public async Task GetAll_Students_ReturnAllStudents()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
-        await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
 
         // Act
         var students = await studentService.GetAllAsync(default);
 
         // Assert
-        students.Should().NotBeNull();
+        students.Should().NotBeEmpty();
+        students.Should().ContainSingle(e => e.Id == addedStudent.Id);
     }
 
     /// <summary>
     /// Проверка выбор верного студента по идентификатору
     /// </summary>
     [Fact]
-    public async Task GetById_ReturnSelectedStudent()
+    public async Task GetById_Student_ReturnSelectedStudent()
     {
         // Assert
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -126,7 +116,7 @@ public class StudentServicePositiveTests
     /// Проверка удаления студента
     /// </summary>
     [Fact]
-    public async Task Delete_ShouldDeleteStudent()
+    public async Task Delete_Student_ReturnNull()
     {
         // Assert
         using var scope = _fixture.ServiceProvider.CreateScope();

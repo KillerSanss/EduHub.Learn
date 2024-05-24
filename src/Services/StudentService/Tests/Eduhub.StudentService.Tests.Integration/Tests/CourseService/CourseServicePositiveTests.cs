@@ -1,5 +1,6 @@
 ﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
+using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -27,7 +28,7 @@ public class CourseServicePositiveTests
     /// Проверка верного создания курса
     /// </summary>
     [Fact]
-    public async Task Add_ReturnCreatedCourse()
+    public async Task Add_Course_ReturnCreatedCourse()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -41,7 +42,6 @@ public class CourseServicePositiveTests
         var action = await courseService.AddAsync(addedCourse, default);
 
         // Assert
-        action.Should().NotBeNull();
         action.Should().BeEquivalentTo(addedCourse);
     }
 
@@ -49,7 +49,7 @@ public class CourseServicePositiveTests
     /// Проверка обновления курса
     /// </summary>
     [Fact]
-    public async Task Update_ReturnUpdatedCourse()
+    public async Task Update_Course_ReturnUpdatedCourse()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -59,22 +59,20 @@ public class CourseServicePositiveTests
         var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
         var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id), default);
 
+        var updateCourseData = _courseGenerator.GenerateUpdateCourse(addedCourse.Id, addedEducator.Id);
+
         // Act
-        var updatedCourse = await courseService.UpdateAsync(_courseGenerator.GenerateUpdateCourse(addedCourse.Id, addedEducator.Id), default);
+        var course = await courseService.UpdateAsync(updateCourseData, default);
 
         // Assert
-        updatedCourse.Should().NotBeNull();
-        updatedCourse.Id.Should().Be(addedCourse.Id);
-        updatedCourse.Name.Should().Be(updatedCourse.Name);
-        updatedCourse.Description.Should().Be(updatedCourse.Description);
-        updatedCourse.EducatorId.Should().Be(updatedCourse.EducatorId);
+        course.Should().BeEquivalentTo(updateCourseData);
     }
 
     /// <summary>
     /// Проверка получения всех существующих курсов
     /// </summary>
     [Fact]
-    public async Task GetAll_ReturnAllCourses()
+    public async Task GetAll_Courses_ReturnAllCourses()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -83,20 +81,21 @@ public class CourseServicePositiveTests
 
         var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
 
-        await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id), default);
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id), default);
 
         // Act
         var courses = await courseService.GetAllAsync(default);
 
         // Assert
-        courses.Should().NotBeNull();
+        courses.Should().NotBeEmpty();
+        courses.Should().ContainSingle(e => e.Id == addedCourse.Id);
     }
 
     /// <summary>
     /// Проверка выбор верного курса по идентификатору
     /// </summary>
     [Fact]
-    public async Task GetById_ReturnSelectedCourse()
+    public async Task GetById_Course_ReturnSelectedCourse()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -111,7 +110,6 @@ public class CourseServicePositiveTests
         var selectedCourse = await courseService.GetByIdAsync(addedCourse.Id, default);
 
         // Assert
-        selectedCourse.Should().NotBeNull();
         selectedCourse.Should().BeEquivalentTo(addedCourse);
     }
 
@@ -119,7 +117,7 @@ public class CourseServicePositiveTests
     /// Проверка удаления курса
     /// </summary>
     [Fact]
-    public async Task Delete_ShouldDeleteCourseFromRepository()
+    public async Task Delete_Course_ReturnNull()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
