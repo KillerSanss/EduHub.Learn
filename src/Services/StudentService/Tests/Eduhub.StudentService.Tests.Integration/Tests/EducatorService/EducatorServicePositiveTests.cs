@@ -1,6 +1,5 @@
 ﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
-using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 using FluentAssertions;
@@ -36,13 +35,10 @@ public class EducatorServicePositiveTests
         var addedEducator = _educatorGenerator.GenerateEducator();
 
         // Act
-        var action = await educatorService.AddAsync(addedEducator, default);
+        var action = await educatorService.AddAsync(addedEducator);
 
         // Assert
-        action.Should().BeEquivalentTo(addedEducator, options => options
-            .Excluding(s => s.Phone));
-
-        action.Phone.Should().Be(new Phone(addedEducator.Phone).ToString());
+        action.Should().BeEquivalentTo(addedEducator);
     }
 
     /// <summary>
@@ -55,18 +51,15 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
 
         var newEducator = _educatorGenerator.GenerateUpdateEducator(addedEducator.Id);
 
         // Act
-        var action = await educatorService.UpdateAsync(newEducator, default);
+        var action = await educatorService.UpdateAsync(newEducator);
 
         // Assert
-        action.Should().BeEquivalentTo(newEducator, options => options
-            .Excluding(s => s.Phone));
-
-        action.Phone.Should().Be(new Phone(newEducator.Phone).ToString());
+        action.Should().BeEquivalentTo(newEducator);
     }
 
     /// <summary>
@@ -79,13 +72,12 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
 
         // Act
-        var educators = await educatorService.GetAllAsync(default);
+        var educators = await educatorService.GetAllAsync();
 
         // Assert
-        educators.Should().NotBeEmpty();
         educators.Should().ContainSingle(e => e.Id == addedEducator.Id);
     }
 
@@ -99,10 +91,10 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
 
         // Act
-        var selectedEducator = await educatorService.GetByIdAsync(addedEducator.Id, default);
+        var selectedEducator = await educatorService.GetByIdAsync(addedEducator.Id);
 
         // Assert
         selectedEducator.Should().BeEquivalentTo(addedEducator);
@@ -119,11 +111,11 @@ public class EducatorServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var educatorRepository = scope.ServiceProvider.GetRequiredService<IEducatorRepository>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
 
         // Act
-        await educatorService.DeleteAsync(addedEducator.Id, default);
-        var action = await educatorRepository.GetByIdAsync(addedEducator.Id, default);
+        await educatorService.DeleteAsync(addedEducator.Id);
+        var action = await educatorRepository.GetByIdAsync(addedEducator.Id);
 
         // Assert
         action.Should().BeNull();

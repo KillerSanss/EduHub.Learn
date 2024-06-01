@@ -12,7 +12,7 @@ public interface IEnrollmentService
     /// </summary>
     /// <param name="enrollment">Дто зачисления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    Task<EnrollmentDto> AddAsync(CreateEnrollmentDto enrollment, CancellationToken cancellationToken);
+    Task<EnrollmentDto> AddAsync(CreateEnrollmentDto enrollment, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение всех зачислений студента
@@ -20,19 +20,19 @@ public interface IEnrollmentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений студента.</returns>
-    Task<StudentEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken);
+    Task<StudentEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение всех зачислений
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений.</returns>
-    Task<EnrollmentDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<EnrollmentDto[]> GetAllAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Удаление зачисления
     /// </summary>
     /// <param name="enrollmentId">Идентификатор зачисления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    Task DeleteAsync(Guid enrollmentId, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid enrollmentId, CancellationToken cancellationToken = default);
 }

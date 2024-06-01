@@ -15,15 +15,21 @@ namespace EduHub.StudentService.Application.Services.Services;
 public class EnrollmentService : IEnrollmentService
 {
     private readonly IEnrollmentRepository _enrollmentRepository;
+    private readonly ICourseRepository _courseRepository;
+    private readonly IStudentRepository _studentRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
     public EnrollmentService(
         IEnrollmentRepository enrollmentRepository,
+        ICourseRepository courseRepository,
+        IStudentRepository studentRepository,
         IMapper mapper,
         IUnitOfWork unitOfWork)
     {
         _enrollmentRepository = Guard.Against.Null(enrollmentRepository);
+        _courseRepository = Guard.Against.Null(courseRepository);
+        _studentRepository = Guard.Against.Null(studentRepository);
         _mapper = Guard.Against.Null(mapper);
         _unitOfWork = Guard.Against.Null(unitOfWork);
     }
@@ -39,7 +45,10 @@ public class EnrollmentService : IEnrollmentService
         Guard.Against.Null(enrollmentDto);
 
         var enrollment = _mapper.Map<Enrollment>(enrollmentDto);
-
+        
+        await CourseExistOrThrowAsync(enrollment.CourseId, cancellationToken);
+        await StudentExistOrThrowAsync(enrollment.StudentId, cancellationToken);
+        
         await _enrollmentRepository.AddAsync(enrollment, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -91,5 +100,23 @@ public class EnrollmentService : IEnrollmentService
         }
 
         return enrollment;
+    }
+    
+    private async Task CourseExistOrThrowAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var course = await _courseRepository.GetByIdAsync(id, cancellationToken);
+        if (course == null)
+        {
+            throw new EntityNotFoundException<Course>(nameof(Enrollment.CourseId), id.ToString());
+        }
+    }
+    
+    private async Task StudentExistOrThrowAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var student = await _studentRepository.GetByIdAsync(id, cancellationToken);
+        if (student == null)
+        {
+            throw new EntityNotFoundException<Student>(nameof(Enrollment.StudentId), id.ToString());
+        }
     }
 }

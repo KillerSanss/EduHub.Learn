@@ -1,9 +1,9 @@
 ﻿using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -12,7 +12,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.CourseServ
 /// <summary>
 /// Негативные тесты сервиса курса
 /// </summary>
-[Collection("DatabaseCollection")]
+[Collection(nameof(CollectionNames.DatabaseCollection))]
 public class CourseServiceNegativeTests
 {
     private readonly IntegrationTestFixture _fixture;
@@ -35,10 +35,10 @@ public class CourseServiceNegativeTests
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
         // Act
-        var action = async () => await courseService.DeleteAsync(Guid.NewGuid(), default);
+        var action = async () => await courseService.DeleteAsync(Guid.NewGuid());
 
         // Assert
-        await action.Should().ThrowAsync<EntityNotFoundException<Domain.Entities.Course>>();
+        await action.Should().ThrowAsync<EntityNotFoundException<Course>>();
     }
 
     /// <summary>
@@ -52,10 +52,10 @@ public class CourseServiceNegativeTests
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
         // Act
-        var action = async () => await courseService.GetByIdAsync(Guid.NewGuid(), default);
+        var action = async () => await courseService.GetByIdAsync(Guid.NewGuid());
 
         // Assert
-        await action.Should().ThrowAsync<EntityNotFoundException<Domain.Entities.Course>>();
+        await action.Should().ThrowAsync<EntityNotFoundException<Course>>();
     }
 
     /// <summary>
@@ -69,29 +69,29 @@ public class CourseServiceNegativeTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
 
         // Act
-        var action = async () => await courseService.UpdateAsync(_courseGenerator.GenerateUpdateCourse(Guid.NewGuid(), addedEducator.Id), default);
+        var action = async () => await courseService.UpdateAsync(_courseGenerator.GenerateUpdateCourse(Guid.NewGuid(), addedEducator.Id));
 
         // Assert
-        await action.Should().ThrowAsync<EntityNotFoundException<Domain.Entities.Course>>();
+        await action.Should().ThrowAsync<EntityNotFoundException<Course>>();
     }
     
     /// <summary>
     /// Создания курса с несуществующим преподавателем
     /// </summary>
     [Fact]
-    public async Task Add_Course_ThrowDbUpdateException()
+    public async Task Add_Course_ThrowEntityNotFoundException()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
         
         // Act
-        var action = async () => await courseService.AddAsync(_courseGenerator.GenerateCourse(Guid.NewGuid()), default);
+        var action = async () => await courseService.AddAsync(_courseGenerator.GenerateCourse(Guid.NewGuid()));
         
         // Assert
-        await action.Should().ThrowAsync<DbUpdateException>();
+        await action.Should().ThrowAsync<EntityNotFoundException<Educator>>();
     }
 }

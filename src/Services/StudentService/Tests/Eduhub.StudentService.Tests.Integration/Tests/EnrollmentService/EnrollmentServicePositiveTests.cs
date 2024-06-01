@@ -11,7 +11,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.Enrollment
 /// <summary>
 /// Позитивные тесты сервиса зачислений
 /// </summary>
-[Collection("DatabaseCollection")]
+[Collection(nameof(CollectionNames.DatabaseCollection))]
 public class EnrollmentServicePositiveTests
 {
     private readonly IntegrationTestFixture _fixture;
@@ -38,13 +38,13 @@ public class EnrollmentServicePositiveTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id), default);
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
         var addedEnrollment = _enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id);
 
         // Act
-        var action = await enrollmentService.AddAsync(addedEnrollment,default);
+        var action = await enrollmentService.AddAsync(addedEnrollment);
 
         // Assert
         action.Should().BeEquivalentTo(addedEnrollment, options => options
@@ -64,16 +64,15 @@ public class EnrollmentServicePositiveTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id), default);
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
-        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id), default);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
+        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id));
 
         // Act
-        var enrollments = await enrollmentService.GetAllAsync(default);
+        var enrollments = await enrollmentService.GetAllAsync();
 
         // Assert
-        enrollments.Should().NotBeEmpty();
         enrollments.Should().ContainSingle(e => e.Id == addedEnrollment.Id);
     }
 
@@ -91,14 +90,14 @@ public class EnrollmentServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id), default);
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
-        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id), default);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
+        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id));
 
         // Act
-        await enrollmentService.DeleteAsync(addedEnrollment.Id, default);
-        var action = await enrollmentRepository.GetByIdAsync(addedEnrollment.Id, default);
+        await enrollmentService.DeleteAsync(addedEnrollment.Id);
+        var action = await enrollmentRepository.GetByIdAsync(addedEnrollment.Id);
 
         // Assert
         action.Should().BeNull();
@@ -117,13 +116,13 @@ public class EnrollmentServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator(), default);
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id), default);
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
-        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id), default);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
+        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id));
 
         // Act
-        var studentEnrollments = await enrollmentService.GetStudentEnrollmentsAsync(addedStudent.Id, default);
+        var studentEnrollments = await enrollmentService.GetStudentEnrollmentsAsync(addedStudent.Id);
 
         // Assert
         studentEnrollments.Should().ContainSingle(e => e.Id == addedEnrollment.Id);

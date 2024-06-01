@@ -6,14 +6,13 @@
 public static class EnrollmentTestData
 {
     /// <summary>
-    /// Генерация данных для исключения ArgumentException у сущности Enrollment
+    /// Генерация данных для исключения EntityNotFoundException у сущности Enrollment
     /// </summary>
     public static IEnumerable<object[]> GetEnrollmentArgumentExceptionProperties()
     {
         return new List<object[]>
         {
-            new object[] {Guid.Empty, Guid.NewGuid()},
-            new object[] {Guid.NewGuid(), Guid.Empty}
+            new object[] {Guid.NewGuid(), Guid.NewGuid()}
         };
     }
 }

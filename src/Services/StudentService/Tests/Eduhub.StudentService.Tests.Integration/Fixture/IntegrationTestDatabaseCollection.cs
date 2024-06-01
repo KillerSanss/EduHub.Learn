@@ -2,7 +2,7 @@
 
 namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 
-[CollectionDefinition("DatabaseCollection")]
+[CollectionDefinition(nameof(CollectionNames.DatabaseCollection))]
 public class IntegrationTestDatabaseCollection : ICollectionFixture<IntegrationTestFixture>
 {
 }

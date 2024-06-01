@@ -1,5 +1,6 @@
 ﻿using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 using FluentAssertions;
@@ -11,7 +12,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.StudentSer
 /// <summary>
 /// Негативные тесты сервиса студента
 /// </summary>
-[Collection("DatabaseCollection")]
+[Collection(nameof(CollectionNames.DatabaseCollection))]
 public class StudentServiceNegativeTests
 {
     private readonly IntegrationTestFixture _fixture;
@@ -33,10 +34,10 @@ public class StudentServiceNegativeTests
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
         // Act
-        var action = async () => await studentService.DeleteAsync(Guid.NewGuid(), default);
+        var action = async () => await studentService.DeleteAsync(Guid.NewGuid());
 
         // Assert
-        await action.Should().ThrowAsync<EntityNotFoundException<Domain.Entities.Student>>();
+        await action.Should().ThrowAsync<EntityNotFoundException<Student>>();
     }
 
     /// <summary>
@@ -50,10 +51,10 @@ public class StudentServiceNegativeTests
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
         // Act
-        var action = async () => await studentService.GetByIdAsync(Guid.NewGuid(), default);
+        var action = async () => await studentService.GetByIdAsync(Guid.NewGuid());
 
         // Assert
-        await action.Should().ThrowAsync<EntityNotFoundException<Domain.Entities.Student>>();
+        await action.Should().ThrowAsync<EntityNotFoundException<Student>>();
     }
 
     /// <summary>
@@ -67,9 +68,9 @@ public class StudentServiceNegativeTests
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
         // Act
-        var action = async () => await studentService.UpdateAsync(_studentGenerator.GenerateUpdateStudent(Guid.NewGuid()), default);
+        var action = async () => await studentService.UpdateAsync(_studentGenerator.GenerateUpdateStudent(Guid.NewGuid()));
 
         // Assert
-        await action.Should().ThrowAsync<EntityNotFoundException<Domain.Entities.Student>>();
+        await action.Should().ThrowAsync<EntityNotFoundException<Student>>();
     }
 }

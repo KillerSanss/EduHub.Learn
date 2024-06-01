@@ -13,7 +13,7 @@ public interface ICourseService
     /// <param name="course">Дто Курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный курс.</returns>
-    Task<CourseDto> AddAsync(CreateCourseDto course, CancellationToken cancellationToken);
+    Task<CourseDto> AddAsync(CreateCourseDto course, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Обновление курса
@@ -21,7 +21,7 @@ public interface ICourseService
     /// <param name="course">Дто Курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный курс.</returns>
-    Task<CourseDto> UpdateAsync(UpdateCourseDto course, CancellationToken cancellationToken);
+    Task<CourseDto> UpdateAsync(UpdateCourseDto course, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение курса
@@ -29,19 +29,19 @@ public interface ICourseService
     /// <param name="courseId">Идентификатор курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный курс.</returns>
-    Task<CourseDto> GetByIdAsync(Guid courseId, CancellationToken cancellationToken);
+    Task<CourseDto> GetByIdAsync(Guid courseId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение всех курсов
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив курсов.</returns>
-    Task<CourseDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<CourseDto[]> GetAllAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Удаление курса
     /// </summary>
     /// <param name="courseId">Идентификатор курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    Task DeleteAsync(Guid courseId, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid courseId, CancellationToken cancellationToken = default);
 }

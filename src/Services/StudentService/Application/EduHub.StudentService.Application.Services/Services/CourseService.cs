@@ -15,12 +15,14 @@ namespace EduHub.StudentService.Application.Services.Services;
 public class CourseService : ICourseService
 {
     private readonly ICourseRepository _courseRepository;
+    private readonly IEducatorRepository _educatorRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CourseService(ICourseRepository courseRepository, IMapper mapper, IUnitOfWork unitOfWork)
+    public CourseService(ICourseRepository courseRepository, IEducatorRepository educatorRepository, IMapper mapper, IUnitOfWork unitOfWork)
     {
         _courseRepository = Guard.Against.Null(courseRepository);
+        _educatorRepository = Guard.Against.Null(educatorRepository);
         _mapper = Guard.Against.Null(mapper);
         _unitOfWork = Guard.Against.Null(unitOfWork);
     }
@@ -34,9 +36,10 @@ public class CourseService : ICourseService
     public async Task<CourseDto> AddAsync(CreateCourseDto courseDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(courseDto);
-
+        
         var course = _mapper.Map<Course>(courseDto);
-
+        
+        await EducatorExistOrThrowAsync(course.EducatorId, cancellationToken);
         await _courseRepository.AddAsync(course, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -107,5 +110,14 @@ public class CourseService : ICourseService
         }
 
         return course;
+    }
+    
+    private async Task EducatorExistOrThrowAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var educator = await _educatorRepository.GetByIdAsync(id, cancellationToken);
+        if (educator == null)
+        {
+            throw new EntityNotFoundException<Educator>(nameof(Course.EducatorId), id.ToString());
+        }
     }
 }

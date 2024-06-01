@@ -2,6 +2,7 @@
 using EduHub.StudentService.Application.Services.Dtos.Enrollment;
 using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.TestData;
 using FluentAssertions;
@@ -13,7 +14,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.Enrollment
 /// <summary>
 /// Негативные тесты сервиса зачислений
 /// </summary>
-[Collection("DatabaseCollection")]
+[Collection(nameof(CollectionNames.DatabaseCollection))]
 public class EnrollmentServiceNegativeTests
 {
     private readonly IntegrationTestFixture _fixture;
@@ -37,18 +38,18 @@ public class EnrollmentServiceNegativeTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
 
         // Act
-        var action = async () => await enrollmentService.DeleteAsync(Guid.NewGuid(), default);
+        var action = async () => await enrollmentService.DeleteAsync(Guid.NewGuid());
 
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException<Domain.Entities.Enrollment>>();
     }
     
     /// <summary>
-    /// Проверка, что у метод AddAsync сервиса зачислений выбрасывает ArgumentException
+    /// Проверка, что у метод AddAsync сервиса зачислений выбрасывает DbUpdateException
     /// </summary>
     [Theory]
     [MemberData(nameof(TestEnrollmentArgumentExceptionData))]
-    public async Task Add_Enrollment_ThrowDbUpdateException(Guid courseId, Guid studentId)
+    public async Task Add_Enrollment_ThrowEntityNotFoundException(Guid courseId, Guid studentId)
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
@@ -63,9 +64,10 @@ public class EnrollmentServiceNegativeTests
         };
         
         // Act
-        var action = async () => await enrollmentService.AddAsync(enrollment, default);
+        var action = async () => await enrollmentService.AddAsync(enrollment);
         
         // Assert
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<Exception>()
+            .Where(e => e is EntityNotFoundException<Student> || e is EntityNotFoundException<Course>);
     }
 }

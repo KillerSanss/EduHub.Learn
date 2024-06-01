@@ -1,6 +1,5 @@
 ﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
-using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
 using FluentAssertions;
@@ -12,7 +11,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.StudentSer
 /// <summary>
 /// Позитивные тесты сервиса студента
 /// </summary>
-[Collection("DatabaseCollection")]
+[Collection(nameof(CollectionNames.DatabaseCollection))]
 public class StudentServicePositiveTests
 {
     private readonly IntegrationTestFixture _fixture;
@@ -36,15 +35,10 @@ public class StudentServicePositiveTests
         var addedStudent = _studentGenerator.GenerateStudent();
 
         // Act
-        var action = await studentService.AddAsync(addedStudent, default);
+        var action = await studentService.AddAsync(addedStudent);
 
         // Assert
-        action.Should().BeEquivalentTo(addedStudent, options => options
-            .Excluding(s => s.Phone)
-            .Excluding(s => s.Email));
-
-        action.Phone.Should().Be(new Phone(addedStudent.Phone).ToString());
-        action.Email.Should().Be(new Email(addedStudent.Email).ToString());
+        action.Should().BeEquivalentTo(addedStudent);
     }
 
     /// <summary>
@@ -57,20 +51,15 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
 
         var newStudent = _studentGenerator.GenerateUpdateStudent(addedStudent.Id);
 
         // Act
-        var action = await studentService.UpdateAsync(newStudent, default);
+        var action = await studentService.UpdateAsync(newStudent);
 
         // Assert
-        action.Should().BeEquivalentTo(newStudent, options => options
-            .Excluding(s => s.Phone)
-            .Excluding(s => s.Email));
-
-        action.Phone.Should().Be(new Phone(newStudent.Phone).ToString());
-        action.Email.Should().Be(new Email(newStudent.Email).ToString());
+        action.Should().BeEquivalentTo(newStudent);
     }
 
     /// <summary>
@@ -83,13 +72,12 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
 
         // Act
-        var students = await studentService.GetAllAsync(default);
+        var students = await studentService.GetAllAsync();
 
         // Assert
-        students.Should().NotBeEmpty();
         students.Should().ContainSingle(e => e.Id == addedStudent.Id);
     }
 
@@ -103,10 +91,10 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
 
         // Act
-        var selectedStudent = await studentService.GetByIdAsync(addedStudent.Id, default);
+        var selectedStudent = await studentService.GetByIdAsync(addedStudent.Id);
 
         // Assert
         selectedStudent.Should().BeEquivalentTo(addedStudent);
@@ -123,11 +111,11 @@ public class StudentServicePositiveTests
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
         var studentRepository = scope.ServiceProvider.GetRequiredService<IStudentRepository>();
 
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent(), default);
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
 
         // Act
-        await studentService.DeleteAsync(addedStudent.Id, default);
-        var action = await studentRepository.GetByIdAsync(addedStudent.Id, default);
+        await studentService.DeleteAsync(addedStudent.Id);
+        var action = await studentRepository.GetByIdAsync(addedStudent.Id);
 
         // Assert
         action.Should().BeNull();

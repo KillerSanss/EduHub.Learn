@@ -14,7 +14,7 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранная сущность.</returns>
-    Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken  = default);
 
     /// <summary>
     /// Добавление
@@ -22,7 +22,7 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     /// <param name="entity">Сущность на добавление.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленная сущность.</returns>
-    Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken);
+    Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Обновление
@@ -30,19 +30,19 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     /// <param name="entity">Сущность на обновление.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленная сущнсть.</returns>
-    Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken);
+    Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Удаление
     /// </summary>
     /// <param name="entity">Сущность на удаление.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    Task DeleteAsync(TEntity entity, CancellationToken cancellationToken);
+    Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Выбор всех существующих сущностей
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив всех сущностей.</returns>
-    Task<TEntity[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<TEntity[]> GetAllAsync(CancellationToken cancellationToken = default);
 }
