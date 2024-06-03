@@ -24,7 +24,11 @@ public class StudentMappingProfile : Profile
             .ForMember(dest => dest.Street,
                 opt => opt.MapFrom(s => s.Address.Street))
             .ForMember(dest => dest.HouseNumber,
-                opt => opt.MapFrom(s => s.Address.HouseNumber));
+                opt => opt.MapFrom(s => s.Address.HouseNumber))
+            .ForMember(dest => dest.Phone,
+            opt => opt.MapFrom(s => s.Phone.Value))
+            .ForMember(dest => dest.Email,
+            opt => opt.MapFrom(s => s.Email.Value));
 
         CreateMap<CreateStudentDto, Student>()
             .ConstructUsing(dto => new Student(

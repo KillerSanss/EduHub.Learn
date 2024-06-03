@@ -13,5 +13,5 @@ public interface ICourseRepository : IRepository<Course>
     /// <param name="id">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns></returns>
-    Task<Course[]> GetAllByEducatorIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Course[]> GetAllByEducatorIdAsync(Guid id, CancellationToken cancellationToken = default);
 }

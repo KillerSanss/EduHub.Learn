@@ -14,7 +14,7 @@ public interface IEducatorService
     /// <param name="educator">Дто Преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный преподаватель.</returns>
-    Task<EducatorDto> AddAsync(CreateEducatorDto educator, CancellationToken cancellationToken);
+    Task<EducatorDto> AddAsync(CreateEducatorDto educator, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Обновление преподавателя
@@ -22,7 +22,7 @@ public interface IEducatorService
     /// <param name="educator">Дто Преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный преподаватель.</returns>
-    Task<EducatorDto> UpdateAsync(UpdateEducatorDto educator, CancellationToken cancellationToken);
+    Task<EducatorDto> UpdateAsync(UpdateEducatorDto educator, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение преподавателя
@@ -30,21 +30,21 @@ public interface IEducatorService
     /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный преподаватель.</returns>
-    Task<EducatorDto> GetByIdAsync(Guid educatorId, CancellationToken cancellationToken);
+    Task<EducatorDto> GetByIdAsync(Guid educatorId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение всех преподавателей
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив преподавателей.</returns>
-    Task<EducatorDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<EducatorDto[]> GetAllAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Удаление преподавателя
     /// </summary>
     /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    Task DeleteAsync(Guid educatorId, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid educatorId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение всех курсов преподавателя
@@ -52,5 +52,5 @@ public interface IEducatorService
     /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns></returns>
-    Task<EducatorCourseDto[]> GetAllCourses(Guid educatorId, CancellationToken cancellationToken);
+    Task<EducatorCourseDto[]> GetAllCourses(Guid educatorId, CancellationToken cancellationToken = default);
 }

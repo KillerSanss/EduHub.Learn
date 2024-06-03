@@ -7,7 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Application\EduHub.StudentService.Application.Services\EduHub.StudentService.Application.Services.csproj" />
       <ProjectReference Include="..\Eduhub.StudentService.Infrastructure.Data\Eduhub.StudentService.Infrastructure.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Ardalis.GuardClauses" Version="4.3.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
     </ItemGroup>
 
 </Project>

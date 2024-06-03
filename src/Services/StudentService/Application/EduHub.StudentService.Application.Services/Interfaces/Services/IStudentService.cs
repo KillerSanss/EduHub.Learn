@@ -13,7 +13,7 @@ public interface IStudentService
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    Task<StudentDto> AddAsync(CreateStudentDto student, CancellationToken cancellationToken);
+    Task<StudentDto> AddAsync(CreateStudentDto student, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Обновление студента
@@ -21,7 +21,7 @@ public interface IStudentService
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    Task<StudentDto> UpdateAsync(UpdateStudentDto student, CancellationToken  cancellationToken);
+    Task<StudentDto> UpdateAsync(UpdateStudentDto student, CancellationToken  cancellationToken = default);
 
     /// <summary>
     /// Получение студента
@@ -29,19 +29,19 @@ public interface IStudentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный студент.</returns>
-    Task<StudentDto> GetByIdAsync(Guid studentId, CancellationToken cancellationToken);
+    Task<StudentDto> GetByIdAsync(Guid studentId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение всех студентов
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив студентов.</returns>
-    Task<StudentDto[]> GetAllAsync(CancellationToken cancellationToken);
+    Task<StudentDto[]> GetAllAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Удаление студента
     /// </summary>
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    Task DeleteAsync(Guid studentId, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid studentId, CancellationToken cancellationToken = default);
 }

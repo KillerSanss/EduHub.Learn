@@ -18,7 +18,9 @@ public class EducatorMappingProfile : Profile
             .ForMember(dest => dest.FirstName,
                 opt => opt.MapFrom(e => e.FullName.FirstName))
             .ForMember(dest => dest.Patronymic,
-                opt => opt.MapFrom(e => e.FullName.Patronymic));
+                opt => opt.MapFrom(e => e.FullName.Patronymic))
+            .ForMember(dest => dest.Phone,
+                opt => opt.MapFrom(e => e.Phone.Value));
 
         CreateMap<CreateEducatorDto, Educator>()
             .ConstructUsing(dto => new Educator(
