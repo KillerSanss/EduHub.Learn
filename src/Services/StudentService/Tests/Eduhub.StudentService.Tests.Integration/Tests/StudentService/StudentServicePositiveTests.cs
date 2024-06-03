@@ -11,7 +11,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.StudentSer
 /// <summary>
 /// Позитивные тесты сервиса студента
 /// </summary>
-[Collection(nameof(IntegrationTestDatabaseCollection.DatabaseCollection))]
+[Collection(nameof(IntegrationTestCollection))]
 public class StudentServicePositiveTests
 {
     private readonly IntegrationTestFixture _fixture;

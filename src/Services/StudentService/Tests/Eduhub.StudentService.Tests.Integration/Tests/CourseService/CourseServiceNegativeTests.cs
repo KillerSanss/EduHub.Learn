@@ -12,7 +12,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.CourseServ
 /// <summary>
 /// Негативные тесты сервиса курса
 /// </summary>
-[Collection(nameof(IntegrationTestDatabaseCollection.DatabaseCollection))]
+[Collection(nameof(IntegrationTestCollection))]
 public class CourseServiceNegativeTests
 {
     private readonly IntegrationTestFixture _fixture;
