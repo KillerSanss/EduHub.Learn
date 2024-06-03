@@ -1,7 +1,7 @@
 ﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
-using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
+using Eduhub.StudentService.Tests.Shared.Generators;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -11,7 +11,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.CourseServ
 /// <summary>
 /// Позитивные тесты сервиса курса
 /// </summary>
-[Collection(nameof(CollectionNames.DatabaseCollection))]
+[Collection(nameof(IntegrationTestDatabaseCollection.DatabaseCollection))]
 public class CourseServicePositiveTests
 {
     private readonly IntegrationTestFixture _fixture;
@@ -34,8 +34,8 @@ public class CourseServicePositiveTests
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
-        var addedCourse = _courseGenerator.GenerateCourse(addedEducator.Id);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedCourse = _courseGenerator.GenerateCourseDto(addedEducator.Id);
 
         // Act
         var action = await courseService.AddAsync(addedCourse);
@@ -55,10 +55,10 @@ public class CourseServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
 
-        var updateCourseData = _courseGenerator.GenerateUpdateCourse(addedCourse.Id, addedEducator.Id);
+        var updateCourseData = _courseGenerator.GenerateUpdateCourseDto(addedCourse.Id, addedEducator.Id);
 
         // Act
         var course = await courseService.UpdateAsync(updateCourseData);
@@ -78,9 +78,9 @@ public class CourseServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
 
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
 
         // Act
         var courses = await courseService.GetAllAsync();
@@ -100,9 +100,9 @@ public class CourseServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
 
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
 
         // Act
         var selectedCourse = await courseService.GetByIdAsync(addedCourse.Id);
@@ -123,8 +123,8 @@ public class CourseServicePositiveTests
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
         var courseRepository = scope.ServiceProvider.GetRequiredService<ICourseRepository>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
 
         // Act
         await courseService.DeleteAsync(addedCourse.Id, CancellationToken.None);

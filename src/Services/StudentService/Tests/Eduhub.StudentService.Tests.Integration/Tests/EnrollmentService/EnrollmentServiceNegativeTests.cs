@@ -4,7 +4,7 @@ using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
-using Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.TestData;
+using Eduhub.StudentService.Tests.Shared.Generators;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -14,13 +14,14 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.Enrollment
 /// <summary>
 /// Негативные тесты сервиса зачислений
 /// </summary>
-[Collection(nameof(CollectionNames.DatabaseCollection))]
+[Collection(nameof(IntegrationTestDatabaseCollection.DatabaseCollection))]
 public class EnrollmentServiceNegativeTests
 {
     private readonly IntegrationTestFixture _fixture;
     private readonly Faker _faker = new();
-    
-    public static IEnumerable<object[]> TestEnrollmentArgumentExceptionData = EnrollmentTestData.GetEnrollmentArgumentExceptionProperties();
+    private readonly CourseGenerator _courseGenerator = new();
+    private readonly StudentGenerator _studentGenerator = new();
+    private readonly EducatorGenerator _educatorGenerator = new();
 
     public EnrollmentServiceNegativeTests(IntegrationTestFixture fixture)
     {
@@ -41,25 +42,29 @@ public class EnrollmentServiceNegativeTests
         var action = async () => await enrollmentService.DeleteAsync(Guid.NewGuid());
 
         // Assert
-        await action.Should().ThrowAsync<EntityNotFoundException<Domain.Entities.Enrollment>>();
+        await action.Should().ThrowAsync<EntityNotFoundException<Enrollment>>();
     }
     
     /// <summary>
-    /// Проверка, что у метод AddAsync сервиса зачислений выбрасывает DbUpdateException
+    /// Проверка, что у метод AddAsync сервиса зачислений выбрасывает EntityNotFoundException для студента
     /// </summary>
-    [Theory]
-    [MemberData(nameof(TestEnrollmentArgumentExceptionData))]
-    public async Task Add_Enrollment_ThrowEntityNotFoundException(Guid courseId, Guid studentId)
+    [Fact]
+    public async Task Add_Enrollment_ThrowStudentNotFoundException()
     {
         // Arrange
         using var scope = _fixture.ServiceProvider.CreateScope();
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
+        var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
+        var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
+        
+        var educator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var course = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(educator.Id));
         
         var enrollment = new CreateEnrollmentDto
         {
             Id = Guid.NewGuid(),
-            CourseId = courseId,
-            StudentId = studentId,
+            CourseId = course.Id,
+            StudentId = Guid.NewGuid(),
             StartDate = _faker.Date.Past()
         };
         
@@ -67,7 +72,34 @@ public class EnrollmentServiceNegativeTests
         var action = async () => await enrollmentService.AddAsync(enrollment);
         
         // Assert
-        await action.Should().ThrowAsync<Exception>()
-            .Where(e => e is EntityNotFoundException<Student> || e is EntityNotFoundException<Course>);
+        await action.Should().ThrowAsync<EntityNotFoundException<Student>>();
+    }
+    
+    /// <summary>
+    /// Проверка, что у метод AddAsync сервиса зачислений выбрасывает EntityNotFoundException для курса
+    /// </summary>
+    [Fact]
+    public async Task Add_Enrollment_ThrowCourseNotFoundException()
+    {
+        // Arrange
+        using var scope = _fixture.ServiceProvider.CreateScope();
+        var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
+        var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
+        
+        var student = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        
+        var enrollment = new CreateEnrollmentDto
+        {
+            Id = Guid.NewGuid(),
+            CourseId = Guid.NewGuid(),
+            StudentId = student.Id,
+            StartDate = _faker.Date.Past()
+        };
+        
+        // Act
+        var action = async () => await enrollmentService.AddAsync(enrollment);
+        
+        // Assert
+        await action.Should().ThrowAsync<EntityNotFoundException<Course>>();
     }
 }

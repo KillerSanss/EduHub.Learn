@@ -1,21 +1,20 @@
 ﻿using Bogus;
 using EduHub.StudentService.Application.Services.Dtos.Educator;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
+using Eduhub.StudentService.Domain.Entities.ValueObjects;
 
-namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
+namespace Eduhub.StudentService.Tests.Shared.Generators;
 
-/// <summary>
-/// Класс генерации преподавателя
-/// </summary>
 public class EducatorGenerator
 {
     private readonly Faker _faker = new();
-
+    
     /// <summary>
     /// Генерация преподавателя
     /// </summary>
     /// <returns>Преподаватель.</returns>
-    public CreateEducatorDto GenerateEducator()
+    public CreateEducatorDto GenerateEducatorDto()
     {
         var educator = new CreateEducatorDto
         {
@@ -27,16 +26,16 @@ public class EducatorGenerator
             StartDate = _faker.Date.Past(),
             WorkExperience = _faker.Random.Int(1)
         };
-
+        
         return educator;
     }
-
+    
     /// <summary>
     /// Генeрация преподавателя на обновление
     /// </summary>
     /// <param name="id">Идентификатор преподавателя.</param>
     /// <returns>Преподаватель.</returns>
-    public UpdateEducatorDto GenerateUpdateEducator(Guid id)
+    public UpdateEducatorDto GenerateUpdateEducatorDto(Guid id)
     {
         var educator = new UpdateEducatorDto
         {
@@ -49,7 +48,22 @@ public class EducatorGenerator
             StartDate = _faker.Date.Past(),
             WorkExperience = _faker.Random.Int(1)
         };
-
+        
         return educator;
+    }
+    
+    private static readonly Faker<Educator> Faker = new Faker<Educator>()
+        .CustomInstantiator(f => new Educator(
+            f.Random.Guid(),
+            new FullName(f.Name.LastName(), f.Name.FirstName(), f.Name.LastName()),
+            Gender.Male,
+            f.Random.Int(1),
+            f.Date.Past(),
+            new Phone(f.Phone.PhoneNumber("373########"))
+        ));
+    
+    public static Educator GenerateEducator()
+    {
+        return Faker.Generate();
     }
 }

@@ -21,6 +21,7 @@
       <ProjectReference Include="..\..\Infrastructure\Eduhub.StudentService.Infrastructure.Data\Eduhub.StudentService.Infrastructure.Data.csproj" />
       <ProjectReference Include="..\..\Infrastructure\EduHub.StudentService.Infrastructure.Migrator\EduHub.StudentService.Infrastructure.Migrator.csproj" />
       <ProjectReference Include="..\..\Infrastructure\EduHub.StudentService.Infrastructure.Repositories\EduHub.StudentService.Infrastructure.Repositories.csproj" />
+      <ProjectReference Include="..\Eduhub.StudentService.Tests.Shared\Eduhub.StudentService.Tests.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

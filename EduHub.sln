@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduHub.StudentService.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eduhub.StudentService.Tests.Integration", "src\Services\StudentService\Tests\Eduhub.StudentService.Tests.Integration\Eduhub.StudentService.Tests.Integration.csproj", "{431C4C05-0E3D-481E-BD25-24D5D667E3B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eduhub.StudentService.Tests.Shared", "src\Services\StudentService\Tests\Eduhub.StudentService.Tests.Shared\Eduhub.StudentService.Tests.Shared.csproj", "{60181C2F-E77C-460D-AFB1-2ED4698BCCB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,7 @@ Global
 		{947EED6A-D2C2-458A-B2AC-527B436A3AB0} = {20C90E8B-523D-4439-958E-CF0156E674AC}
 		{596E2A48-5174-4FC8-ABEC-46E5BB55245A} = {7369230F-0438-4ECB-ABC1-9509C5207BAA}
 		{431C4C05-0E3D-481E-BD25-24D5D667E3B0} = {7369230F-0438-4ECB-ABC1-9509C5207BAA}
+		{60181C2F-E77C-460D-AFB1-2ED4698BCCB5} = {7369230F-0438-4ECB-ABC1-9509C5207BAA}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B70E0EA9-C172-441F-8416-D4ABB8F80B45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -82,5 +85,9 @@ Global
 		{431C4C05-0E3D-481E-BD25-24D5D667E3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{431C4C05-0E3D-481E-BD25-24D5D667E3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{431C4C05-0E3D-481E-BD25-24D5D667E3B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60181C2F-E77C-460D-AFB1-2ED4698BCCB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60181C2F-E77C-460D-AFB1-2ED4698BCCB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60181C2F-E77C-460D-AFB1-2ED4698BCCB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60181C2F-E77C-460D-AFB1-2ED4698BCCB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

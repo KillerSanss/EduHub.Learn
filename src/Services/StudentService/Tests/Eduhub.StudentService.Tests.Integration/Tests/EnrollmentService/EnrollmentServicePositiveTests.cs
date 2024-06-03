@@ -1,7 +1,7 @@
 ﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
-using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
+using Eduhub.StudentService.Tests.Shared.Generators;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -11,7 +11,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.Enrollment
 /// <summary>
 /// Позитивные тесты сервиса зачислений
 /// </summary>
-[Collection(nameof(CollectionNames.DatabaseCollection))]
+[Collection(nameof(IntegrationTestDatabaseCollection.DatabaseCollection))]
 public class EnrollmentServicePositiveTests
 {
     private readonly IntegrationTestFixture _fixture;
@@ -38,10 +38,10 @@ public class EnrollmentServicePositiveTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
-        var addedEnrollment = _enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedEnrollment = _enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id);
 
         // Act
         var action = await enrollmentService.AddAsync(addedEnrollment);
@@ -64,10 +64,10 @@ public class EnrollmentServicePositiveTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
-        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id));
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id));
 
         // Act
         var enrollments = await enrollmentService.GetAllAsync();
@@ -78,7 +78,7 @@ public class EnrollmentServicePositiveTests
 
     /// <summary>
     /// Проверка удаления зачисления
-    /// </summary>
+    /// </summary> 
     [Fact]
     public async Task Delete_Enrollment_ReturnNull()
     {
@@ -90,10 +90,10 @@ public class EnrollmentServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
-        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id));
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id));
 
         // Act
         await enrollmentService.DeleteAsync(addedEnrollment.Id);
@@ -116,10 +116,10 @@ public class EnrollmentServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourse(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudent());
-        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollment(addedStudent.Id, addedCourse.Id));
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id));
 
         // Act
         var studentEnrollments = await enrollmentService.GetStudentEnrollmentsAsync(addedStudent.Id);

@@ -1,6 +1,6 @@
 ﻿using Bogus;
 using Eduhub.StudentService.Domain.Entities;
-using EduHub.StudentService.Tests.Unit.Infrastructure.Generators;
+using Eduhub.StudentService.Tests.Shared.Generators;
 using FluentAssertions;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Courses;

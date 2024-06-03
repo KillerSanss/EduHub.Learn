@@ -1,7 +1,7 @@
 ﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
-using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
+using Eduhub.StudentService.Tests.Shared.Generators;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -11,7 +11,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.EducatorSe
 /// <summary>
 /// Позитивные тесты сервиса преподавателя
 /// </summary>
-[Collection("DatabaseCollection")]
+[Collection(nameof(IntegrationTestDatabaseCollection.DatabaseCollection))]
 public class EducatorServicePositiveTests
 {
     private readonly IntegrationTestFixture _fixture;
@@ -32,7 +32,7 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = _educatorGenerator.GenerateEducator();
+        var addedEducator = _educatorGenerator.GenerateEducatorDto();
 
         // Act
         var action = await educatorService.AddAsync(addedEducator);
@@ -51,9 +51,9 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
 
-        var newEducator = _educatorGenerator.GenerateUpdateEducator(addedEducator.Id);
+        var newEducator = _educatorGenerator.GenerateUpdateEducatorDto(addedEducator.Id);
 
         // Act
         var action = await educatorService.UpdateAsync(newEducator);
@@ -72,7 +72,7 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
 
         // Act
         var educators = await educatorService.GetAllAsync();
@@ -91,7 +91,7 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
 
         // Act
         var selectedEducator = await educatorService.GetByIdAsync(addedEducator.Id);
@@ -111,7 +111,7 @@ public class EducatorServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var educatorRepository = scope.ServiceProvider.GetRequiredService<IEducatorRepository>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducator());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
 
         // Act
         await educatorService.DeleteAsync(addedEducator.Id);

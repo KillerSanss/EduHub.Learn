@@ -1,21 +1,20 @@
 ﻿using Bogus;
 using EduHub.StudentService.Application.Services.Dtos.Student;
+using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.Enums;
+using Eduhub.StudentService.Domain.Entities.ValueObjects;
 
-namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
+namespace Eduhub.StudentService.Tests.Shared.Generators;
 
-/// <summary>
-/// Класс генерации студента
-/// </summary>
 public class StudentGenerator
 {
     private readonly Faker _faker = new();
-
+    
     /// <summary>
     /// Генерация студента
     /// </summary>
     /// <returns>Студент.</returns>
-    public CreateStudentDto GenerateStudent()
+    public CreateStudentDto GenerateStudentDto()
     {
         var student = new CreateStudentDto
         {
@@ -31,16 +30,16 @@ public class StudentGenerator
             HouseNumber = _faker.Random.Int(1, 1000),
             Avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png")
         };
-
+        
         return student;
     }
-
+    
     /// <summary>
     /// Генерация студента для обновления
     /// </summary>
     /// <param name="id">Идентификатор студента.</param>
     /// <returns>Студент.</returns>
-    public UpdateStudentDto GenerateUpdateStudent(Guid id)
+    public UpdateStudentDto GenerateUpdateStudentDto(Guid id)
     {
         var student = new UpdateStudentDto
         {
@@ -57,7 +56,24 @@ public class StudentGenerator
             HouseNumber = _faker.Random.Int(1, 1000),
             Avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png")
         };
-
+        
         return student;
+    }
+    
+    private static readonly Faker<Student> Faker = new Faker<Student>()
+        .CustomInstantiator(f => new Student(
+            f.Random.Guid(),
+            new FullName(f.Name.LastName(), f.Name.FirstName(), f.Name.LastName()),
+            Gender.Male,
+            f.Date.Past(),
+            new Email(f.Internet.Email()),
+            new Phone(f.Phone.PhoneNumber("373########")),
+            new FullAddress(f.Address.City(), f.Address.StreetName(), f.Random.Int(1, 1000)),
+            f.Image.PicsumUrl() + f.PickRandom(".jpeg", ".png")
+        ));
+    
+    public static Student GenerateStudent()
+    {
+        return Faker.Generate();
     }
 }

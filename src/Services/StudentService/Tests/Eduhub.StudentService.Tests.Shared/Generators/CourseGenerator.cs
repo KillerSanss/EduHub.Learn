@@ -1,21 +1,19 @@
 ﻿using Bogus;
 using EduHub.StudentService.Application.Services.Dtos.Course;
+using Eduhub.StudentService.Domain.Entities;
 
-namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
+namespace Eduhub.StudentService.Tests.Shared.Generators;
 
-/// <summary>
-/// Класс генерации курса
-/// </summary>
 public class CourseGenerator
 {
     private readonly Faker _faker = new();
-
+    
     /// <summary>
     /// Генерация курса
     /// </summary>
     /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <returns>Курс.</returns>
-    public CreateCourseDto GenerateCourse(Guid educatorId)
+    public CreateCourseDto GenerateCourseDto(Guid educatorId)
     {
         var course = new CreateCourseDto
         {
@@ -23,17 +21,17 @@ public class CourseGenerator
             Description = _faker.Random.Word(),
             EducatorId = educatorId
         };
-
+        
         return course;
     }
-
+    
     /// <summary>
     /// Генерация курса для обновления
     /// </summary>
     /// <param name="id">Идентификатор курса на обновление.</param>
     /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <returns>Курс.</returns>
-    public UpdateCourseDto GenerateUpdateCourse(Guid id, Guid educatorId)
+    public UpdateCourseDto GenerateUpdateCourseDto(Guid id, Guid educatorId)
     {
         var course = new UpdateCourseDto
         {
@@ -42,7 +40,20 @@ public class CourseGenerator
             Description = _faker.Random.Word(),
             EducatorId = educatorId
         };
-
+        
         return course;
+    }
+    
+    private static readonly Faker<Course> Faker = new Faker<Course>()
+        .CustomInstantiator(f => new Course(
+            f.Random.Guid(),
+            f.Random.String(1, 50),
+            f.Random.String(),
+            f.Random.Guid()
+        ));
+    
+    public static Course GenerateCourse()
+    {
+        return Faker.Generate();
     }
 }

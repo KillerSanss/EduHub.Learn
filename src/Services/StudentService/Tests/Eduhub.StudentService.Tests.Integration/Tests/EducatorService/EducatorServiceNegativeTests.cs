@@ -2,7 +2,7 @@
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
-using Eduhub.StudentService.Infrastructure.IntegrationTests.Generators;
+using Eduhub.StudentService.Tests.Shared.Generators;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -12,7 +12,7 @@ namespace Eduhub.StudentService.Infrastructure.IntegrationTests.Tests.EducatorSe
 /// <summary>
 /// Негативные тесты сервиса преподавателя
 /// </summary>
-[Collection(nameof(CollectionNames.DatabaseCollection))]
+[Collection(nameof(IntegrationTestDatabaseCollection.DatabaseCollection))]
 public class EducatorServiceNegativeTests
 {
     private readonly IntegrationTestFixture _fixture;
@@ -68,7 +68,7 @@ public class EducatorServiceNegativeTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
         // Act
-        var action = async () => await educatorService.UpdateAsync(_educatorGenerator.GenerateUpdateEducator(Guid.NewGuid()));
+        var action = async () => await educatorService.UpdateAsync(_educatorGenerator.GenerateUpdateEducatorDto(Guid.NewGuid()));
 
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException<Educator>>();
