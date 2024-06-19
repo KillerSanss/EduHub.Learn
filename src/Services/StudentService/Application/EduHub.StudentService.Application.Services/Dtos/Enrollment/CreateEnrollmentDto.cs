@@ -9,5 +9,4 @@ public class CreateEnrollmentDto : BaseEnrollmentDto
     /// Идентификатор студента
     /// </summary>
     public Guid StudentId { get; init; }
-
 }

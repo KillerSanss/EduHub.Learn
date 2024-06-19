@@ -6,7 +6,7 @@
 public abstract class BaseEnrollmentDto
 {
     /// <summary>
-    /// Идентификатор зачиселния
+    /// Идентификатор зачисления
     /// </summary>
     public Guid Id { get; init; }
 
