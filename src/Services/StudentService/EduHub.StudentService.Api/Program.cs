@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using EduHub.StudentService.Api.Middleware;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
+using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using EduHub.StudentService.Application.Services.Mapping;
 using EduHub.StudentService.Application.Services.Services;
@@ -26,29 +27,25 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IEducatorRepository, EducatorRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
-builder.Services.AddScoped<StudentService>();
-builder.Services.AddScoped<EducatorService>();
-builder.Services.AddScoped<CourseService>();
-builder.Services.AddScoped<EnrollmentService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IEducatorService, EducatorService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork<StudentDbContext>>();
-builder.Services.AddAutoMapper(typeof(StudentMappingProfile));
-builder.Services.AddAutoMapper(typeof(EducatorMappingProfile));
-builder.Services.AddAutoMapper(typeof(CourseMappingProfile));
-builder.Services.AddAutoMapper(typeof(EnrollmentMappingProfile));
+builder.Services.AddAutoMapper(typeof(StudentMappingProfile).Assembly);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-Console.WriteLine(connectionString);
 builder.Services.AddDbContext<StudentDbContext>(o => o.UseNpgsql(EduhubNpgsqlDataSource.Create(connectionString)));
 
 var app = builder.Build();
+
+app.UseMiddleware<MiddlewareExceptionHandler>();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseMiddleware<MiddlewareExceptionHandler>();
 
 app.UseRouting();
 app.UseHttpsRedirection();

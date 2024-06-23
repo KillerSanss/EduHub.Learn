@@ -1,5 +1,6 @@
-﻿using EduHub.StudentService.Application.Services.Dtos.Course;
-using EduHub.StudentService.Application.Services.Services;
+﻿using Ardalis.GuardClauses;
+using EduHub.StudentService.Application.Services.Dtos.Course;
+using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduHub.StudentService.Api.Controllers;
@@ -11,11 +12,11 @@ namespace EduHub.StudentService.Api.Controllers;
 [ApiController]
 public class CourseController : ControllerBase
 {
-    private readonly CourseService _courseService;
+    private readonly ICourseService _courseService;
 
-    public CourseController(CourseService courseService)
+    public CourseController(ICourseService courseService)
     {
-        _courseService = courseService;
+        _courseService = Guard.Against.Null(courseService);
     }
     
     /// <summary>
@@ -23,8 +24,8 @@ public class CourseController : ControllerBase
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Все курсы в базе данных.</returns>
-    [HttpGet("get_all_courses")]
-    public async Task<IActionResult> GetAllAsync(
+    [HttpGet]
+    public async Task<ActionResult<CourseDto[]>> GetAllAsync(
         CancellationToken cancellationToken)
     {
         var courses = await _courseService.GetAllAsync(cancellationToken);
@@ -37,8 +38,8 @@ public class CourseController : ControllerBase
     /// <param name="id">Идентификатор курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный курс.</returns>
-    [HttpGet("get_by_id_course")]
-    public async Task<IActionResult> GetByIdAsync(
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<CourseDto>> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken)
     {
@@ -52,13 +53,13 @@ public class CourseController : ControllerBase
     /// <param name="createCourseDto">Данные для создания курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный курс.</returns>
-    [HttpPost("create_course")]
-    public async Task<IActionResult> Create(
+    [HttpPost]
+    public async Task<ActionResult<CreateCourseDto>> Create(
         [FromBody] CreateCourseDto createCourseDto,
         CancellationToken cancellationToken)
     {
         var addedCourse = await _courseService.AddAsync(createCourseDto, cancellationToken);
-        return Ok(addedCourse);
+        return Created(nameof(Create), addedCourse);
     }
     
     /// <summary>
@@ -67,8 +68,8 @@ public class CourseController : ControllerBase
     /// <param name="updateCourseDto">Данные для обновления курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный курс.</returns>
-    [HttpPut("update_course")]
-    public async Task<IActionResult> Update(
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<UpdateCourseDto>> Update(
         [FromBody] UpdateCourseDto updateCourseDto,
         CancellationToken cancellationToken)
     {
@@ -81,8 +82,8 @@ public class CourseController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    [HttpDelete("delete_course")]
-    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         await _courseService.DeleteAsync(id, cancellationToken);
         return NoContent();

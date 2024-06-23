@@ -1,4 +1,6 @@
-﻿using EduHub.StudentService.Application.Services.Dtos.Student;
+﻿using Ardalis.GuardClauses;
+using EduHub.StudentService.Application.Services.Dtos.Student;
+using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduHub.StudentService.Api.Controllers;
@@ -10,11 +12,11 @@ namespace EduHub.StudentService.Api.Controllers;
 [ApiController]
 public class StudentController : ControllerBase
 {
-    private readonly Application.Services.Services.StudentService _studentService;
+    private readonly IStudentService _studentService;
 
-    public StudentController(Application.Services.Services.StudentService studentService)
+    public StudentController(IStudentService studentService)
     {
-        _studentService = studentService;
+        _studentService = Guard.Against.Null(studentService);
     }
     
     /// <summary>
@@ -22,8 +24,8 @@ public class StudentController : ControllerBase
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Все студенты в базе данных.</returns>
-    [HttpGet("get_all_students")]
-    public async Task<IActionResult> GetAllAsync(
+    [HttpGet]
+    public async Task<ActionResult<StudentDto[]>> GetAllAsync(
         CancellationToken cancellationToken)
     {
         var students = await _studentService.GetAllAsync(cancellationToken);
@@ -36,8 +38,8 @@ public class StudentController : ControllerBase
     /// <param name="id">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный студент.</returns>
-    [HttpGet("get_by_id_student")]
-    public async Task<IActionResult> GetByIdAsync(
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<StudentDto>> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken)
     {
@@ -51,13 +53,13 @@ public class StudentController : ControllerBase
     /// <param name="createStudentDto">Данные для создания студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    [HttpPost("create_student")]
-    public async Task<IActionResult> Create(
+    [HttpPost]
+    public async Task<ActionResult<CreateStudentDto>> Create(
         [FromBody] CreateStudentDto createStudentDto,
         CancellationToken cancellationToken)
     {
         var addedStudent = await _studentService.AddAsync(createStudentDto, cancellationToken);
-        return Ok(addedStudent);
+        return Created(nameof(Create), addedStudent);
     }
     
     /// <summary>
@@ -66,8 +68,8 @@ public class StudentController : ControllerBase
     /// <param name="updateStudentDto">Данные для обновления студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    [HttpPut("update_student")]
-    public async Task<IActionResult> Update(
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<UpdateStudentDto>> Update(
         [FromBody] UpdateStudentDto updateStudentDto,
         CancellationToken cancellationToken)
     {
@@ -80,8 +82,8 @@ public class StudentController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    [HttpDelete("delete_student")]
-    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         await _studentService.DeleteAsync(id, cancellationToken);
         return NoContent();

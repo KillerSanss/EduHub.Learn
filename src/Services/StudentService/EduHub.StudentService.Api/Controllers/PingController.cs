@@ -13,7 +13,7 @@ public class PingController : ControllerBase
     /// Возвращение pong
     /// </summary>
     /// <returns></returns>
-    [HttpGet("get_pong")]
+    [HttpGet]
     public IActionResult Pong()
     {
         return Ok("pong");

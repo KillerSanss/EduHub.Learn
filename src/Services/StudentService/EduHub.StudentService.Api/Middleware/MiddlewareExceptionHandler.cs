@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Net;
+using EduHub.StudentService.Application.Services.Exceptions;
+using Eduhub.StudentService.Domain.Entities.Base;
 
 namespace EduHub.StudentService.Api.Middleware;
 
@@ -30,20 +32,13 @@ public class MiddlewareExceptionHandler
     
     private async Task HandleExceptionAsync(Exception exception, HttpContext context)
     {
-        HttpStatusCode httpStatusCode;
-        switch (exception)
-        {
-            case ValidationException:
-            {
-                httpStatusCode = HttpStatusCode.BadRequest;
-                break;
-            }
-            default:
-            {
-                httpStatusCode = HttpStatusCode.InternalServerError;
-                break;
-            }
-        }
+        var httpStatusCode = exception switch
+                {
+                    ValidationException => HttpStatusCode.BadRequest,
+                    EntityNotFoundException<BaseEntity> => HttpStatusCode.NotFound,
+                    EntityConflictException<BaseEntity> => HttpStatusCode.Conflict,
+                    _ => HttpStatusCode.InternalServerError
+                };
         
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int) httpStatusCode;
