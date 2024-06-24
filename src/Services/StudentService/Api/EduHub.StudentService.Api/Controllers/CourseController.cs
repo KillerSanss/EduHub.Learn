@@ -1,6 +1,8 @@
 ﻿using Ardalis.GuardClauses;
+using EduHub.StudentService.Api.Validators.Course;
 using EduHub.StudentService.Application.Services.Dtos.Course;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduHub.StudentService.Api.Controllers;
@@ -8,15 +10,22 @@ namespace EduHub.StudentService.Api.Controllers;
 /// <summary>
 /// Контроллер курса
 /// </summary>
-[Route("[controller]")]
+[Route("api/course")]
 [ApiController]
 public class CourseController : ControllerBase
 {
     private readonly ICourseService _courseService;
+    private readonly CourseCreateDtoValidator _courseCreateDtoValidator;
+    private readonly CourseUpdateDtoValidator _courseUpdateDtoValidator;
 
-    public CourseController(ICourseService courseService)
+    public CourseController(
+        ICourseService courseService,
+        CourseCreateDtoValidator courseCreateDtoValidator,
+        CourseUpdateDtoValidator courseUpdateDtoValidator)
     {
         _courseService = Guard.Against.Null(courseService);
+        _courseCreateDtoValidator = courseCreateDtoValidator;
+        _courseUpdateDtoValidator = courseUpdateDtoValidator;
     }
     
     /// <summary>
@@ -24,7 +33,7 @@ public class CourseController : ControllerBase
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Все курсы в базе данных.</returns>
-    [HttpGet]
+    [HttpGet("get-all/list")]
     public async Task<ActionResult<CourseDto[]>> GetAllAsync(
         CancellationToken cancellationToken)
     {
@@ -38,7 +47,7 @@ public class CourseController : ControllerBase
     /// <param name="id">Идентификатор курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный курс.</returns>
-    [HttpGet("{id:guid}")]
+    [HttpGet("get-by-id/{id:guid}")]
     public async Task<ActionResult<CourseDto>> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken)
@@ -53,11 +62,13 @@ public class CourseController : ControllerBase
     /// <param name="createCourseDto">Данные для создания курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный курс.</returns>
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<ActionResult<CreateCourseDto>> Create(
         [FromBody] CreateCourseDto createCourseDto,
         CancellationToken cancellationToken)
     {
+        await _courseCreateDtoValidator.ValidateAndThrowAsync(createCourseDto, cancellationToken);
+        
         var addedCourse = await _courseService.AddAsync(createCourseDto, cancellationToken);
         return Created(nameof(Create), addedCourse);
     }
@@ -68,11 +79,13 @@ public class CourseController : ControllerBase
     /// <param name="updateCourseDto">Данные для обновления курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный курс.</returns>
-    [HttpPut("{id:guid}")]
+    [HttpPut("update")]
     public async Task<ActionResult<UpdateCourseDto>> Update(
         [FromBody] UpdateCourseDto updateCourseDto,
         CancellationToken cancellationToken)
     {
+        await _courseUpdateDtoValidator.ValidateAndThrowAsync(updateCourseDto, cancellationToken);
+        
         var updatedStudent = await _courseService.UpdateAsync(updateCourseDto, cancellationToken);
         return Ok(updatedStudent);
     }
@@ -82,7 +95,7 @@ public class CourseController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("delete/{id:guid}")]
     public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         await _courseService.DeleteAsync(id, cancellationToken);

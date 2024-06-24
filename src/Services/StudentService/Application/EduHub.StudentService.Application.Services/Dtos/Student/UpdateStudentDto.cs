@@ -8,5 +8,5 @@ public class UpdateStudentDto : BaseStudentDto
     /// <summary>
     /// Идентификатор студента
     /// </summary>
-    public Guid Id { get; init;  }
+    public Guid Id { get; init; }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace EduHub.StudentService.Api.Middleware;
+namespace EduHub.StudentService.Api.Middleware.Models;
 
 /// <summary>
 /// Класс для ошибки

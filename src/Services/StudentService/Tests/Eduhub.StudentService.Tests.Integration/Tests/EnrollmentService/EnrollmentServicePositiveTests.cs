@@ -47,8 +47,7 @@ public class EnrollmentServicePositiveTests
         var action = await enrollmentService.AddAsync(addedEnrollment);
 
         // Assert
-        action.Should().BeEquivalentTo(addedEnrollment, options => options
-            .Excluding(e => e.Id));
+        action.Should().BeEquivalentTo(addedEnrollment);
     }
 
     /// <summary>

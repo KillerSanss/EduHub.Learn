@@ -31,6 +31,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Domain\Eduhub.StudentService.Domain\Eduhub.StudentService.Domain.csproj" />
+      <ProjectReference Include="..\Eduhub.StudentService.Tests.Shared\Eduhub.StudentService.Tests.Shared.csproj" />
     </ItemGroup>
 
 </Project>

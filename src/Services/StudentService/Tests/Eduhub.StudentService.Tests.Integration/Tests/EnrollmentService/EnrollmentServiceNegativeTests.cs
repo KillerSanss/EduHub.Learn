@@ -62,7 +62,6 @@ public class EnrollmentServiceNegativeTests
         
         var enrollment = new CreateEnrollmentDto
         {
-            Id = Guid.NewGuid(),
             CourseId = course.Id,
             StudentId = Guid.NewGuid(),
             StartDate = _faker.Date.Past()
@@ -90,7 +89,6 @@ public class EnrollmentServiceNegativeTests
         
         var enrollment = new CreateEnrollmentDto
         {
-            Id = Guid.NewGuid(),
             CourseId = Guid.NewGuid(),
             StudentId = student.Id,
             StartDate = _faker.Date.Past()

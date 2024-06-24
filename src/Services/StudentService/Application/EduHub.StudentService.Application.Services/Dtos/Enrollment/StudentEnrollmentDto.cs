@@ -6,6 +6,11 @@
 public class StudentEnrollmentDto : BaseEnrollmentDto
 {
     /// <summary>
+    /// Идентификатор зачисления
+    /// </summary>
+    public Guid Id { get; init; }
+    
+    /// <summary>
     /// Название курса
     /// </summary>
     public string Name { get; init; }

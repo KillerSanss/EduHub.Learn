@@ -6,11 +6,6 @@
 public abstract class BaseEnrollmentDto
 {
     /// <summary>
-    /// Идентификатор зачисления
-    /// </summary>
-    public Guid Id { get; init; }
-
-    /// <summary>
     /// Дата зачисления
     /// </summary>
     public DateTime StartDate { get; init; }
