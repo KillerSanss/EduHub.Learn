@@ -41,7 +41,7 @@ services:
             - ASPNETCORE_ENVIRONMENT=Development
             - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=Student;Username=user;Password=password
         ports:
-            - "5120:5120"
+            - "5120:80"
 
 volumes:
     database_data:
