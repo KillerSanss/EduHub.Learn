@@ -1,10 +1,6 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 using EduHub.StudentService.Api.Middleware;
-using EduHub.StudentService.Api.Validators.Course;
-using EduHub.StudentService.Api.Validators.Educator;
-using EduHub.StudentService.Api.Validators.Enrollment;
-using EduHub.StudentService.Api.Validators.Student;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
@@ -49,16 +45,16 @@ builder.Services.AddAutoMapper(typeof(StudentMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(EducatorMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(CourseMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(EnrollmentMappingProfile).Assembly);
-builder.Services.AddScoped<StudentCreateDtoValidator>();
-builder.Services.AddScoped<StudentUpdateDtoValidator>();
-builder.Services.AddScoped<EducatorCreateDtoValidator>();
-builder.Services.AddScoped<EducatorUpdateDtoValidator>();
-builder.Services.AddScoped<CourseCreateDtoValidator>();
-builder.Services.AddScoped<CourseUpdateDtoValidator>();
-builder.Services.AddScoped<EnrollmentCreateDtoValidator>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<StudentDbContext>(o => o.UseNpgsql(EduhubNpgsqlDataSource.Create(connectionString)));
+
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5120);
+    serverOptions.ListenAnyIP(80);
+    serverOptions.ListenAnyIP(443);
+});
 
 var app = builder.Build();
 

@@ -7,8 +7,10 @@ using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
+using EduHub.StudentService.Application.Services.Validators.Educator;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
+using FluentValidation;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -40,6 +42,8 @@ public class EducatorService : IEducatorService
     {
         Guard.Against.Null(educatorDto);
 
+        await new EducatorCreateDtoValidator(educatorDto).ValidateAndThrowAsync(educatorDto, cancellationToken);
+        
         var educator = _mapper.Map<Educator>(educatorDto);
         await _educatorRepository.AddAsync(educator, cancellationToken);
 
@@ -57,6 +61,8 @@ public class EducatorService : IEducatorService
     public async Task<EducatorDto> UpdateAsync(UpdateEducatorDto educatorDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(educatorDto);
+        
+        await new EducatorUpdateDtoValidator(educatorDto).ValidateAndThrowAsync(educatorDto, cancellationToken);
 
         var educator = await GetByIdOrThrowAsync(educatorDto.Id, cancellationToken);
         educator.Update(

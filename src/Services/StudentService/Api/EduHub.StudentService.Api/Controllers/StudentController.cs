@@ -1,8 +1,6 @@
 ﻿using Ardalis.GuardClauses;
-using EduHub.StudentService.Api.Validators.Student;
 using EduHub.StudentService.Application.Services.Dtos.Student;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduHub.StudentService.Api.Controllers;
@@ -15,17 +13,10 @@ namespace EduHub.StudentService.Api.Controllers;
 public class StudentController : ControllerBase
 {
     private readonly IStudentService _studentService;
-    private readonly StudentCreateDtoValidator _studentCreateDtoValidator;
-    private readonly StudentUpdateDtoValidator _studentUpdateDtoValidator;
 
-    public StudentController(
-        IStudentService studentService,
-        StudentCreateDtoValidator studentCreateDtoValidator,
-        StudentUpdateDtoValidator studentUpdateDtoValidator)
+    public StudentController(IStudentService studentService)
     {
         _studentService = Guard.Against.Null(studentService);
-        _studentCreateDtoValidator = studentCreateDtoValidator;
-        _studentUpdateDtoValidator = studentUpdateDtoValidator;
     }
     
     /// <summary>
@@ -33,7 +24,7 @@ public class StudentController : ControllerBase
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Все студенты в базе данных.</returns>
-    [HttpGet("get-all/list")]
+    [HttpGet("list")]
     public async Task<ActionResult<StudentDto[]>> GetAllAsync(
         CancellationToken cancellationToken)
     {
@@ -47,7 +38,7 @@ public class StudentController : ControllerBase
     /// <param name="id">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Выбранный студент.</returns>
-    [HttpGet("get-by-id/{id:guid}")]
+    [HttpGet("{id:guid}")]
     public async Task<ActionResult<StudentDto>> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken)
@@ -62,13 +53,11 @@ public class StudentController : ControllerBase
     /// <param name="createStudentDto">Данные для создания студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<ActionResult<CreateStudentDto>> Create(
         [FromBody] CreateStudentDto createStudentDto,
         CancellationToken cancellationToken)
     {
-        await _studentCreateDtoValidator.ValidateAndThrowAsync(createStudentDto, cancellationToken);
-        
         var addedStudent = await _studentService.AddAsync(createStudentDto, cancellationToken);
         return Created(nameof(Create), addedStudent);
     }
@@ -79,13 +68,11 @@ public class StudentController : ControllerBase
     /// <param name="updateStudentDto">Данные для обновления студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    [HttpPut("update")]
+    [HttpPut("{id:guid}")]
     public async Task<ActionResult<UpdateStudentDto>> Update(
         [FromBody] UpdateStudentDto updateStudentDto,
         CancellationToken cancellationToken)
     {
-        await _studentUpdateDtoValidator.ValidateAndThrowAsync(updateStudentDto, cancellationToken);
-        
         var updatedStudent = await _studentService.UpdateAsync(updateStudentDto, cancellationToken);
         return Ok(updatedStudent);
     }
@@ -95,7 +82,7 @@ public class StudentController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    [HttpDelete("delete/{id:guid}")]
+    [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         await _studentService.DeleteAsync(id, cancellationToken);

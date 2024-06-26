@@ -6,6 +6,8 @@ using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
+using EduHub.StudentService.Application.Services.Validators.Course;
+using FluentValidation;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -37,6 +39,8 @@ public class CourseService : ICourseService
     {
         Guard.Against.Null(courseDto);
         
+        await new CourseCreateDtoValidator(courseDto, _educatorRepository).ValidateAndThrowAsync(courseDto, cancellationToken);
+        
         var course = _mapper.Map<Course>(courseDto);
         
         await EducatorExistOrThrowAsync(course.EducatorId, cancellationToken);
@@ -56,6 +60,8 @@ public class CourseService : ICourseService
     {
         Guard.Against.Null(courseDto);
 
+        await new CourseUpdateDtoValidator(courseDto, _educatorRepository).ValidateAndThrowAsync(courseDto, cancellationToken);
+        
         var course = await GetByIdOrThrowAsync(courseDto.Id, cancellationToken);
         course.Update(courseDto.Name, courseDto.Description, courseDto.EducatorId);
 

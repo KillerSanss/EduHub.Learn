@@ -5,7 +5,9 @@ using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
+using EduHub.StudentService.Application.Services.Validators.Enrollment;
 using Eduhub.StudentService.Domain.Entities;
+using FluentValidation;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -44,6 +46,8 @@ public class EnrollmentService : IEnrollmentService
     {
         Guard.Against.Null(enrollmentDto);
 
+        await new EnrollmentCreateDtoValidator(enrollmentDto, _courseRepository, _studentRepository).ValidateAndThrowAsync(enrollmentDto, cancellationToken);
+        
         var enrollment = _mapper.Map<Enrollment>(enrollmentDto);
         
         await CourseExistOrThrowAsync(enrollment.CourseId, cancellationToken);

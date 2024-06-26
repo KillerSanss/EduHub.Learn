@@ -1,8 +1,6 @@
 ﻿using Ardalis.GuardClauses;
-using EduHub.StudentService.Api.Validators.Enrollment;
 using EduHub.StudentService.Application.Services.Dtos.Enrollment;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduHub.StudentService.Api.Controllers;
@@ -15,14 +13,10 @@ namespace EduHub.StudentService.Api.Controllers;
 public class EnrollmentController : ControllerBase
 {
     private readonly IEnrollmentService _enrollmentService;
-    private readonly EnrollmentCreateDtoValidator _enrollmentCreateDtoValidator;
 
-    public EnrollmentController(
-        IEnrollmentService enrollmentService,
-        EnrollmentCreateDtoValidator enrollmentCreateDtoValidator)
+    public EnrollmentController(IEnrollmentService enrollmentService)
     {
         _enrollmentService = Guard.Against.Null(enrollmentService);
-        _enrollmentCreateDtoValidator = enrollmentCreateDtoValidator;
     }
     
     /// <summary>
@@ -30,7 +24,7 @@ public class EnrollmentController : ControllerBase
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Все зачисления в базе данных.</returns>
-    [HttpGet("get-all/list")]
+    [HttpGet("list")]
     public async Task<ActionResult<EnrollmentDto[]>> GetAllAsync(
         CancellationToken cancellationToken)
     {
@@ -44,7 +38,7 @@ public class EnrollmentController : ControllerBase
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Список всех зачислений студента.</returns>
-    [HttpGet("get-student-enrollments/{studentId:guid}/list")]
+    [HttpGet("{studentId:guid}/list")]
     public async Task<ActionResult<StudentEnrollmentDto[]>> GetStudentEnrollments(
         Guid studentId,
         CancellationToken cancellationToken)
@@ -59,13 +53,11 @@ public class EnrollmentController : ControllerBase
     /// <param name="createEnrollmentDto">Данные для создания зачисления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленное зачисление.</returns>
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<ActionResult<CreateEnrollmentDto>> Create(
         [FromBody] CreateEnrollmentDto createEnrollmentDto,
         CancellationToken cancellationToken)
     {
-        await _enrollmentCreateDtoValidator.ValidateAndThrowAsync(createEnrollmentDto, cancellationToken);
-        
         var addedEnrollment = await _enrollmentService.AddAsync(createEnrollmentDto, cancellationToken);
         return Created(nameof(Create), addedEnrollment);
     }
@@ -75,7 +67,7 @@ public class EnrollmentController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор зачисления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
-    [HttpDelete("delete/{id:guid}")]
+    [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         await _enrollmentService.DeleteAsync(id, cancellationToken);

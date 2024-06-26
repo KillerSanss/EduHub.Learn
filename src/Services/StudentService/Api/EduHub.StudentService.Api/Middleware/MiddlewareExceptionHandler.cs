@@ -46,7 +46,7 @@ public class MiddlewareExceptionHandler
         {
             Type = exception.GetType().Name,
             Message = GetInnerException(exception),
-            StackTrace = exception.StackTrace,
+            StackTrace = GetStackTrace(exception),
             Data = exception.Data
         };
 
@@ -63,5 +63,17 @@ public class MiddlewareExceptionHandler
         }
 
         return string.Join(" => ", messages);
+    }
+    
+    private string GetStackTrace(Exception exception)
+    {
+        var stackTraces = new List<string>();
+        while (exception != null)
+        {
+            stackTraces.Add(exception.StackTrace);
+            exception = exception.InnerException;
+        }
+
+        return string.Join(" => ", stackTraces);
     }
 }
