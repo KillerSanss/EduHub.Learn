@@ -46,7 +46,7 @@ public class EnrollmentService : IEnrollmentService
     {
         Guard.Against.Null(enrollmentDto);
 
-        await new EnrollmentCreateDtoValidator(enrollmentDto, _courseRepository, _studentRepository).ValidateAndThrowAsync(enrollmentDto, cancellationToken);
+        await new EnrollmentCreateDtoValidator(enrollmentDto).ValidateAndThrowAsync(enrollmentDto, cancellationToken);
         
         var enrollment = _mapper.Map<Enrollment>(enrollmentDto);
         

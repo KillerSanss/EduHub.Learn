@@ -39,7 +39,7 @@ public class CourseService : ICourseService
     {
         Guard.Against.Null(courseDto);
         
-        await new CourseCreateDtoValidator(courseDto, _educatorRepository).ValidateAndThrowAsync(courseDto, cancellationToken);
+        await new CourseCreateDtoValidator(courseDto).ValidateAndThrowAsync(courseDto, cancellationToken);
         
         var course = _mapper.Map<Course>(courseDto);
         
@@ -60,7 +60,7 @@ public class CourseService : ICourseService
     {
         Guard.Against.Null(courseDto);
 
-        await new CourseUpdateDtoValidator(courseDto, _educatorRepository).ValidateAndThrowAsync(courseDto, cancellationToken);
+        await new CourseUpdateDtoValidator(courseDto).ValidateAndThrowAsync(courseDto, cancellationToken);
         
         var course = await GetByIdOrThrowAsync(courseDto.Id, cancellationToken);
         course.Update(courseDto.Name, courseDto.Description, courseDto.EducatorId);
