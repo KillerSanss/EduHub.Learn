@@ -30,20 +30,9 @@ public class StudentMappingProfile : Profile
             .ForMember(dest => dest.Email,
             opt => opt.MapFrom(s => s.Email.Value));
 
-        CreateMap<CreateStudentDto, Student>()
+        CreateMap<UpsertStudentDto, Student>()
             .ConstructUsing(dto => new Student(
                 Guid.NewGuid(),
-                new FullName(dto.Surname, dto.FirstName, dto.Patronymic),
-                dto.Gender,
-                dto.BirthDate,
-                new Email(dto.Email),
-                new Phone(dto.Phone),
-                new FullAddress(dto.City, dto.Street, dto.HouseNumber),
-                dto.Avatar));
-
-        CreateMap<UpdateStudentDto, Student>()
-            .ConstructUsing(dto => new Student(
-                dto.Id,
                 new FullName(dto.Surname, dto.FirstName, dto.Patronymic),
                 dto.Gender,
                 dto.BirthDate,

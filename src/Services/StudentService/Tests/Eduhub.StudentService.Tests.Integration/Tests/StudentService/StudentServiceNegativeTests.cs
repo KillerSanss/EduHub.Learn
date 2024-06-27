@@ -68,7 +68,7 @@ public class StudentServiceNegativeTests
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
         // Act
-        var action = async () => await studentService.UpdateAsync(_studentGenerator.GenerateUpdateStudentDto(Guid.NewGuid()));
+        var action = async () => await studentService.UpdateAsync(Guid.NewGuid(), _studentGenerator.GenerateUpsertStudentDto());
 
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException<Student>>();

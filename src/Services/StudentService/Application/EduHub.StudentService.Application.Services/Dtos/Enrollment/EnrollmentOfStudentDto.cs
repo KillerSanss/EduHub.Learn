@@ -3,7 +3,7 @@
 /// <summary>
 /// Дто зачисления
 /// </summary>
-public class StudentEnrollmentDto : BaseEnrollmentDto
+public class EnrollmentOfStudentDto : BaseEnrollmentDto
 {
     /// <summary>
     /// Идентификатор зачисления

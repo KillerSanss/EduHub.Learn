@@ -32,7 +32,7 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = _educatorGenerator.GenerateEducatorDto();
+        var addedEducator = _educatorGenerator.GenerateUpsertEducatorDto();
 
         // Act
         var action = await educatorService.AddAsync(addedEducator);
@@ -51,12 +51,12 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
 
-        var newEducator = _educatorGenerator.GenerateUpdateEducatorDto(addedEducator.Id);
+        var newEducator = _educatorGenerator.GenerateUpsertEducatorDto();
 
         // Act
-        var action = await educatorService.UpdateAsync(newEducator);
+        var action = await educatorService.UpdateAsync(addedEducator.Id, newEducator);
 
         // Assert
         action.Should().BeEquivalentTo(newEducator);
@@ -72,7 +72,7 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
 
         // Act
         var educators = await educatorService.GetAllAsync();
@@ -91,7 +91,7 @@ public class EducatorServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
 
         // Act
         var selectedEducator = await educatorService.GetByIdAsync(addedEducator.Id);
@@ -111,7 +111,7 @@ public class EducatorServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var educatorRepository = scope.ServiceProvider.GetRequiredService<IEducatorRepository>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
 
         // Act
         await educatorService.DeleteAsync(addedEducator.Id);

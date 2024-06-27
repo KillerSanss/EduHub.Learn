@@ -22,18 +22,9 @@ public class EducatorMappingProfile : Profile
             .ForMember(dest => dest.Phone,
                 opt => opt.MapFrom(e => e.Phone.Value));
 
-        CreateMap<CreateEducatorDto, Educator>()
+        CreateMap<UpsertEducatorDto, Educator>()
             .ConstructUsing(dto => new Educator(
                 Guid.NewGuid(),
-                new FullName(dto.Surname, dto.FirstName, dto.Patronymic),
-                dto.Gender,
-                dto.WorkExperience,
-                dto.StartDate,
-                new Phone(dto.Phone)));
-
-        CreateMap<UpdateEducatorDto, Educator>()
-            .ConstructUsing(dto => new Educator(
-                dto.Id,
                 new FullName(dto.Surname, dto.FirstName, dto.Patronymic),
                 dto.Gender,
                 dto.WorkExperience,

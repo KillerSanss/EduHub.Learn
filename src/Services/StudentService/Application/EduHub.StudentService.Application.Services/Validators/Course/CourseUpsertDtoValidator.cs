@@ -5,15 +5,15 @@ using FluentValidation;
 namespace EduHub.StudentService.Application.Services.Validators.Course;
 
 /// <summary>
-/// Валидация дто создания курса
+/// Валидация дто создания/обновления курса
 /// </summary>
-public class CourseCreateDtoValidator : AbstractValidator<CreateCourseDto>
+public class CourseUpsertDtoValidator : AbstractValidator<UpsertCourseDto>
 {
-    public CourseCreateDtoValidator(CreateCourseDto courseDto)
+    public CourseUpsertDtoValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(50).WithMessage(string.Format(ErrorMessage.InvalidLength, courseDto.Name));
+            .MaximumLength(50).WithMessage(ErrorMessage.InvalidLength);
 
         RuleFor(x => x.EducatorId)
             .NotEmpty();

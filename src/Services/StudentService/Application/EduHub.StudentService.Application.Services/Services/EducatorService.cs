@@ -38,11 +38,11 @@ public class EducatorService : IEducatorService
     /// <param name="educatorDto">Преподаватель для добавления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный преподаватель.</returns>
-    public async Task<EducatorDto> AddAsync(CreateEducatorDto educatorDto, CancellationToken cancellationToken)
+    public async Task<EducatorDto> AddAsync(UpsertEducatorDto educatorDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(educatorDto);
 
-        await new EducatorCreateDtoValidator(educatorDto).ValidateAndThrowAsync(educatorDto, cancellationToken);
+        await new EducatorUpsertDtoValidator().ValidateAndThrowAsync(educatorDto, cancellationToken);
         
         var educator = _mapper.Map<Educator>(educatorDto);
         await _educatorRepository.AddAsync(educator, cancellationToken);
@@ -58,13 +58,14 @@ public class EducatorService : IEducatorService
     /// <param name="educatorDto">Преподаватель для обновления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный преподаватель.</returns>
-    public async Task<EducatorDto> UpdateAsync(UpdateEducatorDto educatorDto, CancellationToken cancellationToken)
+    public async Task<EducatorDto> UpdateAsync(Guid id, UpsertEducatorDto educatorDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(educatorDto);
+        Guard.Against.NullOrEmpty(id);
         
-        await new EducatorUpdateDtoValidator(educatorDto).ValidateAndThrowAsync(educatorDto, cancellationToken);
+        await new EducatorUpsertDtoValidator().ValidateAndThrowAsync(educatorDto, cancellationToken);
 
-        var educator = await GetByIdOrThrowAsync(educatorDto.Id, cancellationToken);
+        var educator = await GetByIdOrThrowAsync(id, cancellationToken);
         educator.Update(
             new FullName(educatorDto.Surname, educatorDto.FirstName, educatorDto.Patronymic),
             educatorDto.Gender,

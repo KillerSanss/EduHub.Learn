@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 
 namespace Eduhub.StudentService.Domain.Validations.GuardClasses;
@@ -15,12 +14,11 @@ public static class EnumGuard
     public static T Enum<T>(
         this IGuardClause guardClause,
         T value,
-        [CallerArgumentExpression("value")] string paramName = null,
         params T[] defaultValues) where T : Enum
     {
         if (defaultValues.Contains(value))
         {
-            throw new GuardValidationException(string.Format(ErrorMessage.DefaultEnum, paramName));
+            throw new GuardValidationException(ErrorMessage.DefaultEnum);
         }
 
         return value;

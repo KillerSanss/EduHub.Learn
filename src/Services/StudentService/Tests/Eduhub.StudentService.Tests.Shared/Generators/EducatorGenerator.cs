@@ -14,36 +14,14 @@ public class EducatorGenerator
     /// Генерация преподавателя
     /// </summary>
     /// <returns>Преподаватель.</returns>
-    public CreateEducatorDto GenerateEducatorDto()
+    public UpsertEducatorDto GenerateUpsertEducatorDto()
     {
-        var educator = new CreateEducatorDto
+        var educator = new UpsertEducatorDto
         {
             FirstName = _faker.Name.FirstName(),
             Surname = _faker.Name.LastName(),
             Patronymic = _faker.Name.LastName(),
             Gender = _faker.PickRandom(Gender.Female, Gender.Male),
-            Phone = _faker.Phone.PhoneNumber("373########"),
-            StartDate = _faker.Date.Past(),
-            WorkExperience = _faker.Random.Int(1)
-        };
-        
-        return educator;
-    }
-    
-    /// <summary>
-    /// Генeрация преподавателя на обновление
-    /// </summary>
-    /// <param name="id">Идентификатор преподавателя.</param>
-    /// <returns>Преподаватель.</returns>
-    public UpdateEducatorDto GenerateUpdateEducatorDto(Guid id)
-    {
-        var educator = new UpdateEducatorDto
-        {
-            Id = id,
-            FirstName = _faker.Name.FirstName(),
-            Surname = _faker.Name.LastName(),
-            Patronymic = _faker.Name.LastName(),
-            Gender = Gender.Male,
             Phone = _faker.Phone.PhoneNumber("373########"),
             StartDate = _faker.Date.Past(),
             WorkExperience = _faker.Random.Int(1)

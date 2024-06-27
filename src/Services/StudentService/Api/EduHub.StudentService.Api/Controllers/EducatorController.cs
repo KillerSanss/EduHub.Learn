@@ -9,7 +9,7 @@ namespace EduHub.StudentService.Api.Controllers;
 /// <summary>
 /// Контроллер преподавателя
 /// </summary>
-[Route("api/educator")]
+[Route("api/educators")]
 [ApiController]
 public class EducatorController : ControllerBase
 {
@@ -21,11 +21,11 @@ public class EducatorController : ControllerBase
     }
     
     /// <summary>
-    /// Получение всех преподавателей из базы данных
+    /// Получение всех преподавателей
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Все преподаватели в базе данных.</returns>
-    [HttpGet("list")]
+    [HttpGet]
     public async Task<ActionResult<EducatorDto[]>> GetAllAsync(
         CancellationToken cancellationToken)
     {
@@ -41,7 +41,7 @@ public class EducatorController : ControllerBase
     /// <returns>Выбранный преподаватель.</returns>
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<EducatorDto>> GetByIdAsync(
-        Guid id,
+        [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
         var educator = await _educatorService.GetByIdAsync(id, cancellationToken);
@@ -51,26 +51,27 @@ public class EducatorController : ControllerBase
     /// <summary>
     /// Получение всех курсов преподавателя
     /// </summary>
-    /// <param name="educatorId">Идентификатор преподавателя.</param>
+    /// <param name="id">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Все курсы преподавателя.</returns>
-    [HttpGet("{educatorId:guid}/list")]
+    [HttpGet("{id:guid}/courses")]
     public async Task<ActionResult<EducatorCourseDto[]>> GetAllCourses(
-        Guid educatorId, CancellationToken cancellationToken)
+        Guid id,
+        CancellationToken cancellationToken)
     {
-        var courses = await _educatorService.GetAllCourses(educatorId, cancellationToken);
+        var courses = await _educatorService.GetAllCourses(id, cancellationToken);
         return Ok(courses);
     }
     
     /// <summary>
-    /// Добавление преподавателя в базу
+    /// Добавление преподавателя
     /// </summary>
     /// <param name="createEducatorDto">Данные для создания преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный преподавателя.</returns>
     [HttpPost]
-    public async Task<ActionResult<CreateEducatorDto>> Create(
-        [FromBody] CreateEducatorDto createEducatorDto,
+    public async Task<ActionResult<UpsertEducatorDto>> Create(
+        [FromBody] UpsertEducatorDto createEducatorDto,
         CancellationToken cancellationToken)
     {
         var addedEducator = await _educatorService.AddAsync(createEducatorDto, cancellationToken);
@@ -78,27 +79,29 @@ public class EducatorController : ControllerBase
     }
     
     /// <summary>
-    /// Обновление преподавателя в базе
+    /// Обновление преподавателя
     /// </summary>
+    /// <param name="id">Идентификатор преподавателя.</param>
     /// <param name="updateEducatorDto">Данные для обновления преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный преподаватель.</returns>
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<UpdateEducatorDto>> Update(
-        [FromBody] UpdateEducatorDto updateEducatorDto,
+    public async Task<ActionResult<UpsertEducatorDto>> Update(
+        [FromRoute] Guid id,
+        [FromBody] UpsertEducatorDto updateEducatorDto,
         CancellationToken cancellationToken)
     {
-        var updatedEducator = await _educatorService.UpdateAsync(updateEducatorDto, cancellationToken);
+        var updatedEducator = await _educatorService.UpdateAsync(id, updateEducatorDto, cancellationToken);
         return Ok(updatedEducator);
     }
     
     /// <summary>
-    /// Удаление преподавателя из базы данных
+    /// Удаление преподавателя
     /// </summary>
     /// <param name="id">Идентификатор преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     [HttpDelete("{id:guid}")]
-    public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    public async Task<ActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         await _educatorService.DeleteAsync(id, cancellationToken);
         return NoContent();

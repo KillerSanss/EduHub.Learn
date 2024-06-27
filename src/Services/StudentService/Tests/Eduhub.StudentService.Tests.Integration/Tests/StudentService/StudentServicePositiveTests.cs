@@ -32,7 +32,7 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
-        var addedStudent = _studentGenerator.GenerateStudentDto();
+        var addedStudent = _studentGenerator.GenerateUpsertStudentDto();
 
         // Act
         var action = await studentService.AddAsync(addedStudent);
@@ -51,12 +51,12 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
 
-        var newStudent = _studentGenerator.GenerateUpdateStudentDto(addedStudent.Id);
+        var newStudent = _studentGenerator.GenerateUpsertStudentDto();
 
         // Act
-        var action = await studentService.UpdateAsync(newStudent);
+        var action = await studentService.UpdateAsync(addedStudent.Id, newStudent);
 
         // Assert
         action.Should().BeEquivalentTo(newStudent);
@@ -72,7 +72,7 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
 
         // Act
         var students = await studentService.GetAllAsync();
@@ -91,7 +91,7 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
 
         // Act
         var selectedStudent = await studentService.GetByIdAsync(addedStudent.Id);
@@ -111,7 +111,7 @@ public class StudentServicePositiveTests
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
         var studentRepository = scope.ServiceProvider.GetRequiredService<IStudentRepository>();
 
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
 
         // Act
         await studentService.DeleteAsync(addedStudent.Id);

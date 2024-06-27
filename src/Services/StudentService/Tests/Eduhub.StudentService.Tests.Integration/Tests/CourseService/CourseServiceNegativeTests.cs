@@ -69,10 +69,10 @@ public class CourseServiceNegativeTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
 
         // Act
-        var action = async () => await courseService.UpdateAsync(_courseGenerator.GenerateUpdateCourseDto(Guid.NewGuid(), addedEducator.Id));
+        var action = async () => await courseService.UpdateAsync(Guid.NewGuid(), _courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
 
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException<Course>>();
@@ -89,7 +89,7 @@ public class CourseServiceNegativeTests
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
         
         // Act
-        var action = async () => await courseService.AddAsync(_courseGenerator.GenerateCourseDto(Guid.NewGuid()));
+        var action = async () => await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(Guid.NewGuid()));
         
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException<Educator>>();

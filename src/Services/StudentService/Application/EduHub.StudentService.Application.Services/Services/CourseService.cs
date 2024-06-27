@@ -35,11 +35,11 @@ public class CourseService : ICourseService
     /// <param name="courseDto">Курс для добавления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный курс.</returns>
-    public async Task<CourseDto> AddAsync(CreateCourseDto courseDto, CancellationToken cancellationToken)
+    public async Task<CourseDto> AddAsync(UpsertCourseDto courseDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(courseDto);
         
-        await new CourseCreateDtoValidator(courseDto).ValidateAndThrowAsync(courseDto, cancellationToken);
+        await new CourseUpsertDtoValidator().ValidateAndThrowAsync(courseDto, cancellationToken);
         
         var course = _mapper.Map<Course>(courseDto);
         
@@ -56,13 +56,14 @@ public class CourseService : ICourseService
     /// <param name="courseDto">Курс для обновления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный курс.</returns>
-    public async Task<CourseDto> UpdateAsync(UpdateCourseDto courseDto, CancellationToken cancellationToken)
+    public async Task<CourseDto> UpdateAsync(Guid id, UpsertCourseDto courseDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(courseDto);
+        Guard.Against.Null(id);
 
-        await new CourseUpdateDtoValidator(courseDto).ValidateAndThrowAsync(courseDto, cancellationToken);
+        await new CourseUpsertDtoValidator().ValidateAndThrowAsync(courseDto, cancellationToken);
         
-        var course = await GetByIdOrThrowAsync(courseDto.Id, cancellationToken);
+        var course = await GetByIdOrThrowAsync(id, cancellationToken);
         course.Update(courseDto.Name, courseDto.Description, courseDto.EducatorId);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);

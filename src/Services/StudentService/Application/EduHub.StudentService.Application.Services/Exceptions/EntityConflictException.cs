@@ -14,7 +14,7 @@ public class EntityConflictException<T> : BaseConflictException where T : BaseEn
     /// </summary>
     /// <param name="paramName">Название параметра.</param>
     public EntityConflictException(string paramName)
-        : base(nameof(T), paramName)
+        : base(typeof(T).Name, paramName)
     {
     }
 }

@@ -8,7 +8,7 @@ namespace EduHub.StudentService.Api.Controllers;
 /// <summary>
 /// Контроллер курса
 /// </summary>
-[Route("api/course")]
+[Route("api/courses")]
 [ApiController]
 public class CourseController : ControllerBase
 {
@@ -20,11 +20,11 @@ public class CourseController : ControllerBase
     }
     
     /// <summary>
-    /// Получение всех курсов из базы данных
+    /// Получение всех курсов
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Все курсы в базе данных.</returns>
-    [HttpGet("list")]
+    [HttpGet]
     public async Task<ActionResult<CourseDto[]>> GetAllAsync(
         CancellationToken cancellationToken)
     {
@@ -40,7 +40,7 @@ public class CourseController : ControllerBase
     /// <returns>Выбранный курс.</returns>
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<CourseDto>> GetByIdAsync(
-        Guid id,
+        [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
         var course = await _courseService.GetByIdAsync(id, cancellationToken);
@@ -48,14 +48,14 @@ public class CourseController : ControllerBase
     }
     
     /// <summary>
-    /// Добавление курса в базу
+    /// Добавление курса
     /// </summary>
     /// <param name="createCourseDto">Данные для создания курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный курс.</returns>
     [HttpPost]
-    public async Task<ActionResult<CreateCourseDto>> Create(
-        [FromBody] CreateCourseDto createCourseDto,
+    public async Task<ActionResult<UpsertCourseDto>> Create(
+        [FromBody] UpsertCourseDto createCourseDto,
         CancellationToken cancellationToken)
     {
         var addedCourse = await _courseService.AddAsync(createCourseDto, cancellationToken);
@@ -63,27 +63,28 @@ public class CourseController : ControllerBase
     }
     
     /// <summary>
-    /// Обновление курса в базе
+    /// Обновление курса
     /// </summary>
     /// <param name="updateCourseDto">Данные для обновления курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный курс.</returns>
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<UpdateCourseDto>> Update(
-        [FromBody] UpdateCourseDto updateCourseDto,
+    public async Task<ActionResult<UpsertCourseDto>> Update(
+        [FromRoute] Guid id,
+        [FromBody] UpsertCourseDto updateCourseDto,
         CancellationToken cancellationToken)
     {
-        var updatedStudent = await _courseService.UpdateAsync(updateCourseDto, cancellationToken);
+        var updatedStudent = await _courseService.UpdateAsync(id, updateCourseDto, cancellationToken);
         return Ok(updatedStudent);
     }
 
     /// <summary>
-    /// Удаление курса из базы данных
+    /// Удаление курса
     /// </summary>
     /// <param name="id">Идентификатор курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     [HttpDelete("{id:guid}")]
-    public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    public async Task<ActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         await _courseService.DeleteAsync(id, cancellationToken);
         return NoContent();

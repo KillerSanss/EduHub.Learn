@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 
 namespace Eduhub.StudentService.Domain.Validations.GuardClasses;
@@ -14,14 +13,13 @@ public static class DateGuard
     /// </summary>
     public static DateTime FutureDate(
         this IGuardClause guardClause,
-        DateTime date,
-        [CallerArgumentExpression("date")] string paramName = null)
+        DateTime date)
     {
         Guard.Against.Default(date);
 
         if (date > DateTime.Now)
         {
-            throw new GuardValidationException(string.Format(ErrorMessage.FutureDate, paramName));
+            throw new GuardValidationException(ErrorMessage.FutureDate);
         }
 
         return date;

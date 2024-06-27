@@ -13,15 +13,16 @@ public interface ICourseService
     /// <param name="course">Дто Курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный курс.</returns>
-    Task<CourseDto> AddAsync(CreateCourseDto course, CancellationToken cancellationToken = default);
+    Task<CourseDto> AddAsync(UpsertCourseDto course, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Обновление курса
     /// </summary>
+    /// <param name="courseId">Идентификатор курса.</param>
     /// <param name="course">Дто Курса.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный курс.</returns>
-    Task<CourseDto> UpdateAsync(UpdateCourseDto course, CancellationToken cancellationToken = default);
+    Task<CourseDto> UpdateAsync(Guid courseId, UpsertCourseDto course, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение курса

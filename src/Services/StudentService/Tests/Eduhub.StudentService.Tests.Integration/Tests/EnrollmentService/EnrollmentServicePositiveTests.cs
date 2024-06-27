@@ -38,9 +38,9 @@ public class EnrollmentServicePositiveTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
         var addedEnrollment = _enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id);
 
         // Act
@@ -63,9 +63,9 @@ public class EnrollmentServicePositiveTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
         var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id));
 
         // Act
@@ -89,9 +89,9 @@ public class EnrollmentServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
         var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id));
 
         // Act
@@ -115,9 +115,9 @@ public class EnrollmentServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
         var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id));
 
         // Act

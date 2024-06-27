@@ -8,7 +8,7 @@ namespace EduHub.StudentService.Api.Controllers;
 /// <summary>
 /// Контроллер зачисления
 /// </summary>
-[Route("api/enrollment")]
+[Route("api/enrollments")]
 [ApiController]
 public class EnrollmentController : ControllerBase
 {
@@ -20,11 +20,11 @@ public class EnrollmentController : ControllerBase
     }
     
     /// <summary>
-    /// Получение всех зачислений из базы данных
+    /// Получение всех зачислений
     /// </summary>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Все зачисления в базе данных.</returns>
-    [HttpGet("list")]
+    [HttpGet]
     public async Task<ActionResult<EnrollmentDto[]>> GetAllAsync(
         CancellationToken cancellationToken)
     {
@@ -33,22 +33,7 @@ public class EnrollmentController : ControllerBase
     }
     
     /// <summary>
-    /// Получение всех зачислений студента из базы
-    /// </summary>
-    /// <param name="studentId">Идентификатор студента.</param>
-    /// <param name="cancellationToken">Токен отмены.</param>
-    /// <returns>Список всех зачислений студента.</returns>
-    [HttpGet("{studentId:guid}/list")]
-    public async Task<ActionResult<StudentEnrollmentDto[]>> GetStudentEnrollments(
-        Guid studentId,
-        CancellationToken cancellationToken)
-    {
-        var enrollments = await _enrollmentService.GetStudentEnrollmentsAsync(studentId, cancellationToken);
-        return Ok(enrollments);
-    }
-    
-    /// <summary>
-    /// Добавление зачисления в базу
+    /// Добавление зачисления
     /// </summary>
     /// <param name="createEnrollmentDto">Данные для создания зачисления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
@@ -63,12 +48,12 @@ public class EnrollmentController : ControllerBase
     }
     
     /// <summary>
-    /// Удаление зачисления из базы данных
+    /// Удаление зачисления
     /// </summary>
     /// <param name="id">Идентификатор зачисления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     [HttpDelete("{id:guid}")]
-    public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    public async Task<ActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         await _enrollmentService.DeleteAsync(id, cancellationToken);
         return NoContent();

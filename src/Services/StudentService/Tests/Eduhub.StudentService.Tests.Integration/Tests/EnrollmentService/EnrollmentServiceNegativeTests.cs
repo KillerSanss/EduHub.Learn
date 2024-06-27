@@ -57,8 +57,8 @@ public class EnrollmentServiceNegativeTests
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         
-        var educator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
-        var course = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(educator.Id));
+        var educator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
+        var course = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(educator.Id));
         
         var enrollment = new CreateEnrollmentDto
         {
@@ -85,7 +85,7 @@ public class EnrollmentServiceNegativeTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
         
-        var student = await studentService.AddAsync(_studentGenerator.GenerateStudentDto());
+        var student = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
         
         var enrollment = new CreateEnrollmentDto
         {

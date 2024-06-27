@@ -5,14 +5,14 @@ using FluentValidation;
 namespace EduHub.StudentService.Application.Services.Validators.Enrollment;
 
 /// <summary>
-/// Валидация дто создания зачисления
+/// Валидация дто создания/обновления зачисления
 /// </summary>
 public class EnrollmentCreateDtoValidator : AbstractValidator<CreateEnrollmentDto>
 {
-    public EnrollmentCreateDtoValidator(CreateEnrollmentDto enrollmentDto)
+    public EnrollmentCreateDtoValidator()
     {
         RuleFor(x => x.StartDate)
-            .LessThan(DateTime.Now).WithMessage(string.Format(ErrorMessage.FutureDate, enrollmentDto.StartDate));
+            .LessThan(DateTime.Now).WithMessage(ErrorMessage.FutureDate);
 
         RuleFor(x => x.CourseId)
             .NotEmpty();

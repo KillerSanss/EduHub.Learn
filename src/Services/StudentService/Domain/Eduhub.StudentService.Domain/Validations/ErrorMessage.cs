@@ -8,43 +8,27 @@ public static class ErrorMessage
     /// <summary>
     /// Сообщение о некорректности введенных данных
     /// </summary>
-    public const string InvalidData = "{0} is incorrect";
+    public const string InvalidData = "'{PropertyName}' is incorrect";
 
     /// <summary>
     /// Сообщение об ошибке формата - только буквы
     /// </summary>
-    /// <remarks>
-    /// Использовать вместе со string.Format
-    /// {0} - имя свойства
-    /// </remarks>
-    public const string OnlyLetters = "{0} must contains only letters and symbols";
+    public const string OnlyLetters = "'{PropertyName}' must contains only letters and symbols";
 
     /// <summary>
     /// Сообщение об ошибке перечисления
     /// </summary>
-    /// <remarks>
-    /// Использовать вместе со string.Format
-    /// {0} - имя Перечисления
-    /// </remarks>
-    public const string DefaultEnum = "Enum {0} cannot be default";
+    public const string DefaultEnum = "Enum '{PropertyName}' cannot be default";
 
     /// <summary>
     /// Сообщение об ошибке формата - недействительная длина
     /// </summary>
-    /// <remarks>
-    /// Использовать вместе со string.Format
-    /// {0} - имя свойства
-    /// </remarks>
-    public const string InvalidLength = "{0} must be correct length";
+    public const string InvalidLength = "'{PropertyName}' must be correct length";
 
     /// <summary>
     /// Сообщение об ошибке даты
     /// </summary>
-    /// <remarks>
-    /// Использовать вместе со string.Format
-    /// {0} - имя свойства
-    /// </remarks>
-    public const string FutureDate = "{0} cannot be in future";
+    public const string FutureDate = "'{PropertyName}' cannot be in future";
 
     /// <summary>
     /// Сообщение об ошибке некорректного формата электронной почты
@@ -68,7 +52,6 @@ public static class ErrorMessage
     /// Использовать вместе со string.Format
     /// {0} - имя сущности
     /// {1} - имя свойства
-    /// {2} - значение свойства
     /// </remarks>
     public const string ConflictError = "Entity {0} with similar {1} is already exist";
 
@@ -81,5 +64,5 @@ public static class ErrorMessage
     /// {1} - имя свойства
     /// {2} - значение свойства
     /// </remarks>
-    public const string NotFoundError = "Entity {0} with {1} is not found.";
+    public const string NotFoundError = "Entity {0} with {1} = {2} is not found.";
 }

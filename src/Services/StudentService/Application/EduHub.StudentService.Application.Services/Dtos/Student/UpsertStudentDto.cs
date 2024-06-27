@@ -3,6 +3,6 @@
 /// <summary>
 /// Дто для студента
 /// </summary>
-public class CreateStudentDto : BaseStudentDto
+public class UpsertStudentDto : BaseStudentDto
 {
 }
