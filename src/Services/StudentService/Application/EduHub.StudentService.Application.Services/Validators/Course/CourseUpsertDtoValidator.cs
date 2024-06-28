@@ -1,5 +1,5 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Course;
-using Eduhub.StudentService.Domain.Validations;
+using EduHub.StudentService.Application.Services.Primitives;
 using FluentValidation;
 
 namespace EduHub.StudentService.Application.Services.Validators.Course;
@@ -13,7 +13,7 @@ public class CourseUpsertDtoValidator : AbstractValidator<UpsertCourseDto>
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(50).WithMessage(ErrorMessage.InvalidLength);
+            .MaximumLength(50).WithMessage(ErrorMessages.InvalidLength);
 
         RuleFor(x => x.EducatorId)
             .NotEmpty();

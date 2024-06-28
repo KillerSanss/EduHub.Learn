@@ -33,15 +33,15 @@ public class FullName
     /// <param name="patronymic">Отчество.</param>
     public FullName(string surname, string firstName, string patronymic)
     {
-        Surname = ValidateName(surname);
-        FirstName = ValidateName(firstName);
-        Patronymic = ValidateName(patronymic);
+        Surname = ValidateName(surname, nameof(surname));
+        FirstName = ValidateName(firstName, nameof(firstName));
+        Patronymic = ValidateName(patronymic, nameof(patronymic));
     }
 
-    private static string ValidateName(string value)
+    private static string ValidateName(string value, string paramName)
     {
         Guard.Against.String(value, 2, Operation.GreaterThanOrEqual);
         Guard.Against.String(value, 60, Operation.LessThanOrEqual);
-        return Guard.Against.Regex(value, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
+        return Guard.Against.Regex(value, RegexPatterns.LettersPattern, string.Format(ErrorMessage.OnlyLetters, paramName));
     }
 }

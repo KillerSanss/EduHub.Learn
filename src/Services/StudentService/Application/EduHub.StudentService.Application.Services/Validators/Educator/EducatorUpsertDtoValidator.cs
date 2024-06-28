@@ -1,4 +1,5 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Educator;
+using EduHub.StudentService.Application.Services.Primitives;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Validations;
 using FluentValidation;
@@ -14,36 +15,36 @@ public class EducatorUpsertDtoValidator : AbstractValidator<UpsertEducatorDto>
     {
         RuleFor(x => x.Surname)
             .NotEmpty()
-            .MinimumLength(2).WithMessage(ErrorMessage.InvalidLength)
-            .MaximumLength(60).WithMessage(ErrorMessage.InvalidLength)
-            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessage.OnlyLetters);
+            .MinimumLength(2).WithMessage(ErrorMessages.InvalidLength)
+            .MaximumLength(60).WithMessage(ErrorMessages.InvalidLength)
+            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessages.OnlyLetters);
     
         RuleFor(x => x.FirstName)
             .NotEmpty()
-            .MinimumLength(2).WithMessage(ErrorMessage.InvalidLength)
-            .MaximumLength(60).WithMessage(ErrorMessage.InvalidLength)
-            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessage.OnlyLetters);
+            .MinimumLength(2).WithMessage(ErrorMessages.InvalidLength)
+            .MaximumLength(60).WithMessage(ErrorMessages.InvalidLength)
+            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessages.OnlyLetters);
     
         RuleFor(x => x.Patronymic)
             .NotEmpty()
-            .MinimumLength(2).WithMessage(ErrorMessage.InvalidLength)
-            .MaximumLength(60).WithMessage(ErrorMessage.InvalidLength)
-            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessage.OnlyLetters);
+            .MinimumLength(2).WithMessage(ErrorMessages.InvalidLength)
+            .MaximumLength(60).WithMessage(ErrorMessages.InvalidLength)
+            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessages.OnlyLetters);
 
         RuleFor(x => x.Gender)
             .IsInEnum()
-            .NotEqual(Gender.None).WithMessage(ErrorMessage.DefaultEnum);
+            .NotEqual(Gender.None).WithMessage(ErrorMessages.DefaultEnum);
         
         RuleFor(x => x.Phone)
             .NotEmpty()
-            .Matches(RegexPatterns.PhonePattern).WithMessage(ErrorMessage.PhoneFormat);
+            .Matches(RegexPatterns.PhonePattern).WithMessage(ErrorMessages.PhoneFormat);
 
         RuleFor(x => x.WorkExperience)
             .NotEmpty()
-            .GreaterThanOrEqualTo(0).WithMessage(ErrorMessage.InvalidData);
+            .GreaterThanOrEqualTo(0).WithMessage(ErrorMessages.InvalidData);
 
         RuleFor(x => x.StartDate)
             .NotEmpty()
-            .LessThanOrEqualTo(DateTime.Now).WithMessage(ErrorMessage.FutureDate);
+            .LessThanOrEqualTo(DateTime.Now).WithMessage(ErrorMessages.FutureDate);
     }
 }

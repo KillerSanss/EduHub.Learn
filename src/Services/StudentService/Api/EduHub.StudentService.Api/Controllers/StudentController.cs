@@ -103,7 +103,7 @@ public class StudentController : ControllerBase
     /// <returns>Список всех зачислений студента.</returns>
     [HttpGet("{id:guid}/enrollments")]
     public async Task<ActionResult<EnrollmentOfStudentDto[]>> GetStudentEnrollments(
-        Guid id,
+        [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
         var enrollments = await _enrollmentService.GetStudentEnrollmentsAsync(id, cancellationToken);

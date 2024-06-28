@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+﻿using System.Runtime.CompilerServices;
+using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
 using Eduhub.StudentService.Domain.Validations.Enums;
 
@@ -16,7 +17,8 @@ public static class StringGuard
         this IGuardClause guardClause,
         string value,
         int length,
-        Operation operation)
+        Operation operation,
+        [CallerArgumentExpression("value")] string paramName = null)
     {
         Guard.Against.NullOrEmpty(value);
 
@@ -32,7 +34,7 @@ public static class StringGuard
 
         if (!isValid)
         {
-            throw new GuardValidationException(ErrorMessage.InvalidLength);
+            throw new GuardValidationException(string.Format(ErrorMessage.InvalidLength, paramName));
         }
 
         return value;

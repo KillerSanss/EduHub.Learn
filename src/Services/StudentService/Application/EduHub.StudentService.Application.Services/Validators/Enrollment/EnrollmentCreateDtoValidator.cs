@@ -1,5 +1,5 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Enrollment;
-using Eduhub.StudentService.Domain.Validations;
+using EduHub.StudentService.Application.Services.Primitives;
 using FluentValidation;
 
 namespace EduHub.StudentService.Application.Services.Validators.Enrollment;
@@ -12,7 +12,7 @@ public class EnrollmentCreateDtoValidator : AbstractValidator<CreateEnrollmentDt
     public EnrollmentCreateDtoValidator()
     {
         RuleFor(x => x.StartDate)
-            .LessThan(DateTime.Now).WithMessage(ErrorMessage.FutureDate);
+            .LessThan(DateTime.Now).WithMessage(ErrorMessages.FutureDate);
 
         RuleFor(x => x.CourseId)
             .NotEmpty();
