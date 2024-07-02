@@ -1,4 +1,4 @@
-﻿using Eduhub.StudentService.Domain.Validations;
+﻿using Eduhub.StudentService.Domain.Validations.Primitives;
 
 namespace EduHub.StudentService.Application.Services.Exceptions.Base;
 

@@ -15,36 +15,36 @@ public class EducatorUpsertDtoValidator : AbstractValidator<UpsertEducatorDto>
     {
         RuleFor(x => x.Surname)
             .NotEmpty()
-            .MinimumLength(2).WithMessage(Internal.InvalidLength)
-            .MaximumLength(60).WithMessage(Internal.InvalidLength)
-            .Matches(RegexPatterns.LettersPattern).WithMessage(Internal.OnlyLetters);
+            .MinimumLength(2).WithMessage(ErrorMessages.InvalidLength)
+            .MaximumLength(60).WithMessage(ErrorMessages.InvalidLength)
+            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessages.OnlyLetters);
     
         RuleFor(x => x.FirstName)
             .NotEmpty()
-            .MinimumLength(2).WithMessage(Internal.InvalidLength)
-            .MaximumLength(60).WithMessage(Internal.InvalidLength)
-            .Matches(RegexPatterns.LettersPattern).WithMessage(Internal.OnlyLetters);
+            .MinimumLength(2).WithMessage(ErrorMessages.InvalidLength)
+            .MaximumLength(60).WithMessage(ErrorMessages.InvalidLength)
+            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessages.OnlyLetters);
     
         RuleFor(x => x.Patronymic)
             .NotEmpty()
-            .MinimumLength(2).WithMessage(Internal.InvalidLength)
-            .MaximumLength(60).WithMessage(Internal.InvalidLength)
-            .Matches(RegexPatterns.LettersPattern).WithMessage(Internal.OnlyLetters);
+            .MinimumLength(2).WithMessage(ErrorMessages.InvalidLength)
+            .MaximumLength(60).WithMessage(ErrorMessages.InvalidLength)
+            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessages.OnlyLetters);
 
         RuleFor(x => x.Gender)
             .IsInEnum()
-            .NotEqual(Gender.None).WithMessage(Internal.DefaultEnum);
+            .NotEqual(Gender.None).WithMessage(ErrorMessages.DefaultEnum);
         
         RuleFor(x => x.Phone)
             .NotEmpty()
-            .Matches(RegexPatterns.PhonePattern).WithMessage(Internal.PhoneFormat);
+            .Matches(RegexPatterns.PhonePattern).WithMessage(ErrorMessages.PhoneFormat);
 
         RuleFor(x => x.WorkExperience)
             .NotEmpty()
-            .GreaterThanOrEqualTo(0).WithMessage(Internal.InvalidData);
+            .GreaterThanOrEqualTo(0).WithMessage(ErrorMessages.InvalidData);
 
         RuleFor(x => x.StartDate)
             .NotEmpty()
-            .LessThanOrEqualTo(DateTime.Now).WithMessage(Internal.FutureDate);
+            .LessThanOrEqualTo(DateTime.Now).WithMessage(ErrorMessages.FutureDate);
     }
 }

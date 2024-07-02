@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
+using Eduhub.StudentService.Domain.Validations.Primitives;
 
 namespace Eduhub.StudentService.Domain.Validations.GuardClasses;
 

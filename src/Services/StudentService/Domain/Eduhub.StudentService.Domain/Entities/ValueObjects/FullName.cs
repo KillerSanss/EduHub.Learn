@@ -2,6 +2,7 @@
 using Eduhub.StudentService.Domain.Validations;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
 using Eduhub.StudentService.Domain.Validations.Enums;
+using Eduhub.StudentService.Domain.Validations.Primitives;
 
 namespace Eduhub.StudentService.Domain.Entities.ValueObjects;
 

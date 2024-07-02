@@ -1,34 +1,45 @@
-﻿namespace EduHub.StudentService.Application.Services.Primitives;
+﻿namespace Eduhub.StudentService.Domain.Validations.Primitives;
 
 /// <summary>
 /// Класс для хранения сообщений об исключениях при валидации
 /// </summary>
-public static class Internal
+public static class ErrorMessages
 {
-    /// <summary>
-    /// Сообщение о некорректности введенных данных
-    /// </summary>
-    public const string InvalidData = "'{PropertyName}' is incorrect";
-
     /// <summary>
     /// Сообщение об ошибке формата - только буквы
     /// </summary>
-    public const string OnlyLetters = "'{PropertyName}' must contains only letters and symbols";
+    /// <remarks>
+    /// Использовать вместе со string.Format
+    /// {0} - имя свойства
+    /// </remarks>
+    public const string OnlyLetters = "{0} must contains only letters and symbols";
 
     /// <summary>
     /// Сообщение об ошибке перечисления
     /// </summary>
-    public const string DefaultEnum = "Enum '{PropertyName}' cannot be default";
+    /// <remarks>
+    /// Использовать вместе со string.Format
+    /// {0} - имя Перечисления
+    /// </remarks>
+    public const string DefaultEnum = "Enum {0} cannot be default";
 
     /// <summary>
     /// Сообщение об ошибке формата - недействительная длина
     /// </summary>
-    public const string InvalidLength = "'{PropertyName}' must be correct length";
+    /// <remarks>
+    /// Использовать вместе со string.Format
+    /// {0} - имя свойства
+    /// </remarks>
+    public const string InvalidLength = "{0} must be correct length";
 
     /// <summary>
     /// Сообщение об ошибке даты
     /// </summary>
-    public const string FutureDate = "'{PropertyName}' cannot be in future";
+    /// <remarks>
+    /// Использовать вместе со string.Format
+    /// {0} - имя свойства
+    /// </remarks>
+    public const string FutureDate = "{0} cannot be in future";
 
     /// <summary>
     /// Сообщение об ошибке некорректного формата электронной почты

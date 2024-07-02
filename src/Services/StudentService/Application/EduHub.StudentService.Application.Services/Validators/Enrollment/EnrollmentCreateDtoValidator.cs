@@ -12,7 +12,7 @@ public class EnrollmentCreateDtoValidator : AbstractValidator<CreateEnrollmentDt
     public EnrollmentCreateDtoValidator()
     {
         RuleFor(x => x.StartDate)
-            .LessThan(DateTime.Now).WithMessage(Internal.FutureDate);
+            .LessThan(DateTime.Now).WithMessage(ErrorMessages.FutureDate);
 
         RuleFor(x => x.CourseId)
             .NotEmpty();
