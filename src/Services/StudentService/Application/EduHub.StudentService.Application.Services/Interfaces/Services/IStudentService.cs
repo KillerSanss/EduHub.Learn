@@ -13,15 +13,16 @@ public interface IStudentService
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    Task<StudentDto> AddAsync(CreateStudentDto student, CancellationToken cancellationToken = default);
+    Task<StudentDto> AddAsync(UpsertStudentDto student, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Обновление студента
     /// </summary>
+    /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    Task<StudentDto> UpdateAsync(UpdateStudentDto student, CancellationToken  cancellationToken = default);
+    Task<StudentDto> UpdateAsync(Guid studentId, UpsertStudentDto student, CancellationToken  cancellationToken = default);
 
     /// <summary>
     /// Получение студента

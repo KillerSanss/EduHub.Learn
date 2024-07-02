@@ -3,6 +3,7 @@ using Bogus;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Validations;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
+using Eduhub.StudentService.Domain.Validations.Primitives;
 using FluentAssertions;
 
 namespace EduHub.StudentService.Tests.Unit.Tests.Guards;
@@ -56,7 +57,7 @@ public class GuardPositiveTests
         var email = _faker.Internet.Email();
 
         // Act
-        Action action = () => Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessage.EmailFormat);
+        Action action = () => Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessages.EmailFormat);
 
         // Assert
         action.Should().NotThrow();
@@ -72,7 +73,7 @@ public class GuardPositiveTests
         var phoneNumber = _faker.Phone.PhoneNumber("373########");
 
         // Act
-        Action action = () => Guard.Against.Regex(phoneNumber, RegexPatterns.PhonePattern, ErrorMessage.PhoneFormat);
+        Action action = () => Guard.Against.Regex(phoneNumber, RegexPatterns.PhonePattern, ErrorMessages.PhoneFormat);
 
         // Assert
         action.Should().NotThrow();
@@ -88,7 +89,7 @@ public class GuardPositiveTests
         var avatarUrl = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png");
 
         // Act
-        Action action = () => Guard.Against.Regex(avatarUrl, RegexPatterns.AvatarUrlPattern, ErrorMessage.AvatarPattern);
+        Action action = () => Guard.Against.Regex(avatarUrl, RegexPatterns.AvatarUrlPattern, ErrorMessages.AvatarPattern);
 
         // Assert
         action.Should().NotThrow();
@@ -104,7 +105,7 @@ public class GuardPositiveTests
         var text = _faker.Random.String2(1, 100, "a");
 
         // Act
-        Action action = () => Guard.Against.Regex(text, RegexPatterns.LettersPattern, ErrorMessage.InvalidLength);
+        Action action = () => Guard.Against.Regex(text, RegexPatterns.LettersPattern, ErrorMessages.InvalidLength);
 
         // Assert
         action.Should().NotThrow();

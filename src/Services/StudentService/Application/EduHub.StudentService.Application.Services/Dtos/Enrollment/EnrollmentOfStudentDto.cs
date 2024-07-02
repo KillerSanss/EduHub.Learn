@@ -3,8 +3,13 @@
 /// <summary>
 /// Дто зачисления
 /// </summary>
-public class StudentEnrollmentDto : BaseEnrollmentDto
+public class EnrollmentOfStudentDto : BaseEnrollmentDto
 {
+    /// <summary>
+    /// Идентификатор зачисления
+    /// </summary>
+    public Guid Id { get; init; }
+    
     /// <summary>
     /// Название курса
     /// </summary>

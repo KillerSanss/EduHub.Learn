@@ -2,6 +2,7 @@
 using Eduhub.StudentService.Domain.Validations;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
 using Eduhub.StudentService.Domain.Validations.Enums;
+using Eduhub.StudentService.Domain.Validations.Primitives;
 
 namespace Eduhub.StudentService.Domain.Entities.ValueObjects;
 
@@ -42,6 +43,6 @@ public class FullName
     {
         Guard.Against.String(value, 2, Operation.GreaterThanOrEqual);
         Guard.Against.String(value, 60, Operation.LessThanOrEqual);
-        return Guard.Against.Regex(value, RegexPatterns.LettersPattern, string.Format(ErrorMessage.OnlyLetters, paramName));
+        return Guard.Against.Regex(value, RegexPatterns.LettersPattern, string.Format(ErrorMessages.OnlyLetters, paramName));
     }
 }

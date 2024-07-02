@@ -29,5 +29,21 @@ services:
         environment:
             - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=Student;Username=user;Password=password
 
+    api:
+        build:
+            context: .
+            dockerfile: src/Services/StudentService/Api/EduHub.StudentService.Api/Dockerfile
+        container_name: eduhub_api
+        depends_on:
+            database:
+                condition: service_healthy
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=Student;Username=user;Password=password
+        ports:
+            - "5121:80"
+            - "5122:443"
+
 volumes:
     database_data:
+

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
+using Eduhub.StudentService.Domain.Validations.Primitives;
 
 namespace Eduhub.StudentService.Domain.Validations.GuardClasses;
 
@@ -20,7 +21,7 @@ public static class EnumGuard
     {
         if (defaultValues.Contains(value))
         {
-            throw new GuardValidationException(string.Format(ErrorMessage.DefaultEnum, paramName));
+            throw new GuardValidationException(string.Format(ErrorMessages.DefaultEnum, paramName));
         }
 
         return value;

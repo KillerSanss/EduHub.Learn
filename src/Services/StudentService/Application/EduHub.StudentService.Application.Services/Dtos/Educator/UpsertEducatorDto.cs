@@ -3,6 +3,6 @@
 /// <summary>
 /// Дто класс для преподавателя
 /// </summary>
-public class CreateEducatorDto : BaseEducatorDto
+public class UpsertEducatorDto : BaseEducatorDto
 {
 }

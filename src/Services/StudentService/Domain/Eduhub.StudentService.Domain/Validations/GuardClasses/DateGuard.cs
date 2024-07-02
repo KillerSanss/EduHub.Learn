@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.Exceptions;
+using Eduhub.StudentService.Domain.Validations.Primitives;
 
 namespace Eduhub.StudentService.Domain.Validations.GuardClasses;
 
@@ -21,7 +22,7 @@ public static class DateGuard
 
         if (date > DateTime.Now)
         {
-            throw new GuardValidationException(string.Format(ErrorMessage.FutureDate, paramName));
+            throw new GuardValidationException(string.Format(ErrorMessages.FutureDate, paramName));
         }
 
         return date;

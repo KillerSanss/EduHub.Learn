@@ -14,15 +14,16 @@ public interface IEducatorService
     /// <param name="educator">Дто Преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный преподаватель.</returns>
-    Task<EducatorDto> AddAsync(CreateEducatorDto educator, CancellationToken cancellationToken = default);
+    Task<EducatorDto> AddAsync(UpsertEducatorDto educator, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Обновление преподавателя
     /// </summary>
+    /// <param name="educatorId">Идентификатор преподавателя.</param>
     /// <param name="educator">Дто Преподавателя.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный преподаватель.</returns>
-    Task<EducatorDto> UpdateAsync(UpdateEducatorDto educator, CancellationToken cancellationToken = default);
+    Task<EducatorDto> UpdateAsync(Guid educatorId, UpsertEducatorDto educator, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Получение преподавателя

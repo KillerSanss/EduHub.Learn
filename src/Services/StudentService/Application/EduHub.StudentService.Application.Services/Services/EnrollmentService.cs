@@ -5,7 +5,9 @@ using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
+using EduHub.StudentService.Application.Services.Validators.Enrollment;
 using Eduhub.StudentService.Domain.Entities;
+using FluentValidation;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -44,6 +46,8 @@ public class EnrollmentService : IEnrollmentService
     {
         Guard.Against.Null(enrollmentDto);
 
+        await new EnrollmentCreateDtoValidator().ValidateAndThrowAsync(enrollmentDto, cancellationToken);
+        
         var enrollment = _mapper.Map<Enrollment>(enrollmentDto);
         
         await CourseExistOrThrowAsync(enrollment.CourseId, cancellationToken);
@@ -61,10 +65,10 @@ public class EnrollmentService : IEnrollmentService
     /// <param name="studentId">Идентификатор студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Массив зачислений студента.</returns>
-    public async Task<StudentEnrollmentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken)
+    public async Task<EnrollmentOfStudentDto[]> GetStudentEnrollmentsAsync(Guid studentId, CancellationToken cancellationToken)
     {
         var studentEnrollments = await _enrollmentRepository.GetStudentEnrollmentsAsync(studentId, cancellationToken);
-        return _mapper.Map<StudentEnrollmentDto[]>(studentEnrollments);
+        return _mapper.Map<EnrollmentOfStudentDto[]>(studentEnrollments);
     }
 
     /// <summary>

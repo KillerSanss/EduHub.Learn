@@ -1,15 +1,10 @@
-﻿namespace Eduhub.StudentService.Domain.Validations;
+﻿namespace Eduhub.StudentService.Domain.Validations.Primitives;
 
 /// <summary>
 /// Класс для хранения сообщений об исключениях при валидации
 /// </summary>
-public static class ErrorMessage
+public static class ErrorMessages
 {
-    /// <summary>
-    /// Сообщение о некоректности введенных данных
-    /// </summary>
-    public const string InvalidData = "{0} is incorrect";
-
     /// <summary>
     /// Сообщение об ошибке формата - только буквы
     /// </summary>
@@ -68,7 +63,6 @@ public static class ErrorMessage
     /// Использовать вместе со string.Format
     /// {0} - имя сущности
     /// {1} - имя свойства
-    /// {2} - значение свойтсва
     /// </remarks>
     public const string ConflictError = "Entity {0} with similar {1} is already exist";
 
@@ -81,5 +75,5 @@ public static class ErrorMessage
     /// {1} - имя свойства
     /// {2} - значение свойства
     /// </remarks>
-    public const string NotFoundError = "Entity {0} with {1} = {2} not found.";
+    public const string NotFoundError = "Entity {0} with {1} = {2} is not found.";
 }

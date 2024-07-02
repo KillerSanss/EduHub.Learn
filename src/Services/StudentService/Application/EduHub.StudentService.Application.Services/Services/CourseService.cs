@@ -6,6 +6,8 @@ using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
+using EduHub.StudentService.Application.Services.Validators.Course;
+using FluentValidation;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -33,9 +35,11 @@ public class CourseService : ICourseService
     /// <param name="courseDto">Курс для добавления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный курс.</returns>
-    public async Task<CourseDto> AddAsync(CreateCourseDto courseDto, CancellationToken cancellationToken)
+    public async Task<CourseDto> AddAsync(UpsertCourseDto courseDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(courseDto);
+        
+        await new CourseUpsertDtoValidator().ValidateAndThrowAsync(courseDto, cancellationToken);
         
         var course = _mapper.Map<Course>(courseDto);
         
@@ -52,11 +56,14 @@ public class CourseService : ICourseService
     /// <param name="courseDto">Курс для обновления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный курс.</returns>
-    public async Task<CourseDto> UpdateAsync(UpdateCourseDto courseDto, CancellationToken cancellationToken)
+    public async Task<CourseDto> UpdateAsync(Guid id, UpsertCourseDto courseDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(courseDto);
+        Guard.Against.Null(id);
 
-        var course = await GetByIdOrThrowAsync(courseDto.Id, cancellationToken);
+        await new CourseUpsertDtoValidator().ValidateAndThrowAsync(courseDto, cancellationToken);
+        
+        var course = await GetByIdOrThrowAsync(id, cancellationToken);
         course.Update(courseDto.Name, courseDto.Description, courseDto.EducatorId);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);

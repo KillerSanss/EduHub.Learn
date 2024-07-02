@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
 using Eduhub.StudentService.Domain.Validations;
+using Eduhub.StudentService.Domain.Validations.Primitives;
 
 namespace Eduhub.StudentService.Domain.Entities.ValueObjects;
 
@@ -20,7 +21,7 @@ public class Phone
     /// <param name="phoneNumber">Номер телефона.</param>
     public Phone(string phoneNumber)
     {
-        Value = Guard.Against.Regex(phoneNumber, RegexPatterns.PhonePattern, ErrorMessage.PhoneFormat);
+        Value = Guard.Against.Regex(phoneNumber, RegexPatterns.PhonePattern, ErrorMessages.PhoneFormat);
     }
 
     private Phone()

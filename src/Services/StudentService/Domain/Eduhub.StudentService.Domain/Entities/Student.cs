@@ -5,6 +5,7 @@ using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
 using Eduhub.StudentService.Domain.Validations;
 using Eduhub.StudentService.Domain.Validations.Enums;
+using Eduhub.StudentService.Domain.Validations.Primitives;
 
 namespace Eduhub.StudentService.Domain.Entities;
 
@@ -124,6 +125,6 @@ public class Student : BasePerson
     /// </summary>
     private void SetAvatar(string avatar)
     {
-        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern, ErrorMessage.AvatarPattern);
+        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern, ErrorMessages.AvatarPattern);
     }
 }

@@ -34,8 +34,8 @@ public class CourseServicePositiveTests
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
-        var addedCourse = _courseGenerator.GenerateCourseDto(addedEducator.Id);
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
+        var addedCourse = _courseGenerator.GenerateUpsertCourseDto(addedEducator.Id);
 
         // Act
         var action = await courseService.AddAsync(addedCourse);
@@ -55,13 +55,13 @@ public class CourseServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
 
-        var updateCourseData = _courseGenerator.GenerateUpdateCourseDto(addedCourse.Id, addedEducator.Id);
+        var updateCourseData = _courseGenerator.GenerateUpsertCourseDto(addedEducator.Id);
 
         // Act
-        var course = await courseService.UpdateAsync(updateCourseData);
+        var course = await courseService.UpdateAsync(addedCourse.Id, updateCourseData);
 
         // Assert
         course.Should().BeEquivalentTo(updateCourseData);
@@ -78,9 +78,9 @@ public class CourseServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
 
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
 
         // Act
         var courses = await courseService.GetAllAsync();
@@ -100,9 +100,9 @@ public class CourseServicePositiveTests
         var educatorService = scope.ServiceProvider.GetRequiredService<IEducatorService>();
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
 
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
 
         // Act
         var selectedCourse = await courseService.GetByIdAsync(addedCourse.Id);
@@ -123,8 +123,8 @@ public class CourseServicePositiveTests
         var courseService = scope.ServiceProvider.GetRequiredService<ICourseService>();
         var courseRepository = scope.ServiceProvider.GetRequiredService<ICourseRepository>();
 
-        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateEducatorDto());
-        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateCourseDto(addedEducator.Id));
+        var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
+        var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
 
         // Act
         await courseService.DeleteAsync(addedCourse.Id, CancellationToken.None);

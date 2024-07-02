@@ -9,15 +9,12 @@
 
     <ItemGroup>
       <PackageReference Include="AutoFixture" Version="4.18.1" />
-      <PackageReference Include="Bogus" Version="35.4.0" />
       <PackageReference Include="FluentAssertions" Version="6.12.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
       <PackageReference Include="xunit" Version="2.8.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Application\EduHub.StudentService.Application.Services\EduHub.StudentService.Application.Services.csproj" />
       <ProjectReference Include="..\..\Infrastructure\Eduhub.StudentService.Infrastructure.Data\Eduhub.StudentService.Infrastructure.Data.csproj" />
       <ProjectReference Include="..\..\Infrastructure\EduHub.StudentService.Infrastructure.Migrator\EduHub.StudentService.Infrastructure.Migrator.csproj" />
       <ProjectReference Include="..\..\Infrastructure\EduHub.StudentService.Infrastructure.Repositories\EduHub.StudentService.Infrastructure.Repositories.csproj" />

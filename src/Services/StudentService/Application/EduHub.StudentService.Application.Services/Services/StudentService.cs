@@ -6,8 +6,10 @@ using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
+using EduHub.StudentService.Application.Services.Validators.Student;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
+using FluentValidation;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -33,10 +35,12 @@ public class StudentService : IStudentService
     /// <param name="studentDto">Студент для добавления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    public async Task<StudentDto> AddAsync(CreateStudentDto studentDto, CancellationToken cancellationToken)
+    public async Task<StudentDto> AddAsync(UpsertStudentDto studentDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(studentDto);
 
+        await new StudentUpsertDtoValidator().ValidateAndThrowAsync(studentDto, cancellationToken);
+        
         var student = _mapper.Map<Student>(studentDto);
         await _studentRepository.AddAsync(student, cancellationToken);
 
@@ -51,11 +55,14 @@ public class StudentService : IStudentService
     /// <param name="studentDto">Студент для обновления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    public async Task<StudentDto> UpdateAsync(UpdateStudentDto studentDto, CancellationToken cancellationToken)
+    public async Task<StudentDto> UpdateAsync(Guid id, UpsertStudentDto studentDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(studentDto);
+        Guard.Against.NullOrEmpty(id);
+        
+        await new StudentUpsertDtoValidator().ValidateAndThrowAsync(studentDto, cancellationToken);
 
-        var student = await GetByIdOrThrowAsync(studentDto.Id, cancellationToken);
+        var student = await GetByIdOrThrowAsync(id, cancellationToken);
         student.Update(
             new FullName(studentDto.Surname, studentDto.FirstName, studentDto.Patronymic),
             studentDto.Gender,

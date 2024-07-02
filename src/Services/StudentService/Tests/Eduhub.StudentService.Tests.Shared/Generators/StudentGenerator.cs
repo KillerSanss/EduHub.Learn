@@ -14,41 +14,15 @@ public class StudentGenerator
     /// Генерация студента
     /// </summary>
     /// <returns>Студент.</returns>
-    public CreateStudentDto GenerateStudentDto()
+    public UpsertStudentDto GenerateUpsertStudentDto()
     {
-        var student = new CreateStudentDto
+        var student = new UpsertStudentDto
         {
             FirstName = _faker.Name.FirstName(),
             Surname = _faker.Name.LastName(),
             Patronymic = _faker.Name.LastName(),
             BirthDate = _faker.Date.Past(),
             Gender = _faker.PickRandom(Gender.Female, Gender.Male),
-            Phone = _faker.Phone.PhoneNumber("373########"),
-            Email = _faker.Internet.Email(),
-            City = _faker.Address.City(),
-            Street = _faker.Address.StreetName(),
-            HouseNumber = _faker.Random.Int(1, 1000),
-            Avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png")
-        };
-        
-        return student;
-    }
-    
-    /// <summary>
-    /// Генерация студента для обновления
-    /// </summary>
-    /// <param name="id">Идентификатор студента.</param>
-    /// <returns>Студент.</returns>
-    public UpdateStudentDto GenerateUpdateStudentDto(Guid id)
-    {
-        var student = new UpdateStudentDto
-        {
-            Id = id,
-            FirstName = _faker.Name.FirstName(),
-            Surname = _faker.Name.LastName(),
-            Patronymic = _faker.Name.LastName(),
-            BirthDate = _faker.Date.Past(),
-            Gender = Gender.Male,
             Phone = _faker.Phone.PhoneNumber("373########"),
             Email = _faker.Internet.Email(),
             City = _faker.Address.City(),
