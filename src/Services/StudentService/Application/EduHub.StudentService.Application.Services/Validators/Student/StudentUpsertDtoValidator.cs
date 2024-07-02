@@ -1,8 +1,8 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Student;
+using EduHub.StudentService.Application.Services.Primitives;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Validations;
 using FluentValidation;
-using ErrorMessages = EduHub.StudentService.Application.Services.Primitives.ErrorMessages;
 
 namespace EduHub.StudentService.Application.Services.Validators.Student;
 
@@ -15,52 +15,52 @@ public class StudentUpsertDtoValidator : AbstractValidator<UpsertStudentDto>
     {
         RuleFor(x => x.Surname)
             .NotEmpty()
-            .MinimumLength(2).WithMessage(ErrorMessages.InvalidLength)
-            .MaximumLength(60).WithMessage(ErrorMessages.InvalidLength)
-            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessages.OnlyLetters);
+            .MinimumLength(2).WithMessage(Internal.InvalidLength)
+            .MaximumLength(60).WithMessage(Internal.InvalidLength)
+            .Matches(RegexPatterns.LettersPattern).WithMessage(Internal.OnlyLetters);
     
         RuleFor(x => x.FirstName)
             .NotEmpty()
-            .MinimumLength(2).WithMessage(ErrorMessages.InvalidLength)
-            .MaximumLength(60).WithMessage(ErrorMessages.InvalidLength)
-            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessages.OnlyLetters);
+            .MinimumLength(2).WithMessage(Internal.InvalidLength)
+            .MaximumLength(60).WithMessage(Internal.InvalidLength)
+            .Matches(RegexPatterns.LettersPattern).WithMessage(Internal.OnlyLetters);
     
         RuleFor(x => x.Patronymic)
             .NotEmpty()
-            .MinimumLength(2).WithMessage(ErrorMessages.InvalidLength)
-            .MaximumLength(60).WithMessage(ErrorMessages.InvalidLength)
-            .Matches(RegexPatterns.LettersPattern).WithMessage(ErrorMessages.OnlyLetters);
+            .MinimumLength(2).WithMessage(Internal.InvalidLength)
+            .MaximumLength(60).WithMessage(Internal.InvalidLength)
+            .Matches(RegexPatterns.LettersPattern).WithMessage(Internal.OnlyLetters);
 
         RuleFor(x => x.Gender)
             .IsInEnum()
-            .NotEqual(Gender.None).WithMessage(ErrorMessages.DefaultEnum);
+            .NotEqual(Gender.None).WithMessage(Internal.DefaultEnum);
 
         RuleFor(x => x.BirthDate)
             .NotEmpty()
-            .LessThan(DateTime.Now).WithMessage(ErrorMessages.FutureDate);
+            .LessThan(DateTime.Now).WithMessage(Internal.FutureDate);
 
         RuleFor(x => x.Email)
             .NotEmpty()
-            .Matches(RegexPatterns.EmailPattern).WithMessage(ErrorMessages.EmailFormat);
+            .Matches(RegexPatterns.EmailPattern).WithMessage(Internal.EmailFormat);
         
         RuleFor(x => x.Phone)
             .NotEmpty()
-            .Matches(RegexPatterns.PhonePattern).WithMessage(ErrorMessages.PhoneFormat);
+            .Matches(RegexPatterns.PhonePattern).WithMessage(Internal.PhoneFormat);
 
         RuleFor(x => x.City)
             .NotEmpty()
-            .MaximumLength(100).WithMessage(ErrorMessages.InvalidLength);
+            .MaximumLength(100).WithMessage(Internal.InvalidLength);
 
         RuleFor(x => x.Street)
             .NotEmpty()
-            .MaximumLength(100).WithMessage(ErrorMessages.InvalidLength);
+            .MaximumLength(100).WithMessage(Internal.InvalidLength);
 
         RuleFor(x => x.HouseNumber)
             .NotEmpty()
-            .GreaterThan(0).WithMessage(ErrorMessages.InvalidData);
+            .GreaterThan(0).WithMessage(Internal.InvalidData);
 
         RuleFor(x => x.Avatar)
             .NotEmpty()
-            .Matches(RegexPatterns.AvatarUrlPattern).WithMessage(ErrorMessages.AvatarPattern);
+            .Matches(RegexPatterns.AvatarUrlPattern).WithMessage(Internal.AvatarPattern);
     }
 }

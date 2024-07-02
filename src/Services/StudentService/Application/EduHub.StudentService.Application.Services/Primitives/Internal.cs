@@ -3,7 +3,7 @@
 /// <summary>
 /// Класс для хранения сообщений об исключениях при валидации
 /// </summary>
-public static class ErrorMessages
+public static class Internal
 {
     /// <summary>
     /// Сообщение о некорректности введенных данных

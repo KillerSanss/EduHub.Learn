@@ -13,7 +13,7 @@ public class CourseUpsertDtoValidator : AbstractValidator<UpsertCourseDto>
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(50).WithMessage(ErrorMessages.InvalidLength);
+            .MaximumLength(50).WithMessage(Internal.InvalidLength);
 
         RuleFor(x => x.EducatorId)
             .NotEmpty();

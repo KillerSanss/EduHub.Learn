@@ -1,4 +1,4 @@
-﻿using ErrorMessages = EduHub.StudentService.Application.Services.Primitives.ErrorMessages;
+﻿using Eduhub.StudentService.Domain.Validations;
 
 namespace EduHub.StudentService.Application.Services.Exceptions.Base;
 
