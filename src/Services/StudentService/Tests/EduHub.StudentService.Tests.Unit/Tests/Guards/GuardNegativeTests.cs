@@ -84,7 +84,7 @@ public class GuardNegativeTests
         var email = _faker.Random.String();
 
         // Act
-        Action action = () => Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessage.EmailFormat);
+        Action action = () => Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessages.EmailFormat);
 
         // Assert
         action.Should().Throw<GuardValidationException>();
@@ -100,7 +100,7 @@ public class GuardNegativeTests
         var phone = _faker.Random.String();
 
         // Act
-        Action action = () => Guard.Against.Regex(phone, RegexPatterns.PhonePattern, ErrorMessage.PhoneFormat);
+        Action action = () => Guard.Against.Regex(phone, RegexPatterns.PhonePattern, ErrorMessages.PhoneFormat);
 
         // Arrange
         action.Should().Throw<GuardValidationException>();
@@ -116,7 +116,7 @@ public class GuardNegativeTests
         var avatarUrl = _faker.Random.String();
 
         // Act
-        Action action = () => Guard.Against.Regex(avatarUrl, RegexPatterns.AvatarUrlPattern, ErrorMessage.AvatarPattern);
+        Action action = () => Guard.Against.Regex(avatarUrl, RegexPatterns.AvatarUrlPattern, ErrorMessages.AvatarPattern);
 
         // Arrange
         action.Should().Throw<GuardValidationException>();
@@ -132,7 +132,7 @@ public class GuardNegativeTests
         var text = _faker.Random.String() + "-";
 
         // Act
-        Action action = () => Guard.Against.Regex(text, RegexPatterns.LettersPattern, ErrorMessage.OnlyLetters);
+        Action action = () => Guard.Against.Regex(text, RegexPatterns.LettersPattern, ErrorMessages.OnlyLetters);
 
         // Arrange
         action.Should().Throw<GuardValidationException>();

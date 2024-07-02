@@ -34,7 +34,7 @@ public static class StringGuard
 
         if (!isValid)
         {
-            throw new GuardValidationException(string.Format(ErrorMessage.InvalidLength, paramName));
+            throw new GuardValidationException(string.Format(ErrorMessages.InvalidLength, paramName));
         }
 
         return value;

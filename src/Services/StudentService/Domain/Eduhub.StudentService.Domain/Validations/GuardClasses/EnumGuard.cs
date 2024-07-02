@@ -20,7 +20,7 @@ public static class EnumGuard
     {
         if (defaultValues.Contains(value))
         {
-            throw new GuardValidationException(string.Format(ErrorMessage.DefaultEnum, paramName));
+            throw new GuardValidationException(string.Format(ErrorMessages.DefaultEnum, paramName));
         }
 
         return value;

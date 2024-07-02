@@ -3,13 +3,8 @@
 /// <summary>
 /// Класс для хранения сообщений об исключениях при валидации
 /// </summary>
-public static class ErrorMessage
+public static class ErrorMessages
 {
-    /// <summary>
-    /// Сообщение о некорректности введенных данных
-    /// </summary>
-    public const string InvalidData = "{0} is incorrect";
-
     /// <summary>
     /// Сообщение об ошибке формата - только буквы
     /// </summary>

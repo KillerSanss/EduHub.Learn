@@ -124,6 +124,6 @@ public class Student : BasePerson
     /// </summary>
     private void SetAvatar(string avatar)
     {
-        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern, ErrorMessage.AvatarPattern);
+        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern, ErrorMessages.AvatarPattern);
     }
 }

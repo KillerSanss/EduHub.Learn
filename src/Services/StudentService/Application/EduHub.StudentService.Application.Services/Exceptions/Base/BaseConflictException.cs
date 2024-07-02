@@ -1,4 +1,4 @@
-﻿using Eduhub.StudentService.Domain.Validations;
+﻿using ErrorMessages = EduHub.StudentService.Application.Services.Primitives.ErrorMessages;
 
 namespace EduHub.StudentService.Application.Services.Exceptions.Base;
 
@@ -13,7 +13,7 @@ public abstract class BaseConflictException : Exception
     /// <param name="entityName">Название сущности.</param>
     /// <param name="paramName">Название параметра.</param>
     protected BaseConflictException(string entityName, string paramName)
-        : base(string.Format(ErrorMessage.ConflictError, entityName, paramName))
+        : base(string.Format(ErrorMessages.ConflictError, entityName, paramName))
     {
     }
 }

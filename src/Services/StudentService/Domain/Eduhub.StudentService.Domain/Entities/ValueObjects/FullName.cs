@@ -42,6 +42,6 @@ public class FullName
     {
         Guard.Against.String(value, 2, Operation.GreaterThanOrEqual);
         Guard.Against.String(value, 60, Operation.LessThanOrEqual);
-        return Guard.Against.Regex(value, RegexPatterns.LettersPattern, string.Format(ErrorMessage.OnlyLetters, paramName));
+        return Guard.Against.Regex(value, RegexPatterns.LettersPattern, string.Format(ErrorMessages.OnlyLetters, paramName));
     }
 }

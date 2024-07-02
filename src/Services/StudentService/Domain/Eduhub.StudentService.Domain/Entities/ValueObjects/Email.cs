@@ -22,7 +22,7 @@ public class Email
     public Email(string email)
     {
         Guard.Against.String(email, 255, Operation.LessThanOrEqual);
-        Value = Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessage.EmailFormat);
+        Value = Guard.Against.Regex(email, RegexPatterns.EmailPattern, ErrorMessages.EmailFormat);
     }
 
     private Email()

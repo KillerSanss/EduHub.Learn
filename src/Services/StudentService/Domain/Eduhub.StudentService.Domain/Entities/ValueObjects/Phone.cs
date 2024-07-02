@@ -20,7 +20,7 @@ public class Phone
     /// <param name="phoneNumber">Номер телефона.</param>
     public Phone(string phoneNumber)
     {
-        Value = Guard.Against.Regex(phoneNumber, RegexPatterns.PhonePattern, ErrorMessage.PhoneFormat);
+        Value = Guard.Against.Regex(phoneNumber, RegexPatterns.PhonePattern, ErrorMessages.PhoneFormat);
     }
 
     private Phone()

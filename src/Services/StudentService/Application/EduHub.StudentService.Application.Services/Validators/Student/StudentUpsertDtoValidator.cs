@@ -1,8 +1,8 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Student;
-using EduHub.StudentService.Application.Services.Primitives;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Validations;
 using FluentValidation;
+using ErrorMessages = EduHub.StudentService.Application.Services.Primitives.ErrorMessages;
 
 namespace EduHub.StudentService.Application.Services.Validators.Student;
 
