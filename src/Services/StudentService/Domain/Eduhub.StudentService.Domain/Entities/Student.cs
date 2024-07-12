@@ -123,7 +123,7 @@ public class Student : BasePerson
     /// <summary>
     /// Установка аватара
     /// </summary>
-    private void SetAvatar(string avatar)
+    public void SetAvatar(string avatar)
     {
         Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern, ErrorMessages.AvatarPattern);
     }

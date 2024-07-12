@@ -21,12 +21,14 @@ public class StudentService : IStudentService
     private readonly IStudentRepository _studentRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly FileClient _fileClient;
 
-    public StudentService(IStudentRepository studentRepository, IMapper mapper, IUnitOfWork unitOfWork)
+    public StudentService(IStudentRepository studentRepository, IMapper mapper, IUnitOfWork unitOfWork, FileClient fileClient)
     {
         _studentRepository = Guard.Against.Null(studentRepository);
         _mapper = Guard.Against.Null(mapper);
         _unitOfWork = Guard.Against.Null(unitOfWork);
+        _fileClient = Guard.Against.Null(fileClient);
     }
 
     /// <summary>
@@ -38,14 +40,15 @@ public class StudentService : IStudentService
     public async Task<StudentDto> AddAsync(UpsertStudentDto studentDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(studentDto);
-
         await new StudentUpsertDtoValidator().ValidateAndThrowAsync(studentDto, cancellationToken);
         
+        var avatarUri = await _fileClient.UploadFileAsync(studentDto.Avatar);
+        
         var student = _mapper.Map<Student>(studentDto);
+        student.SetAvatar(avatarUri);
+        
         await _studentRepository.AddAsync(student, cancellationToken);
-
         await SaveChangesOrThrowAsync(cancellationToken);
-
         return _mapper.Map<StudentDto>(student);
     }
 
@@ -61,8 +64,10 @@ public class StudentService : IStudentService
         Guard.Against.NullOrEmpty(id);
         
         await new StudentUpsertDtoValidator().ValidateAndThrowAsync(studentDto, cancellationToken);
-
+        
         var student = await GetByIdOrThrowAsync(id, cancellationToken);
+        var avatarUri = await _fileClient.UploadFileAsync(studentDto.Avatar);
+        
         student.Update(
             new FullName(studentDto.Surname, studentDto.FirstName, studentDto.Patronymic),
             studentDto.Gender,
@@ -70,7 +75,7 @@ public class StudentService : IStudentService
             new Email(studentDto.Email),
             new Phone(studentDto.Phone),
             new FullAddress(studentDto.City, studentDto.Street, studentDto.HouseNumber),
-            studentDto.Avatar);
+            avatarUri);
 
         await SaveChangesOrThrowAsync(cancellationToken);
 

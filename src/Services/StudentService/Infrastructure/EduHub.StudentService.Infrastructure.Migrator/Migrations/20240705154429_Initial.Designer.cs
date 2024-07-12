@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    [Migration("20240508212415_Init")]
-    partial class Init
+    [Migration("20240705154429_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
