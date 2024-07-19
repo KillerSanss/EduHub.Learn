@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using EduHub.StudentService.Application.Services;
 using EduHub.StudentService.Application.Services.Dtos.Enrollment;
 using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
@@ -22,10 +23,14 @@ public class EnrollmentServiceNegativeTests
     private readonly CourseGenerator _courseGenerator = new();
     private readonly StudentGenerator _studentGenerator = new();
     private readonly EducatorGenerator _educatorGenerator = new();
+    private readonly FileGetter _file = new();
+    private readonly FileClient _fileClient;
 
     public EnrollmentServiceNegativeTests(IntegrationTestFixture fixture)
     {
         _fixture = fixture;
+        using var scope = _fixture.ServiceProvider.CreateScope();
+        _fileClient = scope.ServiceProvider.GetRequiredService<FileClient>();
     }
 
     /// <summary>
@@ -85,7 +90,7 @@ public class EnrollmentServiceNegativeTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
         
-        var student = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
+        var student = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), _file.GetTestAvatar());
         
         var enrollment = new CreateEnrollmentDto
         {
@@ -99,5 +104,7 @@ public class EnrollmentServiceNegativeTests
         
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException<Course>>();
+        
+        await _fileClient.DeleteAllObjectsInBucketAsync();
     }
 }

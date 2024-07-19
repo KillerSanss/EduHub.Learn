@@ -59,11 +59,13 @@ public class StudentController : ControllerBase
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
     [HttpPost]
+    [Consumes("multipart/form-data")]
     public async Task<ActionResult<UpsertStudentDto>> Create(
-        [FromBody] UpsertStudentDto createStudentDto,
+        [FromForm] UpsertStudentDto createStudentDto,
+        [FromForm] IFormFile file,
         CancellationToken cancellationToken)
     {
-        var addedStudent = await _studentService.AddAsync(createStudentDto, cancellationToken);
+        var addedStudent = await _studentService.AddAsync(createStudentDto, file, cancellationToken);
         return Created(nameof(Create), addedStudent);
     }
     
@@ -76,10 +78,11 @@ public class StudentController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<UpsertStudentDto>> Update(
         [FromRoute] Guid id,
-        [FromBody] UpsertStudentDto updateStudentDto,
+        [FromForm] UpsertStudentDto updateStudentDto,
+        [FromForm] IFormFile file,
         CancellationToken cancellationToken)
     {
-        var updatedStudent = await _studentService.UpdateAsync(id, updateStudentDto, cancellationToken);
+        var updatedStudent = await _studentService.UpdateAsync(id, updateStudentDto, file, cancellationToken);
         return Ok(updatedStudent);
     }
 

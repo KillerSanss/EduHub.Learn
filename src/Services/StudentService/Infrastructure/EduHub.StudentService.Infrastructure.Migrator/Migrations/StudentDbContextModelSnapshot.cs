@@ -113,11 +113,6 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Avatar")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("avatar");
-
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("timestamp")
                         .HasColumnName("birth_date");

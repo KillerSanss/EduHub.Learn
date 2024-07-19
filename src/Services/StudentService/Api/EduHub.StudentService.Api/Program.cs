@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
+using EduHub.StudentService.Api;
 using EduHub.StudentService.Api.Middleware;
 using EduHub.StudentService.Application.Services;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
@@ -20,11 +21,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "EduHub API", Version = "v1" });
-    
+
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
     c.MapType<DateTime>(() => new OpenApiSchema { Type = "string", Format = "date" });
+    c.OperationFilter<FileUploadOperationFilter>();
 });
 
 builder.Services.AddControllers()
@@ -65,7 +67,7 @@ var app = builder.Build();
 
 app.UseMiddleware<MiddlewareExceptionHandler>();
 
-if (app.Environment.IsDevelopment()) 
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

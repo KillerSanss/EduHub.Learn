@@ -1,4 +1,5 @@
 ﻿using EduHub.StudentService.Application.Services.Dtos.Student;
+using Microsoft.AspNetCore.Http;
 
 namespace EduHub.StudentService.Application.Services.Interfaces.Services;
 
@@ -13,7 +14,7 @@ public interface IStudentService
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    Task<StudentDto> AddAsync(UpsertStudentDto student, CancellationToken cancellationToken = default);
+    Task<StudentDto> AddAsync(UpsertStudentDto student, IFormFile file, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Обновление студента
@@ -22,7 +23,7 @@ public interface IStudentService
     /// <param name="student">Дто студента.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    Task<StudentDto> UpdateAsync(Guid studentId, UpsertStudentDto student, CancellationToken  cancellationToken = default);
+    Task<StudentDto> UpdateAsync(Guid studentId, UpsertStudentDto student, IFormFile file, CancellationToken  cancellationToken = default);
 
     /// <summary>
     /// Получение студента

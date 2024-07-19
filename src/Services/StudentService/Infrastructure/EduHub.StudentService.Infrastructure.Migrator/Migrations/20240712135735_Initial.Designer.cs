@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    [Migration("20240705154429_Initial")]
+    [Migration("20240712135735_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -115,11 +115,6 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<string>("Avatar")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("avatar");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("timestamp")

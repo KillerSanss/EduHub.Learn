@@ -47,8 +47,7 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
                 birthDate,
                 email,
                 phone,
-                new FullAddress(city, street, houseNumber),
-                avatar);
+                new FullAddress(city, street, houseNumber));
 
             // Assert
             action.Should().Throw<ArgumentException>();
@@ -72,7 +71,7 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
             var fullAddress = new FullAddress(_faker.Address.City(), _faker.Address.StreetName(), _faker.Random.Int(1, 100));
 
             // Act
-            var action = () => new Student(id, fullName, gender, birthDate, email, phone, fullAddress, avatar);
+            var action = () => new Student(id, fullName, gender, birthDate, email, phone, fullAddress);
 
             // Assert
             action.Should().Throw<GuardValidationException>();

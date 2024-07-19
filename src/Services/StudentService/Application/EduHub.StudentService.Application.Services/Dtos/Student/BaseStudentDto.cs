@@ -56,9 +56,4 @@ public abstract class BaseStudentDto
     /// Номер дома
     /// </summary>
     public int HouseNumber { get; init; }
-
-    /// <summary>
-    /// Аватар
-    /// </summary>
-    public string Avatar { get; init; }
 }

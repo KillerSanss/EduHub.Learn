@@ -38,7 +38,6 @@ public class StudentMappingProfile : Profile
                 dto.BirthDate,
                 new Email(dto.Email),
                 new Phone(dto.Phone),
-                new FullAddress(dto.City, dto.Street, dto.HouseNumber),
-                dto.Avatar));
+                new FullAddress(dto.City, dto.Street, dto.HouseNumber)));
     }
 }

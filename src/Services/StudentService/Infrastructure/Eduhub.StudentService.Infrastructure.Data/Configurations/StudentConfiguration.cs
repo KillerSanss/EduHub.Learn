@@ -90,10 +90,6 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
                 .HasColumnName("house_number");
         });
 
-        builder.Property(s => s.Avatar)
-            .IsRequired()
-            .HasColumnName("avatar");
-
         builder.HasMany<Enrollment>()
             .WithOne()
             .HasForeignKey(e => e.StudentId);

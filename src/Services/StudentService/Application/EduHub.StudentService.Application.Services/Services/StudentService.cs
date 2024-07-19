@@ -10,6 +10,7 @@ using EduHub.StudentService.Application.Services.Validators.Student;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 
 namespace EduHub.StudentService.Application.Services.Services;
 
@@ -23,12 +24,15 @@ public class StudentService : IStudentService
     private readonly IUnitOfWork _unitOfWork;
     private readonly FileClient _fileClient;
 
-    public StudentService(IStudentRepository studentRepository, IMapper mapper, IUnitOfWork unitOfWork, FileClient fileClient)
+    public StudentService(
+        IStudentRepository studentRepository,
+        IMapper mapper, IUnitOfWork unitOfWork,
+        FileClient fileClient)
     {
         _studentRepository = Guard.Against.Null(studentRepository);
         _mapper = Guard.Against.Null(mapper);
         _unitOfWork = Guard.Against.Null(unitOfWork);
-        _fileClient = Guard.Against.Null(fileClient);
+        _fileClient = fileClient;
     }
 
     /// <summary>
@@ -37,18 +41,17 @@ public class StudentService : IStudentService
     /// <param name="studentDto">Студент для добавления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    public async Task<StudentDto> AddAsync(UpsertStudentDto studentDto, CancellationToken cancellationToken)
+    public async Task<StudentDto> AddAsync(UpsertStudentDto studentDto, IFormFile file, CancellationToken cancellationToken)
     {
         Guard.Against.Null(studentDto);
         await new StudentUpsertDtoValidator().ValidateAndThrowAsync(studentDto, cancellationToken);
         
-        var avatarUri = await _fileClient.UploadFileAsync(studentDto.Avatar);
-        
         var student = _mapper.Map<Student>(studentDto);
-        student.SetAvatar(avatarUri);
         
+        await UploadAvatar(file, student.Id.ToString());
         await _studentRepository.AddAsync(student, cancellationToken);
         await SaveChangesOrThrowAsync(cancellationToken);
+        
         return _mapper.Map<StudentDto>(student);
     }
 
@@ -58,24 +61,22 @@ public class StudentService : IStudentService
     /// <param name="studentDto">Студент для обновления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    public async Task<StudentDto> UpdateAsync(Guid id, UpsertStudentDto studentDto, CancellationToken cancellationToken)
+    public async Task<StudentDto> UpdateAsync(Guid id, UpsertStudentDto studentDto, IFormFile file, CancellationToken cancellationToken)
     {
         Guard.Against.Null(studentDto);
         Guard.Against.NullOrEmpty(id);
         
         await new StudentUpsertDtoValidator().ValidateAndThrowAsync(studentDto, cancellationToken);
-        
         var student = await GetByIdOrThrowAsync(id, cancellationToken);
-        var avatarUri = await _fileClient.UploadFileAsync(studentDto.Avatar);
         
+        await UploadAvatar(file, student.Id.ToString());
         student.Update(
             new FullName(studentDto.Surname, studentDto.FirstName, studentDto.Patronymic),
             studentDto.Gender,
             studentDto.BirthDate,
             new Email(studentDto.Email),
             new Phone(studentDto.Phone),
-            new FullAddress(studentDto.City, studentDto.Street, studentDto.HouseNumber),
-            avatarUri);
+            new FullAddress(studentDto.City, studentDto.Street, studentDto.HouseNumber));
 
         await SaveChangesOrThrowAsync(cancellationToken);
 
@@ -146,5 +147,26 @@ public class StudentService : IStudentService
         }
 
         return student;
+    }
+
+    private async Task UploadAvatar(IFormFile file, string id)
+    {
+        Guard.Against.Null(file);
+        
+        var allowedContentTypes = new[] { "image/jpeg", "image/png" };
+        if (!allowedContentTypes.Contains(file.ContentType))
+        {
+            throw new ArgumentException("Файл должен быть изображением (jpeg, png)");
+        }
+        
+        if (file.Length > 10 * 1024 * 1024)
+        {
+            throw new ArgumentException("Размер файла не должен превышать 10 мб");
+        }
+        
+        await _fileClient.EnsureBucketExistsAsync();
+        var objectName = $"{id}";
+
+        await _fileClient.UploadFileAsync(objectName, file);
     }
 }

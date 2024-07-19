@@ -43,7 +43,6 @@ namespace EduHub.StudentService.Infrastructure.Migrator.Migrations
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     house_number = table.Column<int>(type: "integer", nullable: true),
-                    avatar = table.Column<string>(type: "text", nullable: false),
                     surname = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
                     first_name = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),
                     patronymic = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: true),

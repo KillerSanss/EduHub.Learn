@@ -1,4 +1,4 @@
-﻿namespace Eduhub.StudentService.Infrastructure.Data;
+﻿namespace EduHub.StudentService.Application.Services;
 
 /// <summary>
 /// Файл настроек для MinIo
