@@ -90,6 +90,7 @@ public class IntegrationTestFixture : IAsyncLifetime
         serviceCollection.AddScoped<IEnrollmentService, EnrollmentService>();
         serviceCollection.AddScoped<IFormFile, FormFile>();
         serviceCollection.AddScoped<FileClient>();
+        serviceCollection.AddScoped<TestFileClient>();
         serviceCollection.AddScoped<FileGetter>();
         serviceCollection.AddAutoMapper(typeof(CourseMappingProfile));
         serviceCollection.AddAutoMapper(typeof(EducatorMappingProfile));

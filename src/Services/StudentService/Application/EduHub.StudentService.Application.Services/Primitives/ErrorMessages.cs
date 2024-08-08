@@ -41,9 +41,14 @@ internal static class ErrorMessages
     public const string PhoneFormat = "Phone must be correct format. Example: 37377899999";
 
     /// <summary>
-    /// Сообщение об ошибке некорректного формата ссылки на аватар
+    /// Сообщение об ошибке слишком большого файла для аватара
     /// </summary>
-    public const string AvatarPattern = "Avatar url must be correct format.";
+    public const string BigFileSize = "Avatar image size must be less than 10mb.";
+
+    /// <summary>
+    /// Сообщение об ошибке неверного формата файла для аватара
+    /// </summary>
+    public const string FileFormat = "Avatar image format must be jpeg or png.";
 
     /// <summary>
     /// Сообщение об ошибке конфликта

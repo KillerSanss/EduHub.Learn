@@ -1,4 +1,4 @@
-﻿using EduHub.StudentService.Application.Services;
+﻿
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
@@ -18,13 +18,13 @@ public class StudentServicePositiveTests
     private readonly IntegrationTestFixture _fixture;
     private readonly StudentGenerator _studentGenerator = new();
     private readonly FileGetter _file = new();
-    private readonly FileClient _fileClient;
+    private readonly TestFileClient _testFileClient;
 
     public StudentServicePositiveTests(IntegrationTestFixture fixture)
     {
         _fixture = fixture;
         using var scope = _fixture.ServiceProvider.CreateScope();
-        _fileClient = scope.ServiceProvider.GetRequiredService<FileClient>();
+        _testFileClient = scope.ServiceProvider.GetRequiredService<TestFileClient>();
     }
 
     /// <summary>
@@ -39,13 +39,15 @@ public class StudentServicePositiveTests
 
         var addedStudent = _studentGenerator.GenerateUpsertStudentDto();
         
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+
         // Act
-        var action = await studentService.AddAsync(addedStudent, _file.GetTestAvatar());
+        var action = await studentService.AddAsync(addedStudent, fileStream, fileSize, contentType);
         
         // Assert
         action.Should().BeEquivalentTo(addedStudent);
 
-        await _fileClient.DeleteAllObjectsInBucketAsync();
+        await _testFileClient.DeleteAllObjectsInBucketAsync();
     }
     
     /// <summary>
@@ -58,17 +60,21 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), _file.GetTestAvatar());
+        var (fileStream1, fileSize1, contentType1) = _file.GetTestAvatarStream();
+        
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), fileStream1, fileSize1, contentType1);
 
         var newStudent = _studentGenerator.GenerateUpsertStudentDto();
-
+        
+        var (fileStream2, fileSize2, contentType2) = _file.GetTestAvatarStream();
+        
         // Act
-        var action = await studentService.UpdateAsync(addedStudent.Id, newStudent, _file.GetTestAvatar());
+        var action = await studentService.UpdateAsync(addedStudent.Id, newStudent, fileStream2, fileSize2, contentType2);
 
         // Assert
         action.Should().BeEquivalentTo(newStudent);
         
-        await _fileClient.DeleteAllObjectsInBucketAsync();
+        await _testFileClient.DeleteAllObjectsInBucketAsync();
     }
 
     /// <summary>
@@ -81,7 +87,9 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
         
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), _file.GetTestAvatar());
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+        
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), fileStream, fileSize, contentType);
 
         // Act
         var students = await studentService.GetAllAsync();
@@ -100,7 +108,9 @@ public class StudentServicePositiveTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
         
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), _file.GetTestAvatar());
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+        
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), fileStream, fileSize, contentType);
 
         // Act
         var selectedStudent = await studentService.GetByIdAsync(addedStudent.Id);
@@ -120,7 +130,9 @@ public class StudentServicePositiveTests
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
         var studentRepository = scope.ServiceProvider.GetRequiredService<IStudentRepository>();
         
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), _file.GetTestAvatar());
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+        
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), fileStream, fileSize, contentType);
 
         // Act
         await studentService.DeleteAsync(addedStudent.Id);

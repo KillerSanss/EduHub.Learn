@@ -1,5 +1,4 @@
-﻿using EduHub.StudentService.Application.Services;
-using EduHub.StudentService.Application.Services.Exceptions;
+﻿using EduHub.StudentService.Application.Services.Exceptions;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using Eduhub.StudentService.Domain.Entities;
 using Eduhub.StudentService.Infrastructure.IntegrationTests.Fixture;
@@ -19,13 +18,13 @@ public class StudentServiceNegativeTests
     private readonly IntegrationTestFixture _fixture;
     private readonly FileGetter _file = new();
     private readonly StudentGenerator _studentGenerator = new();
-    private readonly FileClient _fileClient;
+    private readonly TestFileClient _testFileClient;
 
     public StudentServiceNegativeTests(IntegrationTestFixture fixture)
     {
         _fixture = fixture;
         using var scope = _fixture.ServiceProvider.CreateScope();
-        _fileClient = scope.ServiceProvider.GetRequiredService<FileClient>();
+        _testFileClient = scope.ServiceProvider.GetRequiredService<TestFileClient>();
     }
 
     /// <summary>
@@ -72,15 +71,19 @@ public class StudentServiceNegativeTests
         using var scope = _fixture.ServiceProvider.CreateScope();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
 
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+        
         // Act
         var action = async () => await studentService.UpdateAsync(
             Guid.NewGuid(),
             _studentGenerator.GenerateUpsertStudentDto(),
-            _file.GetTestAvatar());
+            fileStream,
+            fileSize,
+            contentType);
 
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException<Student>>();
         
-        await _fileClient.DeleteAllObjectsInBucketAsync();
+        await _testFileClient.DeleteAllObjectsInBucketAsync();
     }
 }

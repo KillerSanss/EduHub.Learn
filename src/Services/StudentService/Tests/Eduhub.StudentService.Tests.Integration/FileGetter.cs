@@ -1,22 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-
-namespace Eduhub.StudentService.Infrastructure.IntegrationTests;
+﻿namespace Eduhub.StudentService.Infrastructure.IntegrationTests;
 
 public class FileGetter
 {
-    public FormFile GetTestAvatar()
+    public (Stream fileStream, long fileSize, string contentType) GetTestAvatarStream()
     {
         var testAvatarPath = Path.Combine("C:\\Users\\vantu\\RiderProjects\\EduHub.Learn\\src\\Services\\StudentService\\Tests\\Eduhub.StudentService.Tests.Integration",
             "test.jpg");
         var stream = new FileStream(testAvatarPath, FileMode.Open, FileAccess.Read);
 
-        var file = new FormFile(stream, 0, stream.Length, "test", Path.GetFileName(testAvatarPath))
-        {
-            Headers = new HeaderDictionary(),
-            ContentType = "image/jpeg"
-        };
-
-        return file;
+        return (stream, stream.Length, "image/jpeg");
     }
 }

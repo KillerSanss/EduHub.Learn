@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using EduHub.StudentService.Application.Services;
 using EduHub.StudentService.Application.Services.Dtos.Enrollment;
 using EduHub.StudentService.Application.Services.Dtos.Student;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
@@ -15,13 +16,16 @@ public class StudentController : ControllerBase
 {
     private readonly IStudentService _studentService;
     private readonly IEnrollmentService _enrollmentService;
+    private readonly FileClient _fileClient;
 
     public StudentController(
         IStudentService studentService,
-        IEnrollmentService enrollmentService)
+        IEnrollmentService enrollmentService,
+        FileClient fileClient)
     {
         _studentService = Guard.Against.Null(studentService);
         _enrollmentService = Guard.Against.Null(enrollmentService);
+        _fileClient = fileClient;
     }
     
     /// <summary>
@@ -34,7 +38,18 @@ public class StudentController : ControllerBase
         CancellationToken cancellationToken)
     {
         var students = await _studentService.GetAllAsync(cancellationToken);
-        return Ok(students);
+        var uris = new List<object>();
+        foreach (var student in students)
+        {
+            var uri = await _fileClient.GetFileUriAsync(student.Id.ToString());
+            uris.Add(new 
+            {
+                Student = student,
+                Uri = uri
+            });
+        }
+
+        return Ok(uris);
     }
     
     /// <summary>
@@ -49,7 +64,13 @@ public class StudentController : ControllerBase
         CancellationToken cancellationToken)
     {
         var student = await _studentService.GetByIdAsync(id, cancellationToken);
-        return Ok(student);
+        var uri = await _fileClient.GetFileUriAsync(id.ToString());
+        var response = new
+        {
+            Student = student,
+            Uri = uri
+        };
+        return Ok(response);
     }
     
     /// <summary>
@@ -62,11 +83,19 @@ public class StudentController : ControllerBase
     [Consumes("multipart/form-data")]
     public async Task<ActionResult<UpsertStudentDto>> Create(
         [FromForm] UpsertStudentDto createStudentDto,
-        [FromForm] IFormFile file,
+        IFormFile file,
         CancellationToken cancellationToken)
     {
-        var addedStudent = await _studentService.AddAsync(createStudentDto, file, cancellationToken);
-        return Created(nameof(Create), addedStudent);
+        if (file == null)
+        {
+            return BadRequest("Avatar file is required.");
+        }
+
+        var stream = file.OpenReadStream();
+        {
+            var addedStudent = await _studentService.AddAsync(createStudentDto, stream, file.Length, file.ContentType, cancellationToken);
+            return Created(nameof(Create), addedStudent);
+        }
     }
     
     /// <summary>
@@ -79,11 +108,19 @@ public class StudentController : ControllerBase
     public async Task<ActionResult<UpsertStudentDto>> Update(
         [FromRoute] Guid id,
         [FromForm] UpsertStudentDto updateStudentDto,
-        [FromForm] IFormFile file,
+        IFormFile file,
         CancellationToken cancellationToken)
     {
-        var updatedStudent = await _studentService.UpdateAsync(id, updateStudentDto, file, cancellationToken);
-        return Ok(updatedStudent);
+        if (file == null)
+        {
+            return BadRequest("Avatar file is required.");
+        }
+        
+        var stream = file.OpenReadStream();
+        {
+            var updatedStudent = await _studentService.UpdateAsync(id, updateStudentDto, stream, file.Length, file.ContentType, cancellationToken);
+            return Ok(updatedStudent);
+        }
     }
 
     /// <summary>

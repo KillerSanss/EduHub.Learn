@@ -1,8 +1,7 @@
-﻿using System.Reactive.Linq;
-using Microsoft.AspNetCore.Http;
+﻿using EduHub.StudentService.Application.Services.Exceptions;
+using EduHub.StudentService.Application.Services.Primitives;
 using Microsoft.Extensions.Options;
 using Minio;
-using Minio.ApiEndpoints;
 using Minio.DataModel.Args;
 
 namespace EduHub.StudentService.Application.Services;
@@ -26,22 +25,34 @@ public class FileClient
     /// Загрузка файла в бакет
     /// </summary>
     /// <param name="objectName">Имя файла.</param>
-    /// <param name="file">Файл.</param>
+    /// <param name="stream">Поток файла.</param>
+    /// <param name="size">Размер файла.</param>
+    /// <param name="contentType">Тип содержимого файла.</param>
     /// <returns>Добавленный файл.</returns>
-    public async Task<string> UploadFileAsync(string objectName, IFormFile file)
+    public async Task<string> UploadFileAsync(string objectName, Stream stream, long size, string contentType)
     {
         await EnsureBucketExistsAsync();
 
-        await using var stream = file.OpenReadStream();
+        if (size > 10 * 1024 * 1024)
+        {
+            throw new FileSizeException(ErrorMessages.BigFileSize);
+        }
+        
+        var permittedContentTypes = new[] { "image/png", "image/jpeg" };
+        if (!permittedContentTypes.Contains(contentType))
+        {
+            throw new FileFormatException(ErrorMessages.FileFormat);
+        }
+
         var putObjectArgs = new PutObjectArgs()
             .WithBucket(_bucketName)
             .WithObject(objectName)
             .WithStreamData(stream)
-            .WithObjectSize(file.Length)
-            .WithContentType(file.ContentType);
+            .WithObjectSize(size)
+            .WithContentType(contentType);
 
         await _minioClient.PutObjectAsync(putObjectArgs);
-        
+
         var statObjectArgs = new StatObjectArgs()
             .WithBucket(_bucketName)
             .WithObject(objectName);
@@ -74,24 +85,5 @@ public class FileClient
         {
             await _minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(_bucketName));
         }
-    }
-    
-    /// <summary>
-    /// Удаление всех объектов в бакете
-    /// </summary>
-    public async Task DeleteAllObjectsInBucketAsync()
-    {
-        var listObjectsArgs = new ListObjectsArgs()
-            .WithBucket(_bucketName)
-            .WithRecursive(true);
-    
-        var objects = _minioClient.ListObjectsAsync(listObjectsArgs);
-        
-        await objects.ForEachAsync(async item =>
-        {
-            await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
-                .WithBucket(_bucketName)
-                .WithObject(item.Key));
-        });
     }
 }
