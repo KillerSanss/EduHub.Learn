@@ -17,6 +17,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Infrastructure\Eduhub.StudentService.Infrastructure.Data\Eduhub.StudentService.Infrastructure.Data.csproj" />
       <ProjectReference Include="..\..\Infrastructure\EduHub.StudentService.Infrastructure.Repositories\EduHub.StudentService.Infrastructure.Repositories.csproj" />
+      <ProjectReference Include="..\..\Tests\Eduhub.StudentService.Tests.Integration\Eduhub.StudentService.Tests.Integration.csproj" />
     </ItemGroup>
 
     <ItemGroup>

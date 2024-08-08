@@ -19,10 +19,14 @@ public class EnrollmentServicePositiveTests
     private readonly StudentGenerator _studentGenerator = new();
     private readonly EnrollmentGenerator _enrollmentGenerator = new();
     private readonly EducatorGenerator _educatorGenerator = new();
+    private readonly FileGetter _file = new();
+    private readonly TestFileClient _testFileClient;
 
     public EnrollmentServicePositiveTests(IntegrationTestFixture fixture)
     {
         _fixture = fixture;
+        using var scope = _fixture.ServiceProvider.CreateScope();
+        _testFileClient = scope.ServiceProvider.GetRequiredService<TestFileClient>();
     }
 
     /// <summary>
@@ -40,7 +44,9 @@ public class EnrollmentServicePositiveTests
 
         var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
         var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
+        
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), fileStream, fileSize, contentType);
         var addedEnrollment = _enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id);
 
         // Act
@@ -48,6 +54,8 @@ public class EnrollmentServicePositiveTests
 
         // Assert
         action.Should().BeEquivalentTo(addedEnrollment);
+        
+        await _testFileClient.DeleteAllObjectsInBucketAsync();
     }
 
     /// <summary>
@@ -65,7 +73,9 @@ public class EnrollmentServicePositiveTests
 
         var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
         var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
+        
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), fileStream, fileSize, contentType);
         var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id));
 
         // Act
@@ -73,6 +83,8 @@ public class EnrollmentServicePositiveTests
 
         // Assert
         enrollments.Should().ContainSingle(e => e.Id == addedEnrollment.Id);
+        
+        await _testFileClient.DeleteAllObjectsInBucketAsync();
     }
 
     /// <summary>
@@ -91,7 +103,9 @@ public class EnrollmentServicePositiveTests
 
         var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
         var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
+        
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), fileStream, fileSize, contentType);
         var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id));
 
         // Act
@@ -100,6 +114,8 @@ public class EnrollmentServicePositiveTests
 
         // Assert
         action.Should().BeNull();
+        
+        await _testFileClient.DeleteAllObjectsInBucketAsync();
     }
 
     /// <summary>
@@ -117,7 +133,9 @@ public class EnrollmentServicePositiveTests
 
         var addedEducator = await educatorService.AddAsync(_educatorGenerator.GenerateUpsertEducatorDto());
         var addedCourse = await courseService.AddAsync(_courseGenerator.GenerateUpsertCourseDto(addedEducator.Id));
-        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
+        
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+        var addedStudent = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), fileStream, fileSize, contentType);
         var addedEnrollment = await enrollmentService.AddAsync(_enrollmentGenerator.GenerateEnrollmentDto(addedStudent.Id, addedCourse.Id));
 
         // Act
@@ -125,5 +143,7 @@ public class EnrollmentServicePositiveTests
 
         // Assert
         studentEnrollments.Should().ContainSingle(e => e.Id == addedEnrollment.Id);
+        
+        await _testFileClient.DeleteAllObjectsInBucketAsync();
     }
 }

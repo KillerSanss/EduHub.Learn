@@ -21,30 +21,38 @@ public class StudentService : IStudentService
     private readonly IStudentRepository _studentRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly FileClient _fileClient;
 
-    public StudentService(IStudentRepository studentRepository, IMapper mapper, IUnitOfWork unitOfWork)
+    public StudentService(
+        IStudentRepository studentRepository,
+        IMapper mapper, IUnitOfWork unitOfWork,
+        FileClient fileClient)
     {
         _studentRepository = Guard.Against.Null(studentRepository);
         _mapper = Guard.Against.Null(mapper);
         _unitOfWork = Guard.Against.Null(unitOfWork);
+        _fileClient = fileClient;
     }
 
     /// <summary>
     /// Добавление нового студента
     /// </summary>
     /// <param name="studentDto">Студент для добавления.</param>
+    /// <param name="fileStream">Поток файла изображения.</param>
+    /// <param name="fileSize">Размер файла.</param>
+    /// <param name="contentType">Тип содержимого файла.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Добавленный студент.</returns>
-    public async Task<StudentDto> AddAsync(UpsertStudentDto studentDto, CancellationToken cancellationToken)
+    public async Task<StudentDto> AddAsync(UpsertStudentDto studentDto, Stream fileStream, long fileSize, string contentType, CancellationToken cancellationToken)
     {
         Guard.Against.Null(studentDto);
-
         await new StudentUpsertDtoValidator().ValidateAndThrowAsync(studentDto, cancellationToken);
-        
+    
         var student = _mapper.Map<Student>(studentDto);
         await _studentRepository.AddAsync(student, cancellationToken);
-
         await SaveChangesOrThrowAsync(cancellationToken);
+
+        await _fileClient.UploadFileAsync(student.Id.ToString(), fileStream, fileSize, contentType);
 
         return _mapper.Map<StudentDto>(student);
     }
@@ -55,7 +63,7 @@ public class StudentService : IStudentService
     /// <param name="studentDto">Студент для обновления.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Обновленный студент.</returns>
-    public async Task<StudentDto> UpdateAsync(Guid id, UpsertStudentDto studentDto, CancellationToken cancellationToken)
+    public async Task<StudentDto> UpdateAsync(Guid id, UpsertStudentDto studentDto, Stream fileStream, long fileSize, string contentType, CancellationToken cancellationToken)
     {
         Guard.Against.Null(studentDto);
         Guard.Against.NullOrEmpty(id);
@@ -63,14 +71,16 @@ public class StudentService : IStudentService
         await new StudentUpsertDtoValidator().ValidateAndThrowAsync(studentDto, cancellationToken);
 
         var student = await GetByIdOrThrowAsync(id, cancellationToken);
+
+        await _fileClient.UploadFileAsync(student.Id.ToString(), fileStream, fileSize, contentType);
+       
         student.Update(
             new FullName(studentDto.Surname, studentDto.FirstName, studentDto.Patronymic),
             studentDto.Gender,
             studentDto.BirthDate,
             new Email(studentDto.Email),
             new Phone(studentDto.Phone),
-            new FullAddress(studentDto.City, studentDto.Street, studentDto.HouseNumber),
-            studentDto.Avatar);
+            new FullAddress(studentDto.City, studentDto.Street, studentDto.HouseNumber));
 
         await SaveChangesOrThrowAsync(cancellationToken);
 

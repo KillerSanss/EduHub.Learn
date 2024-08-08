@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 using EduHub.StudentService.Api.Middleware;
+using EduHub.StudentService.Application.Services;
 using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
@@ -19,7 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "EduHub API", Version = "v1" });
-    
+
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
@@ -47,6 +48,9 @@ builder.Services.AddAutoMapper(typeof(EducatorMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(CourseMappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(EnrollmentMappingProfile).Assembly);
 
+builder.Services.Configure<MinioSettings>(builder.Configuration.GetSection(nameof(MinioSettings)));
+builder.Services.AddScoped<FileClient>();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<StudentDbContext>(o => o.UseNpgsql(EduhubNpgsqlDataSource.Create(connectionString)));
 
@@ -61,10 +65,16 @@ var app = builder.Build();
 
 app.UseMiddleware<MiddlewareExceptionHandler>();
 
-if (app.Environment.IsDevelopment()) 
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var fileClient = scope.ServiceProvider.GetRequiredService<FileClient>();
+    await fileClient.EnsureBucketExistsAsync();
 }
 
 app.UseRouting();

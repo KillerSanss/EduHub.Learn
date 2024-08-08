@@ -3,9 +3,7 @@ using Eduhub.StudentService.Domain.Entities.Base;
 using Eduhub.StudentService.Domain.Entities.Enums;
 using Eduhub.StudentService.Domain.Entities.ValueObjects;
 using Eduhub.StudentService.Domain.Validations.GuardClasses;
-using Eduhub.StudentService.Domain.Validations;
 using Eduhub.StudentService.Domain.Validations.Enums;
-using Eduhub.StudentService.Domain.Validations.Primitives;
 
 namespace Eduhub.StudentService.Domain.Entities;
 
@@ -35,11 +33,6 @@ public class Student : BasePerson
     public FullAddress Address { get; private set; }
 
     /// <summary>
-    /// Аватар
-    /// </summary>
-    public string Avatar { get; private set; }
-
-    /// <summary>
     /// Конструктор для установки значений полей для объекта Student.
     /// </summary>
     /// <param name="id">Id.</param>
@@ -49,7 +42,6 @@ public class Student : BasePerson
     /// <param name="email">Электронная почта.</param>
     /// <param name="phone">Номер телефона.</param>
     /// <param name="address">Адрес.</param>
-    /// <param name="avatar">Аватар.</param>
     public Student(
         Guid id,
         FullName fullName,
@@ -57,8 +49,7 @@ public class Student : BasePerson
         DateTime birthDate,
         Email email,
         Phone phone,
-        FullAddress address,
-        string avatar)
+        FullAddress address)
     {
         SetId(id);
         SetFullName(fullName);
@@ -67,7 +58,6 @@ public class Student : BasePerson
         SetBirthDate(birthDate);
         SetEmail(email);
         SetAddress(address);
-        SetAvatar(avatar);
     }
 
     private Student()
@@ -83,8 +73,7 @@ public class Student : BasePerson
         DateTime birthDate,
         Email email,
         Phone phone,
-        FullAddress address,
-        string avatar)
+        FullAddress address)
     {
         SetFullName(fullName);
         SetGender(gender);
@@ -92,7 +81,6 @@ public class Student : BasePerson
         SetBirthDate(birthDate);
         SetEmail(email);
         SetAddress(address);
-        SetAvatar(avatar);
     }
 
     /// <summary>
@@ -118,13 +106,5 @@ public class Student : BasePerson
     private void SetAddress(FullAddress address)
     {
         Address = Guard.Against.Null(address);
-    }
-
-    /// <summary>
-    /// Установка аватара
-    /// </summary>
-    private void SetAvatar(string avatar)
-    {
-        Avatar = Guard.Against.Regex(avatar, RegexPatterns.AvatarUrlPattern, ErrorMessages.AvatarPattern);
     }
 }

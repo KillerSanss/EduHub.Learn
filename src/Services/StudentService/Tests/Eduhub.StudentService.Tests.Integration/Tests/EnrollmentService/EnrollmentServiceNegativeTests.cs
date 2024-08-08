@@ -22,10 +22,14 @@ public class EnrollmentServiceNegativeTests
     private readonly CourseGenerator _courseGenerator = new();
     private readonly StudentGenerator _studentGenerator = new();
     private readonly EducatorGenerator _educatorGenerator = new();
+    private readonly FileGetter _file = new();
+    private readonly TestFileClient _testFileClient;
 
     public EnrollmentServiceNegativeTests(IntegrationTestFixture fixture)
     {
         _fixture = fixture;
+        using var scope = _fixture.ServiceProvider.CreateScope();
+        _testFileClient = scope.ServiceProvider.GetRequiredService<TestFileClient>();
     }
 
     /// <summary>
@@ -85,7 +89,8 @@ public class EnrollmentServiceNegativeTests
         var enrollmentService = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
         
-        var student = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto());
+        var (fileStream, fileSize, contentType) = _file.GetTestAvatarStream();
+        var student = await studentService.AddAsync(_studentGenerator.GenerateUpsertStudentDto(), fileStream, fileSize, contentType);
         
         var enrollment = new CreateEnrollmentDto
         {
@@ -99,5 +104,7 @@ public class EnrollmentServiceNegativeTests
         
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException<Course>>();
+        
+        await _testFileClient.DeleteAllObjectsInBucketAsync();
     }
 }

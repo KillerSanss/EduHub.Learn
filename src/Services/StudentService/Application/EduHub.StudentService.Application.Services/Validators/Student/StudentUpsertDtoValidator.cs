@@ -58,9 +58,5 @@ public class StudentUpsertDtoValidator : AbstractValidator<UpsertStudentDto>
         RuleFor(x => x.HouseNumber)
             .NotEmpty()
             .GreaterThan(0).WithMessage(ErrorMessages.InvalidData);
-
-        RuleFor(x => x.Avatar)
-            .NotEmpty()
-            .Matches(RegexPatterns.AvatarUrlPattern).WithMessage(ErrorMessages.AvatarPattern);
     }
 }

@@ -31,7 +31,7 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
             var avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png");
 
             // Act
-            var student = new Student(id, fullName, gender, birthDate, email, phone, fullAddress, avatar);
+            var student = new Student(id, fullName, gender, birthDate, email, phone, fullAddress);
 
             // Assert
             student.Id.Should().Be(id);
@@ -41,7 +41,6 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
             student.Email.Should().Be(email);
             student.Phone.Should().Be(phone);
             student.Address.Should().Be(fullAddress);
-            student.Avatar.Should().Be(avatar);
         }
 
         /// <summary>
@@ -60,8 +59,7 @@ namespace EduHub.StudentService.Tests.Unit.Tests.Students
                 newStudent.BirthDate,
                 newStudent.Email,
                 newStudent.Phone,
-                newStudent.Address,
-                newStudent.Avatar);
+                newStudent.Address);
 
             // Assert
             student.Should().BeEquivalentTo(newStudent, options => options

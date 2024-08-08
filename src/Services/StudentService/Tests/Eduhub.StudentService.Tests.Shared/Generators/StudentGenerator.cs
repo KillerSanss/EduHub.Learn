@@ -27,8 +27,7 @@ public class StudentGenerator
             Email = _faker.Internet.Email(),
             City = _faker.Address.City(),
             Street = _faker.Address.StreetName(),
-            HouseNumber = _faker.Random.Int(1, 1000),
-            Avatar = _faker.Image.PicsumUrl() + _faker.PickRandom(".jpeg", ".png")
+            HouseNumber = _faker.Random.Int(1, 1000)
         };
         
         return student;
@@ -42,8 +41,7 @@ public class StudentGenerator
             f.Date.Past(),
             new Email(f.Internet.Email()),
             new Phone(f.Phone.PhoneNumber("373########")),
-            new FullAddress(f.Address.City(), f.Address.StreetName(), f.Random.Int(1, 1000)),
-            f.Image.PicsumUrl() + f.PickRandom(".jpeg", ".png")
+            new FullAddress(f.Address.City(), f.Address.StreetName(), f.Random.Int(1, 1000))
         ));
     
     public static Student GenerateStudent()

@@ -1,4 +1,5 @@
-﻿using EduHub.StudentService.Application.Services.Interfaces.Repositories;
+﻿using EduHub.StudentService.Application.Services;
+using EduHub.StudentService.Application.Services.Interfaces.Repositories;
 using EduHub.StudentService.Application.Services.Interfaces.Services;
 using EduHub.StudentService.Application.Services.Interfaces.UnitOfWork;
 using EduHub.StudentService.Application.Services.Mapping;
@@ -8,6 +9,8 @@ using Eduhub.StudentService.Infrastructure.Data.Context;
 using EduHub.StudentService.Infrastructure.Migrator;
 using EduHub.StudentService.Infrastructure.Repositories;
 using EduHub.StudentService.Infrastructure.Repositories.Repositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,12 +62,19 @@ public class IntegrationTestFixture : IAsyncLifetime
             .EnableServiceProviderCaching(false));
 
         AddServices(serviceCollection);
+        ConfigureServices(serviceCollection, configuration);
     }
 
     private static async Task MigrateDatabase(IServiceScope scope)
     {
         await using var dbContext = scope.ServiceProvider.GetRequiredService<StudentDbContext>();
         await dbContext.Database.MigrateAsync();
+    }
+    
+    private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    {
+        var mySection = configuration.GetSection(nameof(MinioSettings));
+        services.Configure<MinioSettings>(c => mySection.Bind(c));
     }
 
     private static void AddServices(IServiceCollection serviceCollection)
@@ -78,6 +88,10 @@ public class IntegrationTestFixture : IAsyncLifetime
         serviceCollection.AddScoped<IEducatorService, EducatorService>();
         serviceCollection.AddScoped<IStudentService, EduHub.StudentService.Application.Services.Services.StudentService>();
         serviceCollection.AddScoped<IEnrollmentService, EnrollmentService>();
+        serviceCollection.AddScoped<IFormFile, FormFile>();
+        serviceCollection.AddScoped<FileClient>();
+        serviceCollection.AddScoped<TestFileClient>();
+        serviceCollection.AddScoped<FileGetter>();
         serviceCollection.AddAutoMapper(typeof(CourseMappingProfile));
         serviceCollection.AddAutoMapper(typeof(EducatorMappingProfile));
         serviceCollection.AddAutoMapper(typeof(StudentMappingProfile));
